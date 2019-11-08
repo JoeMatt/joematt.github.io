@@ -37,8 +37,8 @@ See [Eddie's site](https://edwardawebb.com) for a live example.
 
 This theme uses a combination of a custom archetype `projects` and some data files to drive content.
 
-You can test the provided [exampleSite](exampleSite) after cloning with the command:
-`cd exampleSite;hugo -t hugo-resume --themesDir ../.. server`
+You can test the provided [public](public) after cloning with the command:
+`cd public;hugo -t hugo-resume --themesDir ../.. server`
 
 ### Summary
 Edit the main `contents/_index.md with a brief bio/summary`
@@ -46,9 +46,9 @@ Edit the main `contents/_index.md with a brief bio/summary`
 ### Data files
 Data files are used for simple content presented on the homepage.
 
-- [data/skills.json](https://github.com/eddiewebb/hugo-resume/blob/master/exampleSite/data/skills.json)
-- [data/experience.json](https://github.com/eddiewebb/hugo-resume/blob/master/exampleSite/data/experience.json)
-- [data/education.json](https://github.com/eddiewebb/hugo-resume/blob/master/exampleSite/data/education.json)
+- [data/skills.json](https://github.com/eddiewebb/hugo-resume/blob/master/public/data/skills.json)
+- [data/experience.json](https://github.com/eddiewebb/hugo-resume/blob/master/public/data/experience.json)
+- [data/education.json](https://github.com/eddiewebb/hugo-resume/blob/master/public/data/education.json)
 
 ### Projects
 Initially projects were in their own JSON file too, but I decided I wanted to allow more detail and custom formatting.
@@ -59,7 +59,7 @@ Similar to projects, create them under `publications`. Include any papers, speak
 
 ### Template params
 
-All personal information outside the above details is captured by params in [`config.toml`](https://github.com/eddiewebb/hugo-resume/blob/master/exampleSite/config.toml)
+All personal information outside the above details is captured by params in [`config.toml`](https://github.com/eddiewebb/hugo-resume/blob/master/public/config.toml)
 
 ```
 [params]
