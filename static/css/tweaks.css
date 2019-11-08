@@ -27,11 +27,10 @@ div.skills-heading{
 }
 
 
-
 /* From https://codepen.io/wbeeftink/pen/dIaDH */
 
 .tags {
-    font: 12px/1.5 'PT Sans', serif;
+  font: 12px/1.5 'PT Sans', serif;
   list-style: none;
   margin: 0;
   overflow: hidden;
@@ -96,6 +95,16 @@ div.skills-heading{
 .resume-section blockquote {
     border-left: 4px solid #BD5D38;
     padding-left: 1em;
+}
+
+.expand-label span {
+  /* font-style:italic; */
+  /* font-family: 'Saira Extra Condensed', serif; */
+  padding: 0 20px 0 13px;
+  font-size: 1rem;
+  line-height: 2rem;
+  font-weight: 500;
+  color: #343a40;
 }
 
 /* Fix responsive width for blog posts */

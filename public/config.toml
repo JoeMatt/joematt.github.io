@@ -1,17 +1,18 @@
-baseURL = "https://example.com/"
+baseURL = "https://joemattiello.dev/"
 languageCode = "en-us"
-title = "Eddie Webb"
+title = "Joe Mattiello"
 theme = "hugo-resume"
+disableKinds = [ "taxonomy", "taxonomyTerm"]
 
 [params]
-    firstName = "Eddie"
-    lastName = "Webb"
-    address = "Rollinsford, NH"
-    phone = "1-555-555-1234"
-    contactNote = "Dev Tools Engineer"
-    profileImage = "img/TechChat.png"
-    email = "email@domain.com"
-    description = "Software Platform Engineer with experience leveraging agile, DevOps, and CI/CD to manage large scale distributed platforms both on prem and in public cloud."
+    firstName = "Joseph"
+    lastName = "Mattiello"
+    address = "New York, NY"
+    phone = "1-646-771-8604"
+    contactNote = "iOS Engineer"
+    profileImage = "img/twitter.jpg"
+    email = "mail@joemattiello.com"
+    description = "iOS Platform Engineer with experience leveraging Swift, MVVM, Rx, agile, DevOps, and CI/CD to manage large scale mobile applications."
     favicon = "/favicon.ico"
     # what sections
     showSkills = true
@@ -25,26 +26,22 @@ theme = "hugo-resume"
 
 [[params.handles]]
     name = "LinkedIn"
-    link = "https://www.linkedin.com/in/edwardwebb/"
+    link = "https://www.linkedin.com/in/joemattiello/"
 
 
 [[params.handles]]
     name = "GitHub"
-    link = "https://github.com/eddiewebb/"
-
-[[params.handles]]
-    name = "Bitbucket"
-    link = "https://bitbucket.org/eddiewebb/"
+    link = "https://github.com/JoeMatt/"
 
 [[params.handles]]
     name = "Stack Overflow"
-    link = "https://stackoverflow.com/users/story/82880"
+    link = "https://stackoverflow.com/story/joemattiello"
     icon = "stack-overflow"
 
 [[params.handles]]
     name = "Keybase"
-    link = "https://keybase.io/edwardawebb"
+    link = "https://keybase.io/jmattiello"
     icon = "keybase"
 
 [params.google.analytics]
-    trackerID = "XX-123446-01"
+    trackerID = "UA-5727797-5"

@@ -11,7 +11,7 @@ features = ["social","mobile","projects","responsive","qr-code"]
 min_version = "0.1"
 
 [author]
-  name = "Eddie Webb"
+  name = "Joe Mattiello"
   homepage = "https://edwardawebb.com"
 
 

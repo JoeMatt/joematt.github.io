@@ -1,20 +1,38 @@
 [
     {
-        "role":"Boss man",
-        "company":"Current Company LTD",
-        "summary":"Led in development of fast paced software teams.",
-        "range":"February 2016 - Present"
+        "role":"iOS Director",
+        "company":"NewsCorp",
+        "summary":"Directing iOS development across all NewsCorp brands include New York Post, NewsUK, The Australian, Barron's Group and more.",
+        "range":"2019 - Present"
     },
     {
-        "role":"Developer",
-        "company":"Current Company LTD",
-        "summary":"Expedited the synergies of collaborative agile tooling.",
-        "range":"March 2014 - February 2016"
+        "role":"Lead Mobile Developer",
+        "company":"SALIDO Inc.",
+        "summary":"Led in development of industry leading mobile Point of Sales and Kitchen Display systems.",
+        "range":"2018 - 2019"
     },
     {
-        "role":"Developer",
-        "company":"Previous Company Inc.",
-        "summary":"Implemented continuous devops pipelines automationing",
-        "range":"February 2013 - March 2014"
+        "role":"Lead Mobile Developer",
+        "company":"Hearst Digital News",
+        "summary":"Led in developing iOS/iPad apps and backend infrastructure for San Francisco Chronicle and other major market newspapers.",
+        "range":"2012 - 2018"
+    },
+    {
+        "role":"Lead iOS Developer",
+        "company":"Sooloos Meridian (now Roon Labs).",
+        "summary":"Porting of C#/OpenGL .NET premium audio stream application to the ground breaking, open-source, MonoMac project (now Microsoft Xamarin).",
+        "range":"2010 - 2012"
+    },
+    {
+        "role":"Lead iOS Developer / Hadoop Administrator",
+        "company":"Sense Networks Inc. (Acquired by YellowPages.com)",
+        "summary":"Developed patented machine learning, location based algorithms and applications for social media and financial investment markets.",
+        "range":"2008 - 2010"
+    },
+    {
+        "role":"Security Industry Consultant / Associate TV Producer",
+        "company":"ATT (Bell Labs Park)",
+        "summary":"Consulted for and associate produced original streaming content for ATT Tech Channel, producing shows with industry leaders such as; Richard Stallman (GNU), Whit Diffie (RSA), Bill Cheswick (Firewalls), Emmanuel Goldstein (Editor 2600 Magazine), H. D. Moore (Metasploit), Biz Stone and Jack Dorsey (Twitter Co-Founders), and more.",
+        "range":"2007 - 2008"
     }
 ]

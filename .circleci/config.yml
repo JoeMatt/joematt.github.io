@@ -42,7 +42,7 @@ jobs:
             #just some keywords that confirm content was read into template..
             grep 'Rochester' /tmp/index 
             grep 'fab fa-stack-overflow' /tmp/index 
-            grep 'Eddie Webb' /tmp/index 
+            grep 'Joe Mattiello' /tmp/index 
             grep 'BOSH (Bosh Outer SHell)' /tmp/index 
 
 

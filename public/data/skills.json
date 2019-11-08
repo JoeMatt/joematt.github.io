@@ -3,21 +3,22 @@
       "grouping":"Architecture",
       "skills":[ "IP Networking","DNS","Firewalls","Load Balancing","Microservices","RESTful APIs","SaaS/PaaS/IaaS"]
   },{
-      "grouping":"Languages, Operating Systems & Tools",
-      "skills":[ "Java","Python","git","subversion","linux","bash","php","jquery","javascript"]
-  },
-  {
+      "grouping":"Languages & Tools",
+      "skills":[ "Swift","Objective-C","C","C++","C#","javascript","git","bash","vim","docker"]
+  },{
+    "grouping":"Operating Systems",
+    "skills":[ "Apple","linux","Raspberry Pi","Arduino"]
+  },{
       "grouping":"Platform Development & Administration",
-      "skills":[ "Atlassian","Bamboo","Bitbucket","NGINX","MySQL","Wordpress"]
-  },
-  {
+      "skills":["App Store","Atlassian","Docker","Bitbucket","GitLab","NGINX","MySQL","Wordpress","Travis", "CircleCI"]
+  },{
     "grouping":"Containers & Cloud",
       "skills":[
-          {"name":"BOSH","link":"https://bosh.io"},
+          {"name":"Kubernetes","link":"https://kubernetes.io"},
           {"name":"Docker","link":"https://docker.com"},
           {"name":"AWS","link":"https://aws.amazon.com"},
           {"name":"Google Cloud","link":"https://cloud.google.com"},
-          {"name":"Linux","link":"https://bosh.io"}
+          {"name":"Linux","link":"https://linux.org"}
       ]
   }
 ]
