@@ -6,23 +6,6 @@ weight: 20
 ---
 <p>A collection of efforts to which I contributed, but did not create. Contributing back to Open Source projects is a strong passion of mine, and requires a considerate approach to learn norms, standards and approach for each community for a successful merge!</p>
 
-#### Coming Soon!
-
-There's so many to list, how can I fit them all.
-
-Visit my GitHub profile for a partial list.
-
-Notable exclusions
-
-- `Core Audio` port of CoreAudio Objective-C & C libraries to Microsoft Xamarin
-- `pbxbuild` for GNU/FSF OpenStep
-
-<div class="github-card" data-github="joematt" data-width="400" data-height="150" data-theme="default"></div>
-<script src="//cdn.jsdelivr.net/github-cards/latest/widget.js"></script>
-
-<div class="github-card" data-user="joematt" data-repo="github-cards"></div>
-<script src="https://cdn.jsdelivr.net/gh/lepture/github-cards@latest/jsdelivr/widget.js"></script>
-
 ### Gists
 
 {{%expand "Create XCode INFO.PLIST from shell variables" %}}
