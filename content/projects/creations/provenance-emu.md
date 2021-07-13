@@ -7,7 +7,8 @@
   "description": "iOS & tvOS multi-emulator frontend, supporting various Atari, Bandai, NEC, Nintendo, Sega, SNK and Sony console systems…",
   "tags": ["Swift", "Objective-C", "AArch64", "Assembly", "iOS", "tvOS", "MVVM", "Rx", "Realm"],
   "fact": "The most starred (4k+) full featured iOS application on GitHub",
-  "featured":true
+  "featured":true,
+  "weight": 1
 }
 
 Provenance is an open source, multi-platform emulator for iOS and tvOS. Originally created by James Addyman as a part of OpenEMU to iOS for NES, SNES and Genesis systems.

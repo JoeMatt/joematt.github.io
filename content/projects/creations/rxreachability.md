@@ -5,9 +5,10 @@
   "link": "https://github.com/rxswiftcommunity/rxreachability",
   "image": "https://raw.githubusercontent.com/RxSwiftCommunity/RxReachability/master/Assets/Logo.png",
   "description": "RxReachability adds easy to use RxSwift bindings for ReachabilitySwift. You can react to network reachability changes and even retry observables when network comes back up.",
-  "tags": ["Swift", "Objective-C", "AArch64", "Assembly", "iOS", "tvOS", "MVVM", "Rx", "Realm"],
+  "tags": ["Swift", "Objective-C", "macOS", "iOS", "tvOS", "MVVM", "Rx", "Realm"],
   "fact": "",
-  "featured":true
+  "featured":true,
+  "weight": 2
 }
 
 [RxReachability](https://github.com/rxswiftcommunity/rxreachability) is an open source project that I voluneteered to take ownership of in 2019.

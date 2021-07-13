@@ -5,9 +5,10 @@
   "link": "https://github.com/HeroTransitions/Hero",
   "image": "https://cdn.rawgit.com/lkzhao/Hero/427d5f2/Resources/Hero.svg",
   "description": "Hero is a library for building iOS view controller transitions. It provides a declarative layer on top of the UIKit's cumbersome transition APIs—making custom transitions an easy task for developers.",
-  "tags": ["Swift", "Objective-C", "AArch64", "Assembly", "iOS", "tvOS", "MVVM", "Rx", "Realm"],
+  "tags": ["Swift", "Objective-C", "AArch64", "iOS", "tvOS"],
   "fact": "",
-  "featured":true
+  "featured":true,
+  "weight": 2
 }
 
 [Hero Transitions](https://github.com/HeroTransitions/Hero) is an open source project that I voluneteered to take ownership of in 2019.
