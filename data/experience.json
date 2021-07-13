@@ -1,9 +1,21 @@
 [
     {
+        "role":"iOS Consultant",
+        "company":"Fitness.AI",
+        "summary":"Provided support services for reformatting and refactoring project for the CEO to continue being a sole developer with a better enviroment.",
+        "range":"2021"
+    },
+    {
+        "role":"iOS Lead",
+        "company":"Cameo",
+        "summary":"The sole native iOS developer on the team. Added support for async HD Video compression and real-time filters.",
+        "range":"2020 - 2021"
+    },
+    {
         "role":"iOS Director",
         "company":"NewsCorp",
         "summary":"Directing iOS development across all NewsCorp brands include New York Post, NewsUK, The Australian, Barron's Group and more.",
-        "range":"2019 - Present"
+        "range":"2019 - 2020"
     },
     {
         "role":"Lead Mobile Developer",
