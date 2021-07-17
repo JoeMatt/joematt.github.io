@@ -1,3 +1,3 @@
 
 serve:
-	cd public; hugo -t joemattiello.dev --themesDir ../.. server
+	hugo -t joemattiello.dev --themesDir ./themes server
