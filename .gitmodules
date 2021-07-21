@@ -4,3 +4,12 @@
 [submodule "themes/hugo-profile"]
 	path = themes/hugo-profile
 	url = https://github.com/gurusabarish/hugo-profile.git
+[submodule "themes/hugo-redirect"]
+	path = themes/hugo-redirect
+	url = https://github.com/gcc42/hugo-redirect.git
+[submodule "themes/hugo-social-metadata"]
+	path = themes/hugo-social-metadata
+	url = https://github.com/msfjarvis/hugo-social-metadata.git
+[submodule "themes/hugo-loremipsum"]
+	path = themes/hugo-loremipsum
+	url = https://github.com/martignoni/hugo-loremipsum.git

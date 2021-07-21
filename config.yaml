@@ -1,10 +1,11 @@
 baseURL: "https://joemattiello.dev/"
 languageCode: "en-us"
 title: "Joe Mattiello"
-theme: "hugo-profile"
+theme: ["hugo-loremipsum", "hugo-social-metadata", "hugo-redirect", "hugo-profile"]
 disableKinds: [ "taxonomy", "taxonomyTerm"]
-#googleanalytics: UA-xxxxxxxx-x
-#disqusShortname: yourdiscussshortname
+googleanalytics: UA-5727797-5
+#disqusShortname:
+
 Paginate: 3
 markup:
   goldmark:
@@ -27,6 +28,8 @@ params:
     profileImage: "img/twitter.jpg"
     description: "iOS Platform Engineer with experience leveraging Swift, MVVM, Rx, agile, DevOps, and CI/CD to manage large scale mobile applications."
     favicon: "/favicon.ico"
+    twitterUsername: "@joemattiello"
+    socialImage: "path/to/the/twitter/card/image"
     #disqus: ""
 
     # what sections
@@ -61,8 +64,8 @@ params:
 
     # About
     disable_about: false
-    descripe_l1_person: "Hi, I'm Profile, a passionate web developer. I tend to make use of modern web technologies to build websites that looks great, feels fantastic, and functions correctly."
-    descripe_l2_person: "This is a example template for about section. You can find my works [here](#projects)"
+    describe_l1_person: "Hi, I'm Profile, a passionate web developer. I tend to make use of modern web technologies to build websites that looks great, feels fantastic, and functions correctly."
+    describe_l2_person: "This is a example template for about section. You can find my works [here](#projects)"
     skills:
         - name: CSS
           percentage: 90
@@ -106,7 +109,7 @@ params:
           university: "Example university"
           startedyear: "2013"
           graduation: "2018"
-        
+
     # Projects
     disable_projects: false
     projects:
