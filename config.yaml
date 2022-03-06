@@ -138,7 +138,7 @@ params:
     # Contact
     disable_contact: false
     contact_content: My inbox is always open. Whether you have a question or just want to say hi, I'll try my best to get back to you!
-    email: "jobs@joemattiello.com"
+    email: "joe@joemattiello.dev"
 
     # Footer
     socialiconfooter: true
