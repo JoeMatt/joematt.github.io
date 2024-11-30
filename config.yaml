@@ -4,6 +4,10 @@ title: "Joe Mattiello"
 theme: ["hugo-loremipsum", "hugo-social-metadata", "hugo-redirect", "hugo-profile"]
 disableKinds: [ "taxonomy", "taxonomyTerm"]
 googleanalytics: UA-5727797-5
+enableGitInfo: true
+PygmentsCodeFences: true
+PygmentsCodeFencesGuessSyntax: true
+PygmentsStyle: "monokai"
 #disqusShortname:
 
 Paginate: 3
@@ -29,7 +33,7 @@ params:
     description: "iOS Platform Engineer with experience leveraging Swift, MVVM, Rx, agile, DevOps, and CI/CD to manage large scale mobile applications."
     favicon: "/favicon.ico"
     twitterUsername: "@joemattiello"
-    socialImage: "path/to/the/twitter/card/image"
+    socialImage: "img/profile3.jpg"
     #disqus: ""
 
     # what sections
@@ -151,6 +155,7 @@ params:
     handles:
         - name: "LinkedIn"
           link: "https://www.linkedin.com/in/joemattiello/"
+
         - name: "GitHub"
           link: "https://github.com/JoeMatt/"
 
@@ -164,3 +169,10 @@ params:
 
 params.google.analytics:
     trackerID: "UA-5727797-5"
+
+outputs:
+    home: ["HTML", "JSON"]
+
+taxonomies:
+    tag: "tags"
+    category: "categories"
