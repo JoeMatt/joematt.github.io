@@ -1,5 +1,11 @@
 [
     {
+        "role":"Founder",
+        "company":"Matti Media LLC",
+        "summary":"Development of Provennce EMU, a mobile emulator application for iOS, tvOS, and macOS Catalyst.",
+        "range":"2022 - Present"
+    },
+    {
         "role":"iOS Consultant",
         "company":"Fitness.AI",
         "summary":"Provided support services for reformatting and refactoring project for the CEO to continue being a sole developer with a better enviroment.",
