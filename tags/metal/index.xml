@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Metal on Joe Mattiello</title><link>https://joemattiello.dev/tags/metal/</link><description>Recent content in Metal on Joe Mattiello</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 30 Nov 2024 14:38:06 -0500</lastBuildDate><atom:link href="https://joemattiello.dev/tags/metal/index.xml" rel="self" type="application/rss+xml"/><item><title>Provenance EMU</title><link>https://joemattiello.dev/projects/creations/provenance-emu/</link><pubDate>Sun, 11 Feb 2018 12:41:05 -0500</pubDate><guid>https://joemattiello.dev/projects/creations/provenance-emu/</guid><description>&lt;h2 id="overview">Overview&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Metal on Joe Mattiello</title><link>https://joemattiello.dev/tags/metal/</link><description>Recent content in Metal on Joe Mattiello</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 30 Nov 2024 14:47:56 -0500</lastBuildDate><atom:link href="https://joemattiello.dev/tags/metal/index.xml" rel="self" type="application/rss+xml"/><item><title>Provenance EMU</title><link>https://joemattiello.dev/projects/creations/provenance-emu/</link><pubDate>Sun, 11 Feb 2018 12:41:05 -0500</pubDate><guid>https://joemattiello.dev/projects/creations/provenance-emu/</guid><description>&lt;h2 id="overview">Overview&lt;/h2>
 &lt;p>Provenance EMU is a state-of-the-art multi-system emulator that brings classic gaming to modern Apple devices. As the founder and lead developer, I&amp;rsquo;ve transformed what began as a simple NES emulator into one of the most comprehensive and powerful emulation platforms available for iOS, tvOS, and macOS.&lt;/p>
-&lt;img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2310.jpg" alt="Provenance Game Library" width="25%" />
 &lt;h2 id="technical-achievements">Technical Achievements&lt;/h2>
 &lt;ul>
 &lt;li>&lt;strong>First Full-Speed N64 Emulation&lt;/strong>: Pioneered the first full-performance Nintendo 64 emulator for iOS without requiring jailbreak or JIT compilation&lt;/li>
@@ -8,6 +7,10 @@
 &lt;li>&lt;strong>Modern Architecture&lt;/strong>: Complete rewrite in Swift using protocol-oriented design, MVVM architecture, and the latest Apple frameworks&lt;/li>
 &lt;li>&lt;strong>Cross-Platform&lt;/strong>: Seamless experience across iOS, tvOS, and macOS using shared codebase and SwiftUI&lt;/li>
 &lt;/ul>
+&lt;span>
+&lt;img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2310.jpg" alt="Provenance Game Library" width="25%" />
+&lt;img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2309.jpg" alt="Gameplay Experience" width="25%" />
 &lt;img src="https://provenance-emu.com/blog/2022/02/15/release-2.1.0/images/ios-menu-icons.jpg" alt="Provenance Menu Interface" width="25%" />
+&lt;/span>
 &lt;h2 id="supported-systems">Supported Systems&lt;/h2>
 &lt;p>Provenance supports an extensive range of classic gaming systems:&lt;/p></description></item></channel></rss>
