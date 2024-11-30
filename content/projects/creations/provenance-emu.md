@@ -28,8 +28,6 @@
 
 Provenance EMU is a state-of-the-art multi-system emulator that brings classic gaming to modern Apple devices. As the founder and lead developer, I've transformed what began as a simple NES emulator into one of the most comprehensive and powerful emulation platforms available for iOS, tvOS, and macOS.
 
-<img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2310.jpg" alt="Provenance Game Library" width="25%" />
-
 ## Technical Achievements
 
 - **First Full-Speed N64 Emulation**: Pioneered the first full-performance Nintendo 64 emulator for iOS without requiring jailbreak or JIT compilation
@@ -37,7 +35,14 @@ Provenance EMU is a state-of-the-art multi-system emulator that brings classic g
 - **Modern Architecture**: Complete rewrite in Swift using protocol-oriented design, MVVM architecture, and the latest Apple frameworks
 - **Cross-Platform**: Seamless experience across iOS, tvOS, and macOS using shared codebase and SwiftUI
 
+<span>
+<img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2310.jpg" alt="Provenance Game Library" width="25%" />
+
+<img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2309.jpg" alt="Gameplay Experience" width="25%" />
+
+
 <img src="https://provenance-emu.com/blog/2022/02/15/release-2.1.0/images/ios-menu-icons.jpg" alt="Provenance Menu Interface" width="25%" />
+</span>
 
 ## Supported Systems
 
@@ -50,8 +55,6 @@ Provenance supports an extensive range of classic gaming systems:
 - NEC (PC Engine/TurboGrafx-16, PC-FX)
 - SNK (Neo Geo Pocket, Neo Geo CD)
 - Bandai (WonderSwan)
-
-<img src="https://provenance-emu.com/blog/2022/12/09/release-2.2.0/images/IMG_2309.jpg" alt="Gameplay Experience" width="25%" />
 
 ## Features
 
