@@ -56,9 +56,9 @@ params:
     profile_image: "/images/profile.png"
     name: "Example name"
     profession: "Profession"
-    github: "https://github.com"
-    linkedin: "https://linkedin.com"
-    twitter: "https://twitter.com/"
+    github: "https://github.com/JoeMatt"
+    linkedin: "https://linkedin.com/in/joemattiello"
+    twitter: "https://twitter.com/JoeMattiello"
     instagram: "https://instagram.com/"
     facebook: "https://facebook.com"
 
