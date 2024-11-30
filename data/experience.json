@@ -1,56 +1,56 @@
 [
     {
-        "role":"Founder",
-        "company":"Matti Media LLC",
-        "summary":"Development of Provennce EMU, a mobile emulator application for iOS, tvOS, and macOS Catalyst.",
-        "range":"2022 - Present"
+        "role": "Founder",
+        "company": "Matti Media LLC",
+        "summary": "Developing Provennce EMU, a cross-platform emulator application for iOS, tvOS, and macOS using Catalyst technology.",
+        "range": "2022 - Present"
     },
     {
-        "role":"iOS Consultant",
-        "company":"Fitness.AI",
-        "summary":"Provided support services for reformatting and refactoring project for the CEO to continue being a sole developer with a better enviroment.",
-        "range":"2021"
+        "role": "iOS Consultant",
+        "company": "Fitness.AI",
+        "summary": "Led project restructuring and codebase modernization efforts, implementing best practices to improve maintainability for single-developer operations.",
+        "range": "2021"
     },
     {
-        "role":"iOS Lead",
-        "company":"Cameo",
-        "summary":"The sole native iOS developer on the team. Added support for async HD Video compression and real-time filters.",
-        "range":"2020 - 2021"
+        "role": "iOS Lead",
+        "company": "Cameo",
+        "summary": "Spearheaded native iOS development, implementing asynchronous HD video compression and real-time filter capabilities. Served as the primary iOS developer responsible for core app functionality.",
+        "range": "2020 - 2021"
     },
     {
-        "role":"iOS Director",
-        "company":"NewsCorp",
-        "summary":"Directing iOS development across all NewsCorp brands include New York Post, NewsUK, The Australian, Barron's Group and more.",
-        "range":"2019 - 2020"
+        "role": "iOS Director",
+        "company": "NewsCorp",
+        "summary": "Directed iOS development strategy across major NewsCorp brands including New York Post, NewsUK, The Australian, and Barron's Group. Oversaw technical direction and implementation standards.",
+        "range": "2019 - 2020"
     },
     {
-        "role":"Lead Mobile Developer",
-        "company":"SALIDO Inc.",
-        "summary":"Led in development of industry leading mobile Point of Sales and Kitchen Display systems.",
-        "range":"2018 - 2019"
+        "role": "Lead Mobile Developer",
+        "company": "SALIDO Inc.",
+        "summary": "Architected and developed industry-leading mobile Point of Sale and Kitchen Display systems, focusing on performance and reliability in high-pressure restaurant environments.",
+        "range": "2018 - 2019"
     },
     {
-        "role":"Lead Mobile Developer",
-        "company":"Hearst Digital News",
-        "summary":"Led in developing iOS/iPad apps and backend infrastructure for San Francisco Chronicle and other major market newspapers.",
-        "range":"2012 - 2018"
+        "role": "Lead Mobile Developer",
+        "company": "Hearst Digital News",
+        "summary": "Developed and maintained iOS/iPad applications and backend infrastructure for the San Francisco Chronicle and other major market newspapers. Led mobile technology initiatives across the organization.",
+        "range": "2012 - 2018"
     },
     {
-        "role":"Lead iOS Developer",
-        "company":"Sooloos Meridian (now Roon Labs).",
-        "summary":"Porting of C#/OpenGL .NET premium audio stream application to the ground breaking, open-source, MonoMac project (now Microsoft Xamarin).",
-        "range":"2010 - 2012"
+        "role": "Lead iOS Developer",
+        "company": "Sooloos Meridian (now Roon Labs)",
+        "summary": "Successfully ported premium audio streaming application from C#/OpenGL .NET to iOS using the pioneering MonoMac project (now Microsoft Xamarin), enabling cross-platform deployment.",
+        "range": "2010 - 2012"
     },
     {
-        "role":"Lead iOS Developer / Hadoop Administrator",
-        "company":"Sense Networks Inc. (Acquired by YellowPages.com)",
-        "summary":"Developed patented machine learning, location based algorithms and applications for social media and financial investment markets.",
-        "range":"2008 - 2010"
+        "role": "Lead iOS Developer / Hadoop Administrator",
+        "company": "Sense Networks Inc. (Acquired by YellowPages.com)",
+        "summary": "Engineered patented machine learning algorithms for location-based services, developing applications for social media and financial markets. Managed Hadoop infrastructure for large-scale data processing.",
+        "range": "2008 - 2010"
     },
     {
-        "role":"Security Industry Consultant / Associate TV Producer",
-        "company":"ATT (Bell Labs Park)",
-        "summary":"Consulted for and associate produced original streaming content for ATT Tech Channel, producing shows with industry leaders such as; Richard Stallman (GNU), Whit Diffie (RSA), Bill Cheswick (Firewalls), Emmanuel Goldstein (Editor 2600 Magazine), H. D. Moore (Metasploit), Biz Stone and Jack Dorsey (Twitter Co-Founders), and more.",
-        "range":"2007 - 2008"
+        "role": "Security Industry Consultant / Associate TV Producer",
+        "company": "ATT (Bell Labs Park)",
+        "summary": "Produced and consulted for ATT Tech Channel, creating original streaming content featuring tech industry luminaries including Richard Stallman (GNU), Whitfield Diffie (RSA), Bill Cheswick (Firewalls), and Twitter co-founders Biz Stone and Jack Dorsey.",
+        "range": "2007 - 2008"
     }
 ]
