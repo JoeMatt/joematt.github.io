@@ -2,3 +2,4 @@
 /public
 /.jekyll-cache
 /_site
+/.hugo_build.lock
