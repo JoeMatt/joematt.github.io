@@ -66,6 +66,7 @@
       {"name": "SwiftUI", "link": "https://developer.apple.com/xcode/swiftui/"},
       {"name": "UIKit", "link": "https://developer.apple.com/documentation/uikit"},
       {"name": "Combine", "link": "https://developer.apple.com/documentation/combine"},
+      {"name": "Swift Concurrency", "link": "https://developer.apple.com/documentation/swift/concurrency"},
       {"name": "RxSwift", "link": "https://github.com/ReactiveX/RxSwift"},
       {"name": "SwiftData", "link": "https://developer.apple.com/documentation/swiftdata"},
       {"name": "Core Data", "link": "https://developer.apple.com/documentation/coredata"},
