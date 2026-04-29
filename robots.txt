@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://joemattiello.dev/sitemap.xml

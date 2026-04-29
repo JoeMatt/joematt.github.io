@@ -1,0 +1,15 @@
+{
+    "version": "1.0",
+    "type": "rich",
+    "title": "Joseph Mattiello — Engineering Leader & Mobile Architect",
+    "author_name": "Joseph Mattiello",
+    "author_url": "https://joemattiello.dev",
+    "provider_name": "joemattiello.dev",
+    "provider_url": "https://joemattiello.dev",
+    "thumbnail_url": "https://joemattiello.dev/img/profile3.jpeg",
+    "thumbnail_width": 400,
+    "thumbnail_height": 400,
+    "html": "<iframe src=\"https://joemattiello.dev\" width=\"800\" height=\"600\" frameborder=\"0\" allowfullscreen></iframe>",
+    "width": 800,
+    "height": 600
+}
