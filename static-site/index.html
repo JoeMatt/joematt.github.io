@@ -827,6 +827,64 @@
             transition: width 1.2s var(--ease-out-expo);
         }
 
+        .skill-item[data-projects] {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .skill-item[data-projects]:hover .skill-name {
+            color: var(--accent-green);
+        }
+
+        .skill-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            padding: 0.7rem 0.85rem;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.2s, transform 0.2s var(--ease-out-expo);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        .skill-item:hover .skill-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .skill-tooltip-label {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .skill-tooltip-projects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+        }
+
+        .skill-tooltip-tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            background: rgba(0,229,153,0.08);
+            color: var(--accent-green);
+            border: 1px solid rgba(0,229,153,0.15);
+            white-space: nowrap;
+        }
+
         .skill-bar-fill.green { background: linear-gradient(90deg, var(--accent-green-dim), var(--accent-green)); }
         .skill-bar-fill.cyan { background: linear-gradient(90deg, #0088aa, var(--accent-cyan)); }
         .skill-bar-fill.amber { background: linear-gradient(90deg, #b07020, var(--accent-amber)); }
@@ -1024,6 +1082,76 @@
             border: none;
             height: 1px;
             background: var(--border-subtle);
+        }
+
+        /* ===== TUI DEMO ===== */
+        .demo-container { max-width: 800px; }
+
+        .demo-window {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .demo-titlebar {
+            background: #1c1c1e;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .demo-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .demo-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .demo-title {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            flex: 1;
+            text-align: center;
+            margin-right: 48px;
+        }
+
+        .demo-video {
+            width: 100%;
+            display: block;
+            background: var(--bg-deep);
+        }
+
+        .demo-install {
+            margin-top: 1.5rem;
+        }
+
+        .demo-install p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.6rem;
+        }
+
+        .demo-cmd {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            overflow-x: auto;
+        }
+
+        .demo-cmd code {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--accent-green);
+            white-space: nowrap;
         }
 
         /* ===== SEARCH MODAL ===== */
@@ -1660,32 +1788,32 @@
     <div class="skills-container reveal" id="skillsContainer">
         <div class="skill-group">
             <h3><span class="icon">⌨️</span> Languages</h3>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Swift</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Objective-C</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">C++</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:80%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">C</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">JavaScript</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:80%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Python</span><span class="skill-rating">3/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:60%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">C#</span><span class="skill-rating">3/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:60%"></div></div></div>
+            <div class="skill-item" data-projects="Provenance, Wayfair, Cameo, NewsCorp, Hearst, Salido, Knewz, Hero Transitions, XMLCoder"><div class="skill-header"><span class="skill-name">Swift</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Hearst, Sooloos, Sense Networks, CabSense, Citysense, iPhreak, Cameo"><div class="skill-header"><span class="skill-name">Objective-C</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Provenance, Virtual Jaguar, iCube, iFly, GLideN64, RetroArch"><div class="skill-header"><span class="skill-name">C++</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Virtual Jaguar, 240p Test Suite, Sense Networks, PBXBuild (GNUstep), USB/MIDI drivers, Provenance cores"><div class="skill-header"><span class="skill-name">C</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Cameo (ReactNative), Wayfair, n8n workflows"><div class="skill-header"><span class="skill-name">JavaScript</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Resume generator, automation scripts, AI tooling"><div class="skill-header"><span class="skill-name">Python</span><span class="skill-rating">3/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:60%"></div></div></div>
+            <div class="skill-item" data-projects="Sooloos/Roonlabs, Mono/MonoMac (CoreAudio, CoreMIDI wrappers)"><div class="skill-header"><span class="skill-name">C#</span><span class="skill-rating">3/5</span></div><div class="skill-bar"><div class="skill-bar-fill green" style="--fill:60%"></div></div></div>
         </div>
         <div class="skill-group">
             <h3><span class="icon">🔧</span> Tools &amp; Platforms</h3>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">AI/LLM Tooling</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">GitHub Actions / CI/CD</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Datadog (RUM, APM)</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:80%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">n8n Automation</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:80%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Jira Automation</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair (MCPs, skills, plugins), Virtual Jaguar (A/B testing), 240p Test Suite, Claude, Cursor, Codex, n8n"><div class="skill-header"><span class="skill-name">AI/LLM Tooling</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair, Provenance, Virtual Jaguar, 240p Test Suite, Cameo, all OSS projects"><div class="skill-header"><span class="skill-name">GitHub Actions / CI/CD</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair (RUM, dashboards, bootup tracking, APM)"><div class="skill-header"><span class="skill-name">Datadog (RUM, APM)</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair (Jira/GitHub automation flows)"><div class="skill-header"><span class="skill-name">n8n Automation</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair (cross-team workflow automation)"><div class="skill-header"><span class="skill-name">Jira Automation</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill amber" style="--fill:80%"></div></div></div>
         </div>
         <div class="skill-group">
             <h3><span class="icon">📱</span> SDKs &amp; APIs</h3>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">iOS/tvOS SDK</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">UIKit</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">SwiftUI</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Core Audio / MIDI</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">XCTest</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">AVFoundation</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:80%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Combine</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:80%"></div></div></div>
-            <div class="skill-item"><div class="skill-header"><span class="skill-name">Realm</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Provenance, Wayfair, Cameo, NewsCorp, Hearst, Salido, Sense Networks, all iOS work"><div class="skill-header"><span class="skill-name">iOS/tvOS SDK</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair, Cameo, NewsCorp, Hearst, Salido, Sooloos"><div class="skill-header"><span class="skill-name">UIKit</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Provenance, Wayfair"><div class="skill-header"><span class="skill-name">SwiftUI</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Sooloos/Roonlabs, Mono/MonoMac, Bass Station II, USB/MIDI drivers"><div class="skill-header"><span class="skill-name">Core Audio / MIDI</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair, Provenance, all production iOS apps"><div class="skill-header"><span class="skill-name">XCTest</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
+            <div class="skill-item" data-projects="Cameo (HD video compression, AR filters), Provenance"><div class="skill-header"><span class="skill-name">AVFoundation</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Wayfair, Provenance"><div class="skill-header"><span class="skill-name">Combine</span><span class="skill-rating">4/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:80%"></div></div></div>
+            <div class="skill-item" data-projects="Hearst, RxRealm (RxSwiftCommunity)"><div class="skill-header"><span class="skill-name">Realm</span><span class="skill-rating">5/5</span></div><div class="skill-bar"><div class="skill-bar-fill cyan" style="--fill:100%"></div></div></div>
         </div>
     </div>
 </section>
@@ -1760,6 +1888,37 @@
             <h3>BS, Computer Science</h3>
             <p>University at Buffalo</p>
             <span class="edu-date">2004 — 2008</span>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- TUI Demo -->
+<section id="demo">
+    <div class="reveal">
+        <div class="section-label">Interactive Resume</div>
+        <h2 class="section-title">Also a terminal app</h2>
+        <p class="section-desc">This resume runs as a native Swift TUI application with ncurses. Tabs, search, scroll — all in your terminal.</p>
+    </div>
+    <div class="demo-container reveal">
+        <div class="demo-window">
+            <div class="demo-titlebar">
+                <div class="demo-dots">
+                    <span style="background:#ff5f57"></span>
+                    <span style="background:#febc2e"></span>
+                    <span style="background:#28c840"></span>
+                </div>
+                <span class="demo-title">joseph.mattiello.resume — zsh</span>
+            </div>
+            <video autoplay loop muted playsinline class="demo-video">
+                <source src="demo.webm" type="video/webm">
+                <img src="demo.gif" alt="Terminal resume demo">
+            </video>
+        </div>
+        <div class="demo-install">
+            <p>Try it yourself:</p>
+            <div class="demo-cmd"><code>git clone https://github.com/JoeMatt/joseph.mattiello.resume.git && cd joseph.mattiello.resume && swift run</code></div>
         </div>
     </div>
 </section>
@@ -1949,6 +2108,17 @@ resizeCanvas();
 initParticles();
 drawParticles();
 window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
+
+// ===== SKILL TOOLTIPS =====
+document.querySelectorAll('.skill-item[data-projects]').forEach(item => {
+    const projects = item.dataset.projects;
+    const tooltip = document.createElement('div');
+    tooltip.className = 'skill-tooltip';
+    tooltip.innerHTML = `<div class="skill-tooltip-label">Used in</div><div class="skill-tooltip-projects">${
+        projects.split(', ').map(p => `<span class="skill-tooltip-tag">${p}</span>`).join('')
+    }</div>`;
+    item.appendChild(tooltip);
+});
 
 // ===== UNIVERSAL SEARCH =====
 const searchIndex = [
