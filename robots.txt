@@ -1,3 +1,66 @@
+# joemattiello.dev — robots.txt
+# Strategy: allow retrieval bots (so AI search engines can cite this page),
+# allow Google AI Overviews retrieval, allow standard search crawlers.
+# Training-only bots have a stricter policy.
+
+# Default — full access for standard search and on-demand retrieval
 User-agent: *
 Allow: /
+
+# AI search retrieval bots — explicitly welcomed
+# These fetch on-demand to answer user questions; we want citations.
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# Standard web search bots — full access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Reference files for AI agents
 Sitemap: https://joemattiello.dev/sitemap.xml
+
+# Discoverability hints
+# llms.txt: structured site summary for LLM consumption
+# https://joemattiello.dev/llms.txt

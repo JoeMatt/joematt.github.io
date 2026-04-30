@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>Consulting — Joseph Mattiello | Mobile AI Launch Readiness Audit</title>
+<meta name="description" content="Mobile AI Launch Readiness Audit — 3-week fixed-fee engagement, $25–35K. iOS performance, AI integration architecture, App Store review, on-device LLM. By the creator of Provenance EMU.">
+<link rel="canonical" href="https://joemattiello.dev/consulting/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mobile AI Launch Readiness Audit — Joseph Mattiello">
+<meta property="og:description" content="3-week fixed-fee consulting engagement. iOS engineering meets AI infrastructure. Currently considering 1–2 engagements for Q3 2026.">
+<meta property="og:url" content="https://joemattiello.dev/consulting/">
+<meta property="og:image" content="https://joemattiello.dev/img/profile3.jpeg">
+
+<!-- JSON-LD: Service offering -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Mobile AI Launch Readiness Audit",
+    "provider": { "@id": "https://joemattiello.dev/#person" },
+    "serviceType": "Mobile AI Consulting",
+    "description": "3-week fixed-fee engagement covering iOS performance, AI integration architecture, App Store review readiness, and on-device LLM/MLX/Core ML pipelines. Deliverable: written report and 60-minute readout.",
+    "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "25000",
+        "priceSpecification": {
+            "@type": "PriceSpecification",
+            "price": "25000-35000",
+            "priceCurrency": "USD"
+        },
+        "availability": "https://schema.org/LimitedAvailability"
+    },
+    "areaServed": "Worldwide",
+    "url": "https://joemattiello.dev/consulting/"
+}
+</script>
+
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --text-primary: #e4e6ea;
+    --text-secondary: #8c919a;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-cyan); }
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.nav-brand a { color: var(--text-primary); }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Hero */
+header.hero {
+    padding: 5rem 0 3rem;
+}
+.hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    background: rgba(0,229,153,0.06);
+    border: 1px solid rgba(0,229,153,0.2);
+    border-radius: 99px;
+}
+.pulse {
+    width: 7px; height: 7px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
+h1.title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    max-width: 900px;
+}
+h1.title .accent { color: var(--accent-green); }
+.lede {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 720px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Primary offer card */
+.offer {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 2.75rem;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 4rem;
+}
+.offer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.offer::after {
+    content: '';
+    position: absolute;
+    top: -180px; right: -120px;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, var(--accent-green) 0%, transparent 70%);
+    opacity: 0.05;
+    pointer-events: none;
+}
+.offer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    align-items: center;
+}
+.offer-meta-item {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+.offer-meta-item strong {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+.offer-meta-divider {
+    color: var(--text-muted);
+}
+.offer-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+.offer-pitch {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 760px;
+}
+.offer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--bg-deep);
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+}
+.offer-stat {
+    text-align: left;
+}
+.offer-stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+}
+.offer-stat-value {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+.offer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.6rem;
+    background: var(--accent-green);
+    color: var(--bg-deep);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.3s var(--ease-out-expo);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.offer-cta:hover {
+    background: #33edb3;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(0,229,153,0.25);
+    color: var(--bg-deep);
+}
+.offer-cta-secondary {
+    margin-left: 1rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+
+/* Section blocks */
+section.block {
+    margin-bottom: 4rem;
+}
+.section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.85rem;
+}
+h2.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+p.section-lede {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 720px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Methodology timeline */
+.method {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+.method-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem;
+    position: relative;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.method-step:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-3px);
+}
+.method-step-num {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+}
+.method-step h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.3;
+}
+.method-step p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+
+/* Deliverables list */
+.deliv {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 2rem;
+}
+.deliv ul { list-style: none; padding: 0; margin: 0; }
+.deliv li {
+    position: relative;
+    padding: 0.85rem 0 0.85rem 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+.deliv li:last-child { border-bottom: none; }
+.deliv li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent-green);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    top: 0.85rem;
+}
+.deliv li strong { color: var(--text-primary); font-weight: 600; }
+
+/* Fit grid (who this is for / not for) */
+.fit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+.fit-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem;
+}
+.fit-card.yes { border-left: 3px solid var(--accent-green); }
+.fit-card.no { border-left: 3px solid var(--accent-pink); }
+.fit-card h4 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+.fit-card.yes h4 { color: var(--accent-green); }
+.fit-card.no h4 { color: var(--accent-pink); }
+.fit-card ul { list-style: none; padding: 0; margin: 0; }
+.fit-card li {
+    color: var(--text-secondary);
+    padding: 0.4rem 0 0.4rem 1.4rem;
+    position: relative;
+    line-height: 1.55;
+    font-size: 0.92rem;
+}
+.fit-card.yes li::before { content: '+'; position: absolute; left: 0; color: var(--accent-green); font-weight: 700; }
+.fit-card.no li::before { content: '−'; position: absolute; left: 0; color: var(--accent-pink); font-weight: 700; }
+@media (max-width: 700px) { .fit-grid { grid-template-columns: 1fr; } }
+
+/* Proof block */
+.proof {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+.proof-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.proof-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+.proof-num {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--accent-cyan);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+.proof-num.green { color: var(--accent-green); }
+.proof-num.amber { color: var(--accent-amber); }
+.proof-num.pink { color: var(--accent-pink); }
+.proof-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+.proof-text strong { color: var(--text-primary); }
+
+/* Other engagements */
+.engagements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.engagement {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+.engagement-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+.engagement-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--accent-green);
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.engagement-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Bottom CTA */
+.bottom-cta {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+.bottom-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.bottom-cta h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+.bottom-cta p {
+    color: var(--text-secondary);
+    margin-bottom: 1.75rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); }
+
+@media (max-width: 700px) {
+    .offer { padding: 2rem 1.5rem; }
+    h1.title { font-size: 1.8rem; }
+    .offer-cta-secondary { display: block; margin-left: 0; margin-top: 0.85rem; }
+}
+</style>
+
+<!-- Analytics scaffolding — uncomment + fill in IDs after signup
+<script defer data-domain="joemattiello.dev" src="https://plausible.io/js/script.js"></script>
+-->
+</head>
+<body>
+
+<nav class="top">
+    <div class="container nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <span class="here">consulting</span>
+        </div>
+        <a href="/" class="nav-back">← Back to site</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container">
+        <div class="hero-tag"><span class="pulse"></span> Considering 1–2 engagements for Q3 2026</div>
+        <h1 class="title">iOS engineering meets <span class="accent">AI infrastructure</span>.</h1>
+        <p class="lede">A fixed-fee, fixed-scope, fixed-timeline audit for teams shipping AI-powered iOS apps. No retainers, no surprises, no &ldquo;let's hop on a call to scope it.&rdquo; Designed for series-B+ companies, fintech / media / health verticals, and AI-native teams shipping native mobile.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- The offer -->
+    <article class="offer">
+        <div class="offer-meta">
+            <span class="offer-meta-item"><strong>Mobile AI Launch Readiness Audit</strong></span>
+            <span class="offer-meta-divider">·</span>
+            <span class="offer-meta-item">3 weeks</span>
+            <span class="offer-meta-divider">·</span>
+            <span class="offer-meta-item"><strong>$25,000–$35,000</strong> fixed</span>
+            <span class="offer-meta-divider">·</span>
+            <span class="offer-meta-item">Remote</span>
+        </div>
+        <h2 class="offer-name">Get an honest read on whether your iOS app is ready to ship AI features — and what'll burn you in App Store review if it isn't.</h2>
+        <p class="offer-pitch">
+            Most teams shipping AI iOS features are flying blind on three intersecting risks: on-device performance under MLX/Core ML inference, App Store review policies on AI content, and the architectural debt that surfaces when you try to bolt agents onto an app that wasn't built for them. I run a structured 3-week audit that gives you a written report, a prioritized fix list, and a 60-minute readout — with the actual fixes in your control.
+        </p>
+
+        <div class="offer-grid">
+            <div class="offer-stat">
+                <div class="offer-stat-label">Engagement length</div>
+                <div class="offer-stat-value">3 weeks</div>
+            </div>
+            <div class="offer-stat">
+                <div class="offer-stat-label">Price (fixed)</div>
+                <div class="offer-stat-value">$25K – $35K</div>
+            </div>
+            <div class="offer-stat">
+                <div class="offer-stat-label">Format</div>
+                <div class="offer-stat-value">Async + 4 sessions</div>
+            </div>
+            <div class="offer-stat">
+                <div class="offer-stat-label">Deliverable</div>
+                <div class="offer-stat-value">Report + readout</div>
+            </div>
+        </div>
+
+        <a href="mailto:mail@joemattiello.com?subject=Mobile%20AI%20Launch%20Readiness%20Audit%20%E2%80%94%20inquiry&amp;body=Hi%20Joe%2C%0A%0AWe're%20%5Bcompany%5D%20building%20%5Bproduct%5D.%20We're%20interested%20in%20the%20Mobile%20AI%20Launch%20Readiness%20Audit.%0A%0AContext%3A%0A-%20Platform%3A%20iOS%20%2F%20iPadOS%20%2F%20%5Bother%5D%0A-%20AI%20features%20in%20scope%3A%20%5Bdescribe%5D%0A-%20Target%20launch%20date%3A%20%5Bdate%5D%0A-%20Team%20size%3A%20%5Bnumber%5D%20mobile%20engineers%0A%0AQuestions%3A%0A%5B%5D%0A%0AThanks%2C%0A%5Bname%5D" class="offer-cta">
+            Inquire about availability →
+        </a>
+        <span class="offer-cta-secondary">or <a href="mailto:mail@joemattiello.com">mail@joemattiello.com</a></span>
+    </article>
+
+    <!-- Methodology -->
+    <section class="block">
+        <div class="section-label">How it works</div>
+        <h2 class="section-title">The 3-week audit, step by step</h2>
+        <p class="section-lede">No discovery-call scope creep. No mystery hours. Three weeks, four sessions, one report.</p>
+        <div class="method">
+            <div class="method-step">
+                <div class="method-step-num">WEEK 1 · DAYS 1–5</div>
+                <h3>Codebase + architecture review</h3>
+                <p>Async access to your repo, profiling builds, and AI integration points. Focus areas: build system, dependency graph, native vs JS-bridge boundaries, AI/ML pipeline architecture, model loading patterns, observability gaps. One 60-minute kickoff.</p>
+            </div>
+            <div class="method-step">
+                <div class="method-step-num">WEEK 2 · DAYS 6–10</div>
+                <h3>Performance + on-device inference</h3>
+                <p>Cold start, hot path profiling (Instruments, Datadog RUM if available), bootup time, memory pressure under inference. MLX / Core ML model performance on real devices. SwiftUI hot-path identification. Two 30-minute working sessions.</p>
+            </div>
+            <div class="method-step">
+                <div class="method-step-num">WEEK 3 · DAYS 11–15</div>
+                <h3>App Store review + report delivery</h3>
+                <p>Audit AI feature surfaces against App Store Review Guidelines (sections 4.7, 5.1.5, 5.5), App Privacy disclosures, ATT compliance, and on-device-vs-server inference policy implications. Final written report (typically 25–40 pages) and 60-minute readout.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What you get -->
+    <section class="block">
+        <div class="section-label">What you walk away with</div>
+        <h2 class="section-title">Every deliverable, named</h2>
+        <div class="deliv">
+            <ul>
+                <li><strong>Written audit report (25–40 pages PDF)</strong> — every finding, with severity, code references, and a recommended fix path.</li>
+                <li><strong>Prioritized fix list</strong> — top 10 items by impact-to-effort, with size estimates so your team can plan.</li>
+                <li><strong>Architecture diagram</strong> of your current AI integration surface and a proposed target state.</li>
+                <li><strong>App Store review risk register</strong> — every AI feature surface mapped to relevant Apple review guidelines, with concrete language to use in your privacy declarations and review notes.</li>
+                <li><strong>Performance baseline</strong> — cold-start, time-to-interactive, inference latency, memory ceiling on your top 3 supported devices.</li>
+                <li><strong>60-minute live readout</strong> — Q&amp;A with engineering and product leadership, recorded for your team.</li>
+                <li><strong>Two follow-up sessions</strong> within 30 days post-delivery, for clarifying questions as your team executes.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Fit -->
+    <section class="block">
+        <div class="section-label">Fit check</div>
+        <h2 class="section-title">Be honest about what you need</h2>
+        <p class="section-lede">If you're outside this fit, I'll tell you upfront and recommend someone else. The work is too specific to fake a match.</p>
+        <div class="fit-grid">
+            <div class="fit-card yes">
+                <h4>This works if</h4>
+                <ul>
+                    <li>You're shipping (or about to ship) AI features in a native iOS / iPadOS / tvOS app</li>
+                    <li>You have a real codebase — not greenfield, not a prototype</li>
+                    <li>You have at least 2 mobile engineers on staff to execute the fixes</li>
+                    <li>You're past Series A; budget for a fixed-fee audit isn't a stretch</li>
+                    <li>You want a written deliverable you can share with leadership / board</li>
+                </ul>
+            </div>
+            <div class="fit-card no">
+                <h4>Not a fit if</h4>
+                <ul>
+                    <li>You want me to write the code (this is an audit, not a build engagement — see below for those)</li>
+                    <li>You're pre-product / pre-launch with no AI features yet planned</li>
+                    <li>Your stack is fully React Native or web-only (the audit specifically covers native iOS depth)</li>
+                    <li>You need an open-ended fractional CTO arrangement (also see below)</li>
+                    <li>You're looking for the cheapest possible quote — this is a premium specialist engagement</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proof -->
+    <section class="block">
+        <div class="section-label">Why me</div>
+        <h2 class="section-title">The track record this audit draws from</h2>
+        <p class="section-lede">Every conclusion in the audit comes from work I've actually shipped. Specifics — not pitch-deck claims.</p>
+        <div class="proof">
+            <div class="proof-card">
+                <div class="proof-num green">~$300k</div>
+                <div class="proof-text"><strong>/year bandwidth savings</strong> shipped at Wayfair via MP4 compression + caching strategy. Couple-day project, recurring savings.</div>
+            </div>
+            <div class="proof-card">
+                <div class="proof-num">388k+</div>
+                <div class="proof-text"><strong>Provenance EMU downloads.</strong> 6.3k stars, 79 contributors, App Store launch Jan 2025. Created and led from 2013–present.</div>
+            </div>
+            <div class="proof-card">
+                <div class="proof-num pink">3</div>
+                <div class="proof-text"><strong>Autonomous AI agents</strong> orchestrated in production CI. Claude (Sonnet+Opus auto-routed), Cursor, Kimi — sharing one dispatch vocabulary.</div>
+            </div>
+            <div class="proof-card">
+                <div class="proof-num amber">8</div>
+                <div class="proof-text"><strong>Regions led</strong> as Director of iOS Platform at NewsCorp. Took iOS from trailing Android to surpassing on every metric.</div>
+            </div>
+            <div class="proof-card">
+                <div class="proof-num">3</div>
+                <div class="proof-text"><strong>US patents</strong> as named inventor (Sense Networks). Portfolio acquired twice — by YP, then by Verve.</div>
+            </div>
+            <div class="proof-card">
+                <div class="proof-num green">17+</div>
+                <div class="proof-text"><strong>Years iOS experience.</strong> Started before Apple released the SDK. iOS, tvOS, macOS, watchOS — every layer.</div>
+            </div>
+        </div>
+        <p style="margin-top:1.5rem;font-size:0.95rem"><a href="/#impact">→ Full case studies on the main site</a></p>
+    </section>
+
+    <!-- Other engagement types -->
+    <section class="block">
+        <div class="section-label">Beyond the audit</div>
+        <h2 class="section-title">Other engagements I take on</h2>
+        <p class="section-lede">If the audit isn't the right shape — these are. All include a free 30-minute scoping call before any commitment.</p>
+        <div class="engagements">
+            <div class="engagement">
+                <div class="engagement-meta">2–4 weeks · $25–60K</div>
+                <div class="engagement-name">AI tooling / SDLC audit</div>
+                <p class="engagement-desc">Cursor / Claude Code / Copilot rollout review for engineering teams. Workflow design, MCP server integration, eval harness scaffolding. For organizations with 20+ engineers adopting AI-assisted development.</p>
+            </div>
+            <div class="engagement">
+                <div class="engagement-meta">4–8 weeks · $40–120K</div>
+                <div class="engagement-name">MCP server build-out</div>
+                <p class="engagement-desc">Custom MCP servers wrapping internal tooling, data sources, or APIs. Includes auth, audit logging, rate limiting, and gateway patterns (LiteLLM / MintMCP-style). Production-grade, not a prototype.</p>
+            </div>
+            <div class="engagement">
+                <div class="engagement-meta">3–6 weeks · $15–50K</div>
+                <div class="engagement-name">iOS performance rescue</div>
+                <p class="engagement-desc">Cold-start, hot-path, memory, and battery-drain remediation for shipping iOS apps. Datadog RUM setup, Instruments deep-dive, prioritized fix plan. Best for apps in App Store review purgatory or post-launch perf complaints.</p>
+            </div>
+            <div class="engagement">
+                <div class="engagement-meta">4–6 weeks · $30–80K</div>
+                <div class="engagement-name">Agent eval harness build</div>
+                <p class="engagement-desc">For teams shipping agents to production: build the eval harness, dataset curation pipeline, regression CI, and observability layer. The infrastructure your model evals should have had from day one.</p>
+            </div>
+            <div class="engagement">
+                <div class="engagement-meta">monthly retainer</div>
+                <div class="engagement-name">Fractional advisory</div>
+                <p class="engagement-desc">For founders and CTOs who want a senior mobile / AI architect on call — code review, hiring sanity checks, architectural sounding board, escalation contact. 5–10 hours / month, capped engagement.</p>
+            </div>
+            <div class="engagement">
+                <div class="engagement-meta">day rate $1,500–4,500</div>
+                <div class="engagement-name">Strategy days</div>
+                <p class="engagement-desc">Single-day on-site or remote engagements. Architecture review, hiring panel, technical due-diligence for VCs / acquirers. Best for &ldquo;we need a senior outside read in the next two weeks&rdquo; situations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ-shaped block (pulls into AI Overviews) -->
+    <section class="block">
+        <div class="section-label">Common questions</div>
+        <h2 class="section-title">Answers to the questions every prospect asks</h2>
+        <div class="deliv">
+            <ul>
+                <li><strong>How is this priced?</strong> Fixed-fee, paid 50% upfront, 50% on delivery. Standard MSA + SOW. No hidden hours, no surprises.</li>
+                <li><strong>What if my codebase is huge?</strong> The $25K–$35K range covers up to ~250k LoC of in-scope code. Above that we scope a custom engagement; happy to talk on a 30-minute call.</li>
+                <li><strong>Do you sign NDAs?</strong> Yes — standard mutual NDA before any code access. I can sign yours or send mine.</li>
+                <li><strong>Will you sub-contract?</strong> No. I do the work personally. The only deliverable is mine.</li>
+                <li><strong>Can you work in our timezone?</strong> Based in NYC (UTC-5/-4). Comfortable across US, EU, and APAC; have led 8-region teams across all three.</li>
+                <li><strong>Can you give a discount?</strong> No. Fixed fees mean fixed fees — that's the value of the engagement structure.</li>
+                <li><strong>What happens after the audit?</strong> Most clients implement findings themselves with quarterly check-ins. A handful retain me for the build-out (separate engagement). I don't push you toward more work — only if it's actually useful.</li>
+                <li><strong>Are you available right now?</strong> Currently considering 1–2 engagements for Q3 2026. Reach out and I'll tell you my next opening honestly.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+        <h3>Want to talk?</h3>
+        <p>Send a short note about your team and what you're shipping. I'll reply within 48 hours with whether the audit's a fit, whether something else makes more sense, or where to look elsewhere.</p>
+        <a href="mailto:mail@joemattiello.com?subject=Mobile%20AI%20Launch%20Readiness%20Audit%20%E2%80%94%20inquiry" class="offer-cta">
+            Email mail@joemattiello.com →
+        </a>
+    </section>
+
+</main>
+
+<footer class="page">
+    <div class="container">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/status/">Site status</a> · <a href="/#impact">Case studies</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
