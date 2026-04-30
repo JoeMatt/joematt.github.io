@@ -497,29 +497,45 @@ jobs:
               },
             ];
 
-            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
-              owner: context.repo.owner, repo: context.repo.repo,
-              labels: 'audit', state: 'open', per_page: 100,
-            });
+            // Skip the rest if Issues are disabled on this repo
+            // (joematt.github.io has them off intentionally; status page handles
+            // surfacing the same checks).
+            let openIssues = [];
+            try {
+              openIssues = await github.paginate(github.rest.issues.listForRepo, {
+                owner: context.repo.owner, repo: context.repo.repo,
+                labels: 'audit', state: 'open', per_page: 100,
+              });
+            } catch (e) {
+              if (e.status === 410) {
+                core.info('Issues disabled on this repo — skipping issue tracking. Status page still updated.');
+                return;
+              }
+              throw e;
+            }
 
             for (const check of checks) {
               const existing = openIssues.find(iss => iss.title === check.title);
-              if (check.failing) {
-                if (!existing) {
-                  await github.rest.issues.create({
+              try {
+                if (check.failing) {
+                  if (!existing) {
+                    await github.rest.issues.create({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      title: check.title, body: check.body, labels: check.labels,
+                    });
+                  }
+                } else if (existing) {
+                  await github.rest.issues.createComment({
                     owner: context.repo.owner, repo: context.repo.repo,
-                    title: check.title, body: check.body, labels: check.labels,
+                    issue_number: existing.number,
+                    body: `✅ This check is now passing. Auto-closing.\n\n_Resolved by [Site Audit](${runUrl})_`,
+                  });
+                  await github.rest.issues.update({
+                    owner: context.repo.owner, repo: context.repo.repo,
+                    issue_number: existing.number, state: 'closed',
                   });
                 }
-              } else if (existing) {
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner, repo: context.repo.repo,
-                  issue_number: existing.number,
-                  body: `✅ This check is now passing. Auto-closing.\n\n_Resolved by [Site Audit](${runUrl})_`,
-                });
-                await github.rest.issues.update({
-                  owner: context.repo.owner, repo: context.repo.repo,
-                  issue_number: existing.number, state: 'closed',
-                });
+              } catch (e) {
+                core.warning(`Failed to update issue for ${check.title}: ${e.message}`);
               }
             }
