@@ -1,0 +1,35 @@
+{
+  "last_updated": "2026-04-30T00:00:00Z",
+  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/workflows/site-audit.yml",
+  "html_check": {
+    "passed": null,
+    "error_count": 0
+  },
+  "lighthouse": {
+    "performance": 0,
+    "accessibility": 0,
+    "best_practices": 0,
+    "seo": 0,
+    "report_url": ""
+  },
+  "observatory": {
+    "grade": "C",
+    "score": 50
+  },
+  "ssl": {
+    "grade": "N/A"
+  },
+  "oss_impact": {
+    "total_stars": 28766,
+    "total_prs_merged": 372,
+    "total_contributors": 79,
+    "provenance_stars": 6305,
+    "provenance_downloads": 388625,
+    "discord_members": 9373
+  },
+  "ai_pipeline": {
+    "agents": ["claude-code", "cursor-agent", "kimi-agent"],
+    "workflow_count": 9,
+    "models": ["Claude Sonnet 4.6", "Claude Opus 4.6", "Claude Haiku", "Cursor", "Kimi Code"]
+  }
+}
