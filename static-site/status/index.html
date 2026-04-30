@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
+<title>Site Status — Joseph Mattiello</title>
+<meta name="description" content="Live operational status for joemattiello.dev — Lighthouse, security headers, link check, and open-source impact metrics. Audited on every deploy.">
+<link rel="canonical" href="https://joemattiello.dev/status/">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --accent-red: #ff4d6d;
+
+    --text-primary: #e4e6ea;
+    --text-secondary: #8c919a;
+    --text-muted: #555960;
+
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-cyan); }
+
+/* Subtle background grain */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 20% 0%, rgba(0,229,153,0.04) 0%, transparent 40%),
+        radial-gradient(circle at 80% 100%, rgba(0,194,255,0.03) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Top nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.nav-brand {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+}
+.nav-brand a { color: var(--text-primary); }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back:hover {
+    border-color: var(--border-glow);
+    color: var(--accent-green);
+}
+
+/* Header */
+header.page {
+    padding: 4rem 0 2.5rem;
+}
+.section-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.85rem;
+}
+h1.title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+}
+p.lede {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    line-height: 1.7;
+}
+
+/* Status banner */
+.banner {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent-green);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+.banner.warn { border-left-color: var(--accent-amber); }
+.banner.fail { border-left-color: var(--accent-red); }
+.banner-text {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+}
+.banner-text strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+.banner-text a {
+    margin-left: 0.5rem;
+    font-size: 0.82rem;
+}
+.badge {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.badge.pass { background: rgba(0,229,153,0.12); color: var(--accent-green); border: 1px solid rgba(0,229,153,0.3); }
+.badge.warn { background: rgba(240,160,48,0.12); color: var(--accent-amber); border: 1px solid rgba(240,160,48,0.3); }
+.badge.fail { background: rgba(255,77,109,0.12); color: var(--accent-red); border: 1px solid rgba(255,77,109,0.3); }
+
+/* Section */
+section.block {
+    margin-bottom: 3.5rem;
+}
+h2.block-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+}
+p.block-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.75rem;
+    max-width: 680px;
+}
+
+/* Score grid */
+.score-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+.score-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.score-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--score-color, var(--accent-green));
+    opacity: 0.7;
+}
+.score-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-glow);
+}
+.score-card.good { --score-color: var(--accent-green); }
+.score-card.ok   { --score-color: var(--accent-amber); }
+.score-card.bad  { --score-color: var(--accent-red); }
+.score-card.unknown { --score-color: var(--text-muted); }
+.score-value {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--score-color, var(--accent-green));
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+}
+.score-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+}
+.score-threshold {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Check cards (HTML, Observatory, SSL) */
+.check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.check-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.check-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--score-color, var(--accent-green));
+    opacity: 0.7;
+}
+.check-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-glow);
+}
+.check-card.good { --score-color: var(--accent-green); }
+.check-card.ok   { --score-color: var(--accent-amber); }
+.check-card.bad  { --score-color: var(--accent-red); }
+.check-card.unknown { --score-color: var(--text-muted); }
+.check-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+.check-title {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+}
+.check-value {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--score-color, var(--accent-green));
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+.check-sub {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Impact metrics */
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+}
+.impact-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem 1.25rem;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.impact-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-glow);
+}
+.impact-value {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--accent-cyan);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+.impact-value.pink { color: var(--accent-pink); }
+.impact-value.green { color: var(--accent-green); }
+.impact-value.amber { color: var(--accent-amber); }
+.impact-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+}
+
+/* Workflow list */
+.wf-list {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 0.5rem 0;
+}
+.wf-item {
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background 0.2s;
+}
+.wf-item:last-child { border-bottom: none; }
+.wf-item:hover { background: rgba(255,255,255,0.02); }
+.wf-name {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+.wf-name a { color: var(--text-primary); }
+.wf-name a:hover { color: var(--accent-pink); }
+.wf-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    flex: 1;
+    margin-left: 1rem;
+    text-align: right;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+.legend-item { display: inline-flex; align-items: center; gap: 0.5rem; }
+.legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.legend-dot.good { background: var(--accent-green); }
+.legend-dot.ok { background: var(--accent-amber); }
+.legend-dot.bad { background: var(--accent-red); }
+.legend-dot.unknown { background: var(--text-muted); }
+
+/* Footer */
+footer.page {
+    padding: 3rem 0 2rem;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 4rem;
+    text-align: center;
+}
+footer.page p {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+footer.page a { color: var(--text-secondary); }
+
+@media (max-width: 600px) {
+    h1.title { font-size: 2rem; }
+    .banner { flex-direction: column; align-items: flex-start; }
+    .check-card, .score-card { padding: 1.25rem 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+    <div class="container nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <span class="here">status</span>
+        </div>
+        <a href="/" class="nav-back">← Back to site</a>
+    </div>
+</nav>
+
+<header class="page">
+    <div class="container">
+        <div class="section-label">Operational Status</div>
+        <h1 class="title">Site status &amp; impact</h1>
+        <p class="lede">Live audit of joemattiello.dev — Lighthouse, security headers, SSL/TLS, and link check — re-run on every deploy. Plus open-source impact metrics across maintained repos. If something breaks, this page surfaces it before you do.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- Banner -->
+    <div id="banner" class="banner">
+        <div class="banner-text">
+            <span id="banner-text-content">Loading audit data…</span>
+        </div>
+        <span id="banner-badge" class="badge pass">Loading</span>
+    </div>
+
+    <!-- Lighthouse -->
+    <section class="block">
+        <h2 class="block-title">Lighthouse</h2>
+        <p class="block-desc">Measured on the homepage. Scores below the threshold auto-open a GitHub issue tagged with the failing category. A score of <code>–</code> means the audit hasn't run yet.</p>
+        <div class="score-grid" id="lighthouse-grid">
+            <div class="score-card unknown"><div class="score-value">–</div><div class="score-label">Performance</div><div class="score-threshold">Min: 70</div></div>
+            <div class="score-card unknown"><div class="score-value">–</div><div class="score-label">Accessibility</div><div class="score-threshold">Min: 80</div></div>
+            <div class="score-card unknown"><div class="score-value">–</div><div class="score-label">Best Practices</div><div class="score-threshold">Min: 80</div></div>
+            <div class="score-card unknown"><div class="score-value">–</div><div class="score-label">SEO</div><div class="score-threshold">Min: 90</div></div>
+        </div>
+        <p style="margin-top:1rem;font-size:0.85rem;text-align:center"><a id="lh-report-link" href="#" style="display:none">View full Lighthouse report →</a></p>
+    </section>
+
+    <!-- Quality Checks -->
+    <section class="block">
+        <h2 class="block-title">Quality &amp; Security</h2>
+        <p class="block-desc">HTML validation runs <code>html-proofer</code> against the built site. Security headers measured by Mozilla Observatory. SSL/TLS measured by Qualys SSL Labs.</p>
+        <div class="check-grid" id="check-grid">
+            <div class="check-card unknown"><span class="check-icon">📄</span><div class="check-title">HTML &amp; Links</div><div class="check-value">–</div><div class="check-sub">html-proofer</div></div>
+            <div class="check-card unknown"><span class="check-icon">🔒</span><div class="check-title">Security Headers</div><div class="check-value">–</div><div class="check-sub">Mozilla Observatory</div></div>
+            <div class="check-card unknown"><span class="check-icon">🛡️</span><div class="check-title">SSL / TLS</div><div class="check-value">–</div><div class="check-sub">SSL Labs</div></div>
+        </div>
+    </section>
+
+    <!-- Open Source Impact -->
+    <section class="block">
+        <h2 class="block-title">Open-source impact</h2>
+        <p class="block-desc">Live counts pulled from the GitHub API across maintained repos — Provenance, virtualjaguar-libretro, Hero, RxRealm, XMLCoder, 240p Test Suite, and others. Updated on every status audit.</p>
+        <div class="impact-grid" id="impact-grid">
+            <div class="impact-card"><div class="impact-value" id="m-stars">–</div><div class="impact-label">Stars across maintained repos</div></div>
+            <div class="impact-card"><div class="impact-value pink" id="m-prs">–</div><div class="impact-label">PRs merged (lifetime)</div></div>
+            <div class="impact-card"><div class="impact-value green" id="m-prov-stars">–</div><div class="impact-label">Provenance stars</div></div>
+            <div class="impact-card"><div class="impact-value amber" id="m-prov-downloads">–</div><div class="impact-label">Provenance downloads</div></div>
+            <div class="impact-card"><div class="impact-value" id="m-contributors">–</div><div class="impact-label">Total contributors</div></div>
+            <div class="impact-card"><div class="impact-value pink" id="m-discord">–</div><div class="impact-label">Discord members</div></div>
+        </div>
+    </section>
+
+    <!-- AI Pipeline -->
+    <section class="block">
+        <h2 class="block-title">AI pipeline</h2>
+        <p class="block-desc">Multi-agent CI ecosystem across the Provenance org. Three autonomous agents — Claude, Cursor, Kimi — share a dispatch vocabulary and route by branch / label. See the <a href="/#impact">case study</a> for architecture details.</p>
+        <div class="impact-grid" style="margin-bottom:1.5rem">
+            <div class="impact-card"><div class="impact-value" id="m-agents">3</div><div class="impact-label">Autonomous agents in production</div></div>
+            <div class="impact-card"><div class="impact-value pink" id="m-workflows">–</div><div class="impact-label">AI-driven workflows</div></div>
+            <div class="impact-card"><div class="impact-value green" id="m-models">5</div><div class="impact-label">LLMs orchestrated</div></div>
+            <div class="impact-card"><div class="impact-value amber" id="m-translations">11</div><div class="impact-label">Languages auto-localized</div></div>
+        </div>
+        <div class="wf-list" id="wf-list">
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/ai-review.yml" target="_blank" rel="noopener">ai-review.yml</a></div>
+                <div class="wf-desc">Sonnet vs Opus auto-selection by static diff analysis</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/cursor-agent.yml" target="_blank" rel="noopener">cursor-agent.yml</a></div>
+                <div class="wf-desc">Cursor agent with shared dispatch vocabulary</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/kimi-agent.yml" target="_blank" rel="noopener">kimi-agent.yml</a></div>
+                <div class="wf-desc">Kimi Code as Anthropic-API-compatible fallback</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/copilot-review-poller.yml" target="_blank" rel="noopener">copilot-review-poller.yml</a></div>
+                <div class="wf-desc">Bot-actor gate bypass via scheduled cron</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/auto-translate.yml" target="_blank" rel="noopener">auto-translate.yml</a></div>
+                <div class="wf-desc">Diff-aware Claude Haiku localization (11 languages)</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/repo-health.yml" target="_blank" rel="noopener">repo-health.yml</a></div>
+                <div class="wf-desc">Cron-driven stuck-PR detection &amp; re-dispatch</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/wiki/blob/master/.github/workflows/auto-fix-ci.yml" target="_blank" rel="noopener">wiki / auto-fix-ci.yml</a></div>
+                <div class="wf-desc">Claude self-heals spell-check &amp; link-check failures</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legend -->
+    <section class="block">
+        <div class="legend">
+            <span class="legend-item"><span class="legend-dot good"></span> 90+ / passing</span>
+            <span class="legend-item"><span class="legend-dot ok"></span> at threshold</span>
+            <span class="legend-item"><span class="legend-dot bad"></span> below threshold</span>
+            <span class="legend-item"><span class="legend-dot unknown"></span> not yet measured</span>
+        </div>
+    </section>
+
+</main>
+
+<footer class="page">
+    <div class="container">
+        <p>Audit pipeline source: <a href="https://github.com/JoeMatt/joematt.github.io/blob/master/.github/workflows/site-audit.yml" target="_blank" rel="noopener">.github/workflows/site-audit.yml</a> · Inspired by <a href="https://provenance-emu.com/status/" target="_blank" rel="noopener">provenance-emu.com/status</a></p>
+    </div>
+</footer>
+
+<script>
+const NUMBER_FMT = (n) => {
+    if (n === null || n === undefined) return '–';
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+    return String(n);
+};
+
+function classify(value, threshold) {
+    if (value === null || value === undefined || value === 0) return 'unknown';
+    if (value >= 90) return 'good';
+    if (value >= threshold) return 'ok';
+    return 'bad';
+}
+
+function gradeClass(grade) {
+    if (!grade || grade === 'N/A' || grade === '–') return 'unknown';
+    if (grade === 'A+' || grade === 'A') return 'good';
+    if (grade === 'B' || grade === 'C') return 'ok';
+    return 'bad';
+}
+
+function renderLighthouse(lh) {
+    const cards = [
+        { label: 'Performance',    value: lh.performance,    threshold: 70 },
+        { label: 'Accessibility',  value: lh.accessibility,  threshold: 80 },
+        { label: 'Best Practices', value: lh.best_practices, threshold: 80 },
+        { label: 'SEO',            value: lh.seo,            threshold: 90 },
+    ];
+    const grid = document.getElementById('lighthouse-grid');
+    grid.innerHTML = cards.map(c => {
+        const cls = classify(c.value, c.threshold);
+        const display = (c.value && c.value > 0) ? c.value : '–';
+        return `<div class="score-card ${cls}">
+            <div class="score-value">${display}</div>
+            <div class="score-label">${c.label}</div>
+            <div class="score-threshold">Min: ${c.threshold}</div>
+        </div>`;
+    }).join('');
+    if (lh.report_url) {
+        const link = document.getElementById('lh-report-link');
+        link.href = lh.report_url;
+        link.style.display = 'inline';
+    }
+}
+
+function renderChecks(d) {
+    const html = d.html_check || {};
+    const obs = d.observatory || {};
+    const ssl = d.ssl || {};
+
+    const items = [
+        {
+            icon: '📄',
+            title: 'HTML & Links',
+            value: html.passed === true ? '✅ Passed' : (html.error_count ? `❌ ${html.error_count} errors` : '–'),
+            sub: 'html-proofer',
+            cls: html.passed === true ? 'good' : (html.error_count ? 'bad' : 'unknown'),
+        },
+        {
+            icon: '🔒',
+            title: 'Security Headers',
+            value: obs.grade && obs.grade !== 'N/A' ? `${obs.grade} (${obs.score || 0}/100)` : '–',
+            sub: 'Mozilla Observatory',
+            cls: gradeClass(obs.grade),
+        },
+        {
+            icon: '🛡️',
+            title: 'SSL / TLS',
+            value: ssl.grade && ssl.grade !== 'N/A' ? ssl.grade : '–',
+            sub: 'SSL Labs',
+            cls: gradeClass(ssl.grade),
+        },
+    ];
+
+    document.getElementById('check-grid').innerHTML = items.map(i => `
+        <div class="check-card ${i.cls}">
+            <span class="check-icon">${i.icon}</span>
+            <div class="check-title">${i.title}</div>
+            <div class="check-value">${i.value}</div>
+            <div class="check-sub">${i.sub}</div>
+        </div>
+    `).join('');
+}
+
+function renderBanner(d) {
+    const banner = document.getElementById('banner');
+    const text = document.getElementById('banner-text-content');
+    const badge = document.getElementById('banner-badge');
+
+    if (!d.last_updated) {
+        text.innerHTML = 'No audit data yet — run the <strong>Site Audit</strong> workflow to populate.';
+        badge.textContent = 'Pending';
+        badge.className = 'badge warn';
+        banner.className = 'banner warn';
+        return;
+    }
+
+    const lh = d.lighthouse || {};
+    const html = d.html_check || {};
+    const allPassing =
+        html.passed === true &&
+        (lh.performance || 0) >= 70 &&
+        (lh.accessibility || 0) >= 80 &&
+        (lh.best_practices || 0) >= 80 &&
+        (lh.seo || 0) >= 90;
+
+    const date = new Date(d.last_updated).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+    let html_text = `Last audited <strong>${date}</strong>`;
+    if (d.run_url) {
+        html_text += ` · <a href="${d.run_url}" target="_blank" rel="noopener">View Actions run →</a>`;
+    }
+    text.innerHTML = html_text;
+
+    if (allPassing) {
+        badge.textContent = 'All checks passing';
+        badge.className = 'badge pass';
+        banner.className = 'banner';
+    } else {
+        badge.textContent = 'Issues detected';
+        badge.className = 'badge warn';
+        banner.className = 'banner warn';
+    }
+}
+
+function renderImpact(d) {
+    const oss = d.oss_impact || {};
+    const set = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = NUMBER_FMT(val);
+    };
+    set('m-stars', oss.total_stars);
+    set('m-prs', oss.total_prs_merged);
+    set('m-prov-stars', oss.provenance_stars);
+    set('m-prov-downloads', oss.provenance_downloads);
+    set('m-contributors', oss.total_contributors);
+    set('m-discord', oss.discord_members);
+
+    const ai = d.ai_pipeline || {};
+    if (ai.workflow_count) set('m-workflows', ai.workflow_count);
+}
+
+(async function loadStatus() {
+    try {
+        const res = await fetch('./data.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('No data.json');
+        const data = await res.json();
+        renderBanner(data);
+        renderLighthouse(data.lighthouse || {});
+        renderChecks(data);
+        renderImpact(data);
+    } catch (err) {
+        console.warn('Status data load failed:', err);
+        const banner = document.getElementById('banner');
+        const text = document.getElementById('banner-text-content');
+        const badge = document.getElementById('banner-badge');
+        text.innerHTML = '⚠️ Failed to load audit data. Check the <a href="https://github.com/JoeMatt/joematt.github.io/actions/workflows/site-audit.yml" target="_blank" rel="noopener">workflow runs</a>.';
+        badge.textContent = 'Data unavailable';
+        badge.className = 'badge fail';
+        banner.className = 'banner fail';
+    }
+})();
+</script>
+
+</body>
+</html>
