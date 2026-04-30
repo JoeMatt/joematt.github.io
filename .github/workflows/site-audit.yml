@@ -190,13 +190,67 @@ jobs:
       - name: SSL Labs
         id: ssl
         run: |
-          curl -s "https://api.ssllabs.com/api/v3/analyze?host=joemattiello.dev&startNew=on&publish=off" > /dev/null
+          # Force a fresh scan only on the Monday cron (weekly refresh) or on
+          # manual workflow_dispatch. Otherwise rely on SSL Labs' own 24h cache
+          # to return instantly and avoid hammering their API.
+          FORCE_FRESH="false"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            FORCE_FRESH="true"
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            FORCE_FRESH="true"
+          fi
+
+          if [ "$FORCE_FRESH" = "true" ]; then
+            KICKOFF_QS="startNew=on&publish=off"
+            POLL_QS="publish=off"
+            echo "SSL Labs: forcing fresh scan (event=${{ github.event_name }})"
+          else
+            KICKOFF_QS="fromCache=on&maxAge=24&publish=off"
+            POLL_QS="fromCache=on&maxAge=24&publish=off"
+            echo "SSL Labs: using cached result if available (maxAge=24h)"
+          fi
+
+          # Kick off (or request cached) analysis
+          curl -s "https://api.ssllabs.com/api/v3/analyze?host=joemattiello.dev&${KICKOFF_QS}" > /dev/null
+
           GRADE="N/A"
-          for i in {1..15}; do
-            sleep 20
-            RESULT=$(curl -s "https://api.ssllabs.com/api/v3/analyze?host=joemattiello.dev&publish=off")
+          STATUS=""
+          MAX_RETRIES=30
+
+          # Initial analyzer warm-up: SSL Labs needs ~30s before useful progress
+          # is reported. After that, poll every 15s.
+          echo "SSL Labs: sleeping 30s for analyzer warm-up..."
+          sleep 30
+
+          for i in $(seq 1 $MAX_RETRIES); do
+            RESULT=$(curl -s "https://api.ssllabs.com/api/v3/analyze?host=joemattiello.dev&${POLL_QS}")
             STATUS=$(echo "$RESULT" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('status',''))" 2>/dev/null || echo "")
-            echo "SSL Labs status: $STATUS (attempt $i)"
+
+            # Per-endpoint progress (when IN_PROGRESS, each endpoint has a
+            # 'progress' int 0-100 and a 'statusDetailsMessage')
+            PROGRESS_LINE=$(echo "$RESULT" | python3 -c "
+          import json,sys
+          try:
+              d=json.load(sys.stdin)
+              eps=d.get('endpoints',[]) or []
+              parts=[]
+              for ep in eps:
+                  ip = ep.get('ipAddress','?')
+                  st = ep.get('statusMessage','')
+                  pr = ep.get('progress')
+                  msg = ep.get('statusDetailsMessage','')
+                  if pr is not None:
+                      parts.append(f'{ip}: {st} {pr}% {msg}'.strip())
+                  else:
+                      parts.append(f'{ip}: {st} {msg}'.strip())
+              print(' | '.join(parts))
+          except Exception:
+              print('')
+              " 2>/dev/null || echo "")
+
+            echo "SSL Labs status: $STATUS (attempt $i/$MAX_RETRIES)${PROGRESS_LINE:+ — $PROGRESS_LINE}"
+
             if [ "$STATUS" = "READY" ]; then
               GRADE=$(echo "$RESULT" | python3 -c "
           import json,sys
@@ -206,7 +260,18 @@ jobs:
               " 2>/dev/null || echo "N/A")
               break
             fi
+            if [ "$STATUS" = "ERROR" ]; then
+              echo "::warning::SSL Labs analysis returned ERROR status, aborting poll"
+              break
+            fi
+
+            sleep 15
           done
+
+          if [ "$STATUS" != "READY" ] && [ "$STATUS" != "ERROR" ]; then
+            echo "::warning::SSL Labs analysis did not complete within $MAX_RETRIES retries (10 minutes). Last status: $STATUS"
+          fi
+
           echo "grade=$GRADE" >> $GITHUB_OUTPUT
           echo "SSL Labs: $GRADE"
 
