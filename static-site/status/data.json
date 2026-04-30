@@ -1,16 +1,16 @@
 {
-  "last_updated": "2026-04-30T00:00:00Z",
-  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/workflows/site-audit.yml",
+  "last_updated": "2026-04-30T05:32:56Z",
+  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/runs/25149035906",
   "html_check": {
-    "passed": null,
+    "passed": true,
     "error_count": 0
   },
   "lighthouse": {
-    "performance": 0,
-    "accessibility": 0,
-    "best_practices": 0,
-    "seo": 0,
-    "report_url": ""
+    "performance": 69,
+    "accessibility": 92,
+    "best_practices": 100,
+    "seo": 100,
+    "report_url": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1777526903644-4285.report.html"
   },
   "observatory": {
     "grade": "C",
@@ -21,15 +21,25 @@
   },
   "oss_impact": {
     "total_stars": 28766,
-    "total_prs_merged": 372,
+    "total_prs_merged": 0,
     "total_contributors": 79,
     "provenance_stars": 6305,
     "provenance_downloads": 388625,
     "discord_members": 9373
   },
   "ai_pipeline": {
-    "agents": ["claude-code", "cursor-agent", "kimi-agent"],
+    "agents": [
+      "claude-code",
+      "cursor-agent",
+      "kimi-agent"
+    ],
     "workflow_count": 9,
-    "models": ["Claude Sonnet 4.6", "Claude Opus 4.6", "Claude Haiku", "Cursor", "Kimi Code"]
+    "models": [
+      "Claude Sonnet 4.6",
+      "Claude Opus 4.6",
+      "Claude Haiku",
+      "Cursor",
+      "Kimi Code"
+    ]
   }
 }
