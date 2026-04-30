@@ -186,10 +186,79 @@
 
     <link rel="icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/favicon-180-precomposed.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* Self-hosted fonts (replaces Google Fonts) */
+        @font-face {
+            font-family: 'Space Mono';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Space Mono';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Outfit';
+            font-style: normal;
+            font-weight: 300;
+            font-display: swap;
+            src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Outfit';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Outfit';
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+            src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Outfit';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Outfit';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+            src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url('/fonts/jetbrains-mono-v24-latin-700.woff2') format('woff2');
+        }
+
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
         :root {
@@ -2101,7 +2170,10 @@
             </div>
         </div>
         <div class="hero-photo">
-            <img src="img/profile3.jpeg" alt="Joseph Mattiello" loading="eager">
+            <picture>
+                <source srcset="img/profile3.webp" type="image/webp">
+                <img src="img/profile3.jpeg" alt="Joseph Mattiello" loading="eager" fetchpriority="high" width="260" height="260">
+            </picture>
         </div>
     </div>
     <div class="hero-scroll-hint">
@@ -2163,22 +2235,22 @@
         <!-- Provenance -->
         <div class="project-card featured reveal">
             <div>
-                <div class="project-icon" style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.2);"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance" loading="lazy"></div>
+                <div class="project-icon" style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.2);"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance" loading="lazy" width="56" height="56"></div>
                 <span class="project-tag tag-creator">Creator &amp; PM</span>
                 <h3>Provenance <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">6.3k ⭐ · App Store</span></h3>
                 <p>The most popular open-source multi-system emulator for iOS, tvOS, and macOS. Now on the App Store. 388k+ downloads, 50+ supported console systems. Full SwiftUI interface with iCloud Sync, Spotlight, QuickLook, FileProvider, and Siri integration. Upcoming: first open-source Jaguar CD emulation.</p>
                 <div class="project-links">
                     <a href="https://provenance-emu.com" target="_blank" rel="noopener">🌐 Website
-                        <div class="link-preview"><img src="https://provenance-emu.com/images/mobile.png" alt="Provenance on iOS" loading="lazy"><div class="link-preview-label">provenance-emu.com</div></div>
+                        <div class="link-preview"><img src="https://provenance-emu.com/images/mobile.png" alt="Provenance on iOS" loading="lazy" width="300" height="200"><div class="link-preview-label">provenance-emu.com</div></div>
                     </a>
                     <a href="https://provenance-emu.com/skins" target="_blank" rel="noopener">🎨 Skins Gallery
-                        <div class="link-preview"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance Skins" loading="lazy"><div class="link-preview-label">provenance-emu.com/skins</div></div>
+                        <div class="link-preview"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance Skins" loading="lazy" width="300" height="200"><div class="link-preview-label">provenance-emu.com/skins</div></div>
                     </a>
                     <a href="https://github.com/Provenance-Emu/Provenance" target="_blank" rel="noopener">↗ GitHub
-                        <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/37421993?v=4" alt="Provenance-Emu org" loading="lazy"><div class="link-preview-label">github.com/Provenance-Emu/Provenance · 6.3k ⭐</div></div>
+                        <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/37421993?v=4" alt="Provenance-Emu org" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/Provenance-Emu/Provenance · 6.3k ⭐</div></div>
                     </a>
                     <a href="https://wiki.provenance-emu.com" target="_blank" rel="noopener">📖 Wiki
-                        <div class="link-preview"><img src="https://wiki.provenance-emu.com/~gitbook/image?url=https%3A%2F%2F2023841110-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-LcssjTrcP7HWLfsYZCJ%252Fsocialpreview%252FaKKeBHCZKJ0ew5HSMm06%252Fhome-banner.webp%3Falt%3Dmedia%26token%3Def70ecb1-ea22-476d-a454-3f1f430d7821&amp;width=1200&amp;height=630&amp;sign=ab51f676&amp;sv=2" alt="Provenance Wiki" loading="lazy"><div class="link-preview-label">wiki.provenance-emu.com</div></div>
+                        <div class="link-preview"><img src="https://wiki.provenance-emu.com/~gitbook/image?url=https%3A%2F%2F2023841110-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-LcssjTrcP7HWLfsYZCJ%252Fsocialpreview%252FaKKeBHCZKJ0ew5HSMm06%252Fhome-banner.webp%3Falt%3Dmedia%26token%3Def70ecb1-ea22-476d-a454-3f1f430d7821&amp;width=1200&amp;height=630&amp;sign=ab51f676&amp;sv=2" alt="Provenance Wiki" loading="lazy" width="300" height="200"><div class="link-preview-label">wiki.provenance-emu.com</div></div>
                     </a>
                 </div>
             </div>
@@ -2186,15 +2258,15 @@
                 <div class="project-links" style="flex-direction:column;gap:0.75rem">
                     <a href="https://icube-emu.com" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
                         🟣 <strong style="color:var(--text-primary)">iCube</strong> — GameCube/Wii emulator for iOS. JIT-less optimized interpreter for Apple Silicon.
-                        <div class="link-preview"><img src="https://icube-emu.com/_next/static/media/iphone1-library.ef84696b.jpg" alt="iCube on iOS" loading="lazy"><div class="link-preview-label">icube-emu.com</div></div>
+                        <div class="link-preview"><img src="https://icube-emu.com/_next/static/media/iphone1-library.ef84696b.jpg" alt="iCube on iOS" loading="lazy" width="300" height="200"><div class="link-preview-label">icube-emu.com</div></div>
                     </a>
                     <a href="https://ifly-emu.com" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
                         🔵 <strong style="color:var(--text-primary)">iFly</strong> — Dreamcast emulator for iOS. JIT-less GPU/CPU interpreter for Apple Silicon.
-                        <div class="link-preview"><img src="https://ifly-emu.com/icon-512.png" alt="iFly app icon" loading="lazy"><div class="link-preview-label">ifly-emu.com</div></div>
+                        <div class="link-preview"><img src="https://ifly-emu.com/icon-512.png" alt="iFly app icon" loading="lazy" width="300" height="200"><div class="link-preview-label">ifly-emu.com</div></div>
                     </a>
                     <a href="https://www.youtube.com/watch?v=OqKeJYLRwJI" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
                         ▶️ <strong style="color:var(--text-primary)">YouTube</strong> — "Mastering Retro Gaming on Your iPhone" (58k+ views)
-                        <div class="link-preview"><img src="https://i.ytimg.com/vi/OqKeJYLRwJI/hqdefault.jpg" alt="Provenance iOS Guide" loading="lazy"><div class="link-preview-label">youtube.com · Techjunkie Aman</div></div>
+                        <div class="link-preview"><img src="https://i.ytimg.com/vi/OqKeJYLRwJI/hqdefault.jpg" alt="Provenance iOS Guide" loading="lazy" width="300" height="200"><div class="link-preview-label">youtube.com · Techjunkie Aman</div></div>
                     </a>
                 </div>
             </div>
@@ -2224,13 +2296,13 @@
 
         <!-- iCube -->
         <div class="project-card reveal">
-            <div class="project-icon" style="background:rgba(128,90,213,0.1);border:1px solid rgba(128,90,213,0.2);"><img src="https://icube-emu.com/icon-1024.png" alt="iCube" loading="lazy"></div>
+            <div class="project-icon" style="background:rgba(128,90,213,0.1);border:1px solid rgba(128,90,213,0.2);"><img src="https://icube-emu.com/icon-1024.png" alt="iCube" loading="lazy" width="48" height="48"></div>
             <span class="project-tag tag-hiatus">Coming soon</span>
             <h3>iCube</h3>
             <p>GameCube &amp; Wii emulator for iOS and tvOS. JIT-less Dolphin fork with optimized CPU/GPU interpreter code purpose-built for Apple Silicon. Metal shaders.</p>
             <div class="project-links">
                 <a href="https://icube-emu.com" target="_blank" rel="noopener">🌐 Website
-                    <div class="link-preview"><img src="https://icube-emu.com/_next/static/media/iphone1-library.ef84696b.jpg" alt="iCube on iOS" loading="lazy"><div class="link-preview-label">icube-emu.com</div></div>
+                    <div class="link-preview"><img src="https://icube-emu.com/_next/static/media/iphone1-library.ef84696b.jpg" alt="iCube on iOS" loading="lazy" width="300" height="200"><div class="link-preview-label">icube-emu.com</div></div>
                 </a>
                 <a href="https://provenance-emu.itch.io/icube" target="_blank" rel="noopener">🕹️ itch.io</a>
             </div>
@@ -2238,13 +2310,13 @@
 
         <!-- iFly -->
         <div class="project-card reveal">
-            <div class="project-icon" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);"><img src="https://ifly-emu.com/icon-512.png" alt="iFly" loading="lazy"></div>
+            <div class="project-icon" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);"><img src="https://ifly-emu.com/icon-512.png" alt="iFly" loading="lazy" width="48" height="48"></div>
             <span class="project-tag tag-hiatus">Coming soon</span>
             <h3>iFly</h3>
             <p>Dreamcast emulator for iOS and tvOS. JIT-less GPU/CPU interpreter optimized for Apple Silicon. Metal shaders, MFi controller support, save states, automatic cheat downloads.</p>
             <div class="project-links">
                 <a href="https://ifly-emu.com" target="_blank" rel="noopener">🌐 Website
-                    <div class="link-preview"><img src="https://ifly-emu.com/icon-512.png" alt="iFly app icon" loading="lazy"><div class="link-preview-label">ifly-emu.com</div></div>
+                    <div class="link-preview"><img src="https://ifly-emu.com/icon-512.png" alt="iFly app icon" loading="lazy" width="300" height="200"><div class="link-preview-label">ifly-emu.com</div></div>
                 </a>
                 <a href="https://provenance.itch.io/ifly" target="_blank" rel="noopener">🕹️ itch.io</a>
             </div>
@@ -2685,52 +2757,52 @@
         <a href="https://github.com/libretro/RetroArch" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>RetroArch</h4>
             <p>Authored Apple platform drivers: camera (AVFoundation), microphone, CoreMIDI, and WiFi — all merged to mainline iOS/macOS/tvOS builds</p>
-            <div class="link-preview"><img src="https://www.retroarch.com/images/logo.png" alt="RetroArch" loading="lazy"><div class="link-preview-label">github.com/libretro/RetroArch</div></div>
+            <div class="link-preview"><img src="https://www.retroarch.com/images/logo.png" alt="RetroArch" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/libretro/RetroArch</div></div>
         </a>
         <a href="https://getutm.app/" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>UTM</h4>
             <p>Virtual machine host for iOS/macOS</p>
-            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/49966544?v=4" alt="UTM" loading="lazy"><div class="link-preview-label">getutm.app</div></div>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/49966544?v=4" alt="UTM" loading="lazy" width="300" height="200"><div class="link-preview-label">getutm.app</div></div>
         </a>
         <a href="https://github.com/HeroTransitions/Hero" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>Hero Transitions</h4>
             <p>Maintained custom view controller transition library for Swift</p>
-            <div class="link-preview"><img src="https://raw.githubusercontent.com/HeroTransitions/Hero/develop/Resources/Hero.png" alt="Hero" loading="lazy"><div class="link-preview-label">github.com/HeroTransitions/Hero · 22k+ ⭐</div></div>
+            <div class="link-preview"><img src="https://raw.githubusercontent.com/HeroTransitions/Hero/develop/Resources/Hero.png" alt="Hero" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/HeroTransitions/Hero · 22k+ ⭐</div></div>
         </a>
         <a href="https://github.com/RxSwiftCommunity/RxRealm" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>RxSwift Community</h4>
             <p>Maintainer of RxRealm &amp; RxReachability</p>
-            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/15903991?v=4" alt="RxSwift Community" loading="lazy"><div class="link-preview-label">github.com/RxSwiftCommunity/RxRealm · 1.1k+ ⭐</div></div>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/15903991?v=4" alt="RxSwift Community" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/RxSwiftCommunity/RxRealm · 1.1k+ ⭐</div></div>
         </a>
         <a href="https://github.com/CoreOffice/XMLCoder" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>XMLCoder</h4>
             <p>Significant PRs — attributed intrinsic value coding, dynamic node encoding</p>
-            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/65599322?v=4" alt="CoreOffice" loading="lazy"><div class="link-preview-label">github.com/CoreOffice/XMLCoder</div></div>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/65599322?v=4" alt="CoreOffice" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/CoreOffice/XMLCoder</div></div>
         </a>
         <a href="https://www.mono-project.com/" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>Mono / Xamarin</h4>
             <p>Authored CoreMIDI, CoreAudio, and Foundation C# wrappers for MonoMac</p>
-            <div class="link-preview"><img src="https://www.mono-project.com/images/mono-gorilla.svg" alt="Mono" loading="lazy"><div class="link-preview-label">github.com/mono/mono</div></div>
+            <div class="link-preview"><img src="https://www.mono-project.com/images/mono-gorilla.svg" alt="Mono" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/mono/mono</div></div>
         </a>
         <a href="https://github.com/gonetz/GLideN64" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>GLideN64</h4>
             <p>Open-source N64 graphics plugin contributions</p>
-            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/6205049?v=4" alt="mupen64plus org" loading="lazy"><div class="link-preview-label">github.com/gonetz/GLideN64</div></div>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/6205049?v=4" alt="mupen64plus org" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/gonetz/GLideN64</div></div>
         </a>
         <a href="https://github.com/SideStore/SideStore" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>SideStore</h4>
             <p>21 merged PRs. Rust build integration, error handling, settings, pairing. Org member</p>
-            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/105070799?v=4" alt="SideStore" loading="lazy"><div class="link-preview-label">github.com/SideStore/SideStore · 5.3k+ ⭐</div></div>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/105070799?v=4" alt="SideStore" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/SideStore/SideStore · 5.3k+ ⭐</div></div>
         </a>
         <a href="https://github.com/mupen64plus/mupen64plus-core" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>mupen64plus</h4>
             <p>Buffer overflow fix in core, removed system() calls for iOS/tvOS compatibility</p>
-            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/6205049?v=4" alt="mupen64plus" loading="lazy"><div class="link-preview-label">github.com/mupen64plus/mupen64plus-core</div></div>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/6205049?v=4" alt="mupen64plus" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/mupen64plus/mupen64plus-core</div></div>
         </a>
         <a href="https://github.com/flyinghead/flycast" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>Flycast (Dreamcast)</h4>
             <p>Metal renderer fixes, Vulkan portability, audio drift fixes (4 open PRs)</p>
-            <div class="link-preview"><img src="https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png" alt="Flycast" loading="lazy"><div class="link-preview-label">github.com/flyinghead/flycast</div></div>
+            <div class="link-preview"><img src="https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png" alt="Flycast" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/flyinghead/flycast</div></div>
         </a>
     </div>
     <div class="oss-more reveal">
@@ -2921,7 +2993,7 @@
             </div>
             <video autoplay loop muted playsinline class="demo-video">
                 <source src="demo.webm" type="video/webm">
-                <img src="demo.gif" alt="Terminal resume demo">
+                <img src="demo.gif" alt="Terminal resume demo" loading="lazy" width="1200" height="700">
             </video>
         </div>
         <div class="demo-install">
@@ -3063,9 +3135,16 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 // Hero canvas - subtle floating particles
+// Pauses when the hero scrolls out of view to save CPU.
 const canvas = document.getElementById('heroCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
+let particlesActive = true;
+
+const heroEl = document.querySelector('.hero');
+if (heroEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => { particlesActive = e.isIntersecting; }, { threshold: 0 }).observe(heroEl);
+}
 
 function resizeCanvas() {
     canvas.width = canvas.offsetWidth;
@@ -3088,6 +3167,10 @@ function initParticles() {
 }
 
 function drawParticles() {
+    if (!particlesActive) {
+        requestAnimationFrame(drawParticles);
+        return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => {
         p.x += p.vx;
@@ -3128,6 +3211,13 @@ initParticles();
 drawParticles();
 window.addEventListener('resize', () => { resizeCanvas(); initParticles(); });
 
+// ===== DEFERRED NON-CRITICAL JS =====
+// Search modal, skill tooltips, link-preview hover positioning are all
+// off-LCP critical path — schedule them when the browser is idle so the
+// initial paint isn't blocked.
+const __idle = window.requestIdleCallback || function (cb) { return setTimeout(cb, 1); };
+
+__idle(() => {
 // ===== SKILL TOOLTIPS =====
 document.querySelectorAll('.skill-item[data-projects]').forEach(item => {
     const projects = item.dataset.projects;
@@ -3354,24 +3444,29 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ===== LINK PREVIEW POSITIONING =====
-document.querySelectorAll('.link-preview').forEach(preview => {
-    const parent = preview.parentElement;
-    document.body.appendChild(preview);
-    parent.addEventListener('mouseenter', () => {
-        const rect = parent.getBoundingClientRect();
-        const pw = 300;
-        let left = rect.left + rect.width / 2 - pw / 2;
-        if (left < 8) left = 8;
-        if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
-        preview.style.left = left + 'px';
-        preview.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
-        preview.style.top = 'auto';
-        preview.classList.add('visible');
-    });
-    parent.addEventListener('mouseleave', () => {
-        preview.classList.remove('visible');
+// Move-to-body + hover wiring is not LCP-critical — runs idle.
+__idle(() => {
+    document.querySelectorAll('.link-preview').forEach(preview => {
+        const parent = preview.parentElement;
+        document.body.appendChild(preview);
+        parent.addEventListener('mouseenter', () => {
+            const rect = parent.getBoundingClientRect();
+            const pw = 300;
+            let left = rect.left + rect.width / 2 - pw / 2;
+            if (left < 8) left = 8;
+            if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+            preview.style.left = left + 'px';
+            preview.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+            preview.style.top = 'auto';
+            preview.classList.add('visible');
+        });
+        parent.addEventListener('mouseleave', () => {
+            preview.classList.remove('visible');
+        });
     });
 });
+
+}); // end __idle (skill tooltips, search modal, link previews)
 </script>
 </body>
 </html>
