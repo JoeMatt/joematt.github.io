@@ -537,6 +537,209 @@
             margin-top: 0.25rem;
         }
 
+        /* ===== CASE STUDIES ===== */
+        .case-studies {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .case-study {
+            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-expo);
+        }
+        .case-study::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 3px;
+            background: var(--cs-accent, var(--accent-green));
+            opacity: 0.6;
+        }
+        .case-study::after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, var(--cs-accent, var(--accent-green)) 0%, transparent 70%);
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        .case-study:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .case-study:hover::before { opacity: 1; }
+
+        .cs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .cs-meta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .cs-meta strong {
+            color: var(--cs-accent, var(--accent-green));
+            font-weight: 700;
+        }
+        .cs-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .cs-tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            letter-spacing: 0.04em;
+        }
+        .cs-headline {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        .cs-subhead {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 760px;
+        }
+        .cs-body {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+        .cs-metric {
+            background: var(--bg-deep);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 1.5rem 1.25rem;
+            text-align: center;
+            position: sticky;
+            top: 5rem;
+        }
+        .cs-metric-value {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--cs-accent, var(--accent-green));
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+        .cs-metric-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1.4;
+        }
+        .cs-metric-sub {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .cs-content h5 {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--cs-accent, var(--accent-green));
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin: 1.5rem 0 0.6rem;
+            font-weight: 600;
+        }
+        .cs-content h5:first-child { margin-top: 0; }
+        .cs-content p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
+        }
+        .cs-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .cs-content ul li {
+            position: relative;
+            padding-left: 1.4rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0.6rem;
+        }
+        .cs-content ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--cs-accent, var(--accent-green));
+            font-size: 0.85rem;
+            top: 0.15rem;
+        }
+        .cs-content ul li strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .cs-stack {
+            margin-top: 1.75rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .cs-stack-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-right: 0.5rem;
+        }
+        .cs-chip {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+        @media (max-width: 760px) {
+            .case-study { padding: 1.75rem; }
+            .cs-body { grid-template-columns: 1fr; gap: 1.5rem; }
+            .cs-metric { position: static; }
+            .cs-metric-value { font-size: 2rem; }
+        }
+
         /* ===== PROJECTS ===== */
         .projects-grid {
             display: grid;
@@ -1610,6 +1813,7 @@
     <ul class="nav-links" id="navLinks">
         <li><a href="#about">About</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#impact">Impact</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#opensource">Open Source</a></li>
@@ -1721,9 +1925,15 @@
                     <a href="https://provenance-emu.com" target="_blank" rel="noopener">🌐 Website
                         <div class="link-preview"><img src="https://provenance-emu.com/images/mobile.png" alt="Provenance on iOS" loading="lazy"><div class="link-preview-label">provenance-emu.com</div></div>
                     </a>
-                    <a href="https://provenance-emu.com/skins" target="_blank" rel="noopener">🎨 Skins Gallery</a>
-                    <a href="https://github.com/Provenance-Emu/Provenance" target="_blank" rel="noopener">↗ GitHub</a>
-                    <a href="https://wiki.provenance-emu.com" target="_blank" rel="noopener">📖 Wiki</a>
+                    <a href="https://provenance-emu.com/skins" target="_blank" rel="noopener">🎨 Skins Gallery
+                        <div class="link-preview"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance Skins" loading="lazy"><div class="link-preview-label">provenance-emu.com/skins</div></div>
+                    </a>
+                    <a href="https://github.com/Provenance-Emu/Provenance" target="_blank" rel="noopener">↗ GitHub
+                        <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/37421993?v=4" alt="Provenance-Emu org" loading="lazy"><div class="link-preview-label">github.com/Provenance-Emu/Provenance · 6.3k ⭐</div></div>
+                    </a>
+                    <a href="https://wiki.provenance-emu.com" target="_blank" rel="noopener">📖 Wiki
+                        <div class="link-preview"><img src="https://wiki.provenance-emu.com/~gitbook/image?url=https%3A%2F%2F2023841110-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252F-LcssjTrcP7HWLfsYZCJ%252Fsocialpreview%252FaKKeBHCZKJ0ew5HSMm06%252Fhome-banner.webp%3Falt%3Dmedia%26token%3Def70ecb1-ea22-476d-a454-3f1f430d7821&amp;width=1200&amp;height=630&amp;sign=ab51f676&amp;sv=2" alt="Provenance Wiki" loading="lazy"><div class="link-preview-label">wiki.provenance-emu.com</div></div>
+                    </a>
                 </div>
             </div>
             <div>
@@ -1793,6 +2003,224 @@
                 <a href="https://provenance.itch.io/ifly" target="_blank" rel="noopener">🕹️ itch.io</a>
             </div>
         </div>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Case Studies / Impact -->
+<section id="impact">
+    <div class="reveal">
+        <div class="section-label">Case Studies</div>
+        <h2 class="section-title">Where I've moved the needle</h2>
+        <p class="section-desc">Selected work where leadership decisions, technical depth, or both translated into measurable business outcomes. Numbers below are real or directly observable; story expanded on request.</p>
+    </div>
+    <div class="case-studies">
+
+        <!-- Case Study 1: Wayfair -->
+        <article class="case-study reveal" style="--cs-accent: var(--accent-green);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>Wayfair</strong> · L4 Mobile Engineer, App Infrastructure · 2025–Present</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">Performance</span>
+                    <span class="cs-tag">Cost Optimization</span>
+                    <span class="cs-tag">Observability</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">~$300k/year in bandwidth savings from two days of work.</h3>
+            <p class="cs-subhead">Joined the App Infrastructure team supporting 60+ mobile engineers. Within the first months: shipped a video compression and caching strategy that pays for the team several times over, plus SwiftUI hot-path optimization and Datadog-instrumented bootup tracking.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">$300k+</div>
+                    <div class="cs-metric-label">Annual bandwidth saved</div>
+                    <div class="cs-metric-sub">From a focused MP4 compression + caching pass — couple-day project, recurring savings.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>Video assets across product surfaces were being delivered with no shared compression or caching strategy. At Wayfair's scale, bandwidth costs grow fast — and the cost was hidden across teams, so no one owned it.</p>
+
+                    <h5>What I did</h5>
+                    <ul>
+                        <li><strong>MP4 pipeline rewrite.</strong> Profiled the existing video delivery path, designed a re-encoding + caching strategy, and validated the savings against real production traffic via Datadog RUM.</li>
+                        <li><strong>SwiftUI purchase flow profiling.</strong> Instrumented the highest-revenue purchasing flow, identified rendering hot paths, and shipped targeted SwiftUI optimizations.</li>
+                        <li><strong>Bootup performance instrumentation.</strong> Stood up Datadog RUM tracking for cold-start, splash-to-interactive, and warm-resume timings — the data that's now driving the next wave of perf work.</li>
+                        <li><strong>AI tooling for the platform team.</strong> Built custom MCP servers, Claude skills/plugins, and n8n workflows that integrate with Jira and GitHub to automate cross-team engineering tasks.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>Roughly $300k/year in recurring bandwidth savings from the video work, real bootup metrics now feeding a structured optimization roadmap, and a growing internal AI tooling surface used across teams.</p>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Swift</span>
+                        <span class="cs-chip">SwiftUI</span>
+                        <span class="cs-chip">AVFoundation</span>
+                        <span class="cs-chip">Datadog RUM</span>
+                        <span class="cs-chip">CDN / Caching</span>
+                        <span class="cs-chip">MCP / Claude</span>
+                        <span class="cs-chip">n8n</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Case Study 2: NewsCorp -->
+        <article class="case-study reveal" style="--cs-accent: var(--accent-cyan);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>NewsCorp</strong> · Director, iOS Platform · 2019–2020</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">Leadership</span>
+                    <span class="cs-tag">Platform SDK</span>
+                    <span class="cs-tag">Global Team</span>
+                    <span class="cs-tag">DevOps</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">Inherited an iOS org trailing Android. A year later, we'd passed them on every metric that mattered.</h3>
+            <p class="cs-subhead">Director of iOS Platform across NewsCorp's global brands — Wall Street Journal, NY Post, The Times UK, Knewz, and more — with engineering teams in NYC, London, Argentina, Ukraine, Russia, Hong Kong, Sydney, and Bangalore.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">8</div>
+                    <div class="cs-metric-label">Regions led</div>
+                    <div class="cs-metric-sub">Hands-on technical leadership across timezones, with a shared platform SDK adopted by every NewsCorp brand.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>iOS apps across NewsCorp's brand portfolio were lagging Android on app-store ratings, crash rates, performance, and bandwidth. Each brand was duplicating platform code. CI/CD was inconsistent. There was no shared iOS strategy.</p>
+
+                    <h5>What I did</h5>
+                    <ul>
+                        <li><strong>Built a shared iOS Platform SDK</strong> as an "internal open source" model — every NewsCorp brand consumed it, contributed back, and got the next perf/stability fix for free.</li>
+                        <li><strong>Restructured and hired</strong> across 8 regions. Set up cross-region code review, release cadence, and on-call ownership.</li>
+                        <li><strong>Modernized CI/CD with GitHub Actions, automated PR management, and Jira integrations</strong> — the same DevOps automation patterns I'd later carry into my OSS work.</li>
+                        <li><strong>Shipped Knewz from scratch</strong> — NewsCorp's news-aggregation app — as a greenfield iOS project, end-to-end, while running platform.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>iOS surpassed Android across the board on stability, app-store ratings, performance, and bandwidth usage. The platform SDK was adopted by every brand and outlived my tenure. Knewz launched on iOS internally-built, on time.</p>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Swift</span>
+                        <span class="cs-chip">Objective-C</span>
+                        <span class="cs-chip">Platform SDK</span>
+                        <span class="cs-chip">GitHub Actions</span>
+                        <span class="cs-chip">Jira Automation</span>
+                        <span class="cs-chip">Fastlane</span>
+                        <span class="cs-chip">Distributed Teams</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Case Study 3: Cameo -->
+        <article class="case-study reveal" style="--cs-accent: var(--accent-amber);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>Cameo</strong> · Principal iOS Engineer · 2020–2021</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">React Native</span>
+                    <span class="cs-tag">Native Bridging</span>
+                    <span class="cs-tag">CI/CD</span>
+                    <span class="cs-tag">AVFoundation</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">First native iOS dev on a React Native team — fixed the build, shipped HD video.</h3>
+            <p class="cs-subhead">Cameo was scaling fast and the iOS build pipeline was cracking. I came in as their first dedicated native iOS engineer, with a mandate to make the engineering org actually able to ship — and to enable native-quality features the JS bridge couldn't deliver.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">HD</div>
+                    <div class="cs-metric-label">Native video shipped</div>
+                    <div class="cs-metric-sub">First native React Native module on the iOS app — set the pattern for native-quality features across the stack.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>The React Native iOS build was slow and flaky — both in CI and locally. Engineers had stopped trusting green builds. And video quality was capped by what JavaScript could push through the bridge.</p>
+
+                    <h5>What I did</h5>
+                    <ul>
+                        <li><strong>Rebuilt the iOS RN build pipeline.</strong> Profiled every stage, eliminated flakiness sources, and parallelized where it mattered. CI went from "maybe" to predictable.</li>
+                        <li><strong>Shipped HD video as a native React Native module.</strong> Built compression, transcoding, and playback in Swift/AVFoundation, exposed via the React Native bridge — gave product the quality bar they couldn't get from JS.</li>
+                        <li><strong>AR filter exploration.</strong> Prototyped native AR filters using ARKit / Core Image, demonstrating the headroom available once you stop fighting the bridge.</li>
+                        <li><strong>CI/CD migration</strong> to streamline the team's release cycle.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>Predictable CI, HD video shipped natively, and a clear pattern for the team: when the JS bridge isn't enough, here's how we drop down to native. Engineering velocity recovered.</p>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Swift</span>
+                        <span class="cs-chip">React Native</span>
+                        <span class="cs-chip">AVFoundation</span>
+                        <span class="cs-chip">ARKit</span>
+                        <span class="cs-chip">RN Bridge</span>
+                        <span class="cs-chip">CI/CD</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Case Study 4: AI-Assisted OSS Pipeline -->
+        <article class="case-study reveal" style="--cs-accent: var(--accent-pink);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>Provenance + libretro + 240p Test Suite</strong> · Maintainer · 2024–Present</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">AI Engineering</span>
+                    <span class="cs-tag">Multi-Agent CI</span>
+                    <span class="cs-tag">DevOps</span>
+                    <span class="cs-tag">Open Source</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">Three autonomous AI agents sharing one orchestration layer — built into production OSS pipelines.</h3>
+            <p class="cs-subhead">A multi-agent CI ecosystem across the Provenance org and upstream libretro contributions. Claude, Cursor, and Kimi Code coexist as routable workers, with model auto-selection by code-pattern heuristics, fallback resilience, and a scheduled poller that bypasses GitHub's bot-actor approval gate.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">3</div>
+                    <div class="cs-metric-label">Autonomous AI agents in production</div>
+                    <div class="cs-metric-sub">Claude (Sonnet + Opus, auto-selected) · Cursor Agent · Kimi Code — sharing one action vocabulary across 10+ workflow files.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>Maintaining a 13-year-old open-source project with 6.3k stars, 79 contributors, 388k+ downloads, and an active App Store presence — while working full-time. Solo-maintainer velocity is the rate-limiter. Generic "use Copilot" doesn't move the needle.</p>
+
+                    <h5>What I built</h5>
+                    <ul>
+                        <li><strong>Reviewer-model auto-selection by static diff analysis.</strong> The PR review workflow grep's the diff for thread-safety patterns (<code>Realm</code>, <code>@Model</code>, <code>actor</code>, <code>@MainActor</code>) — simple PRs route to <strong>Claude Sonnet</strong>; thread-safety-sensitive PRs route to <strong>Claude Opus</strong>. Real cost optimization, not vibes.</li>
+                        <li><strong>Three agents, one action vocabulary.</strong> Claude Code, Cursor Agent, and Kimi Code share dispatch verbs — <code>implement_issue</code>, <code>fix_ai_review</code>, <code>fix_rebase_conflict</code>, <code>ai_approved</code> — routed by branch name and PR labels. Effectively a multi-agent orchestration layer on top of <code>workflow_dispatch</code>.</li>
+                        <li><strong>Kimi Code as Anthropic-API-compatible fallback.</strong> When Claude credits run low, the same Claude Code CLI binary redirects via <code>ANTHROPIC_BASE_URL</code> to drive Kimi — zero workflow rewrite.</li>
+                        <li><strong>Scheduled Copilot review poller.</strong> GitHub blocks event-triggered workflows from bot actors. The 10-minute cron poller bypasses the approval gate by running as a trusted scheduled actor — a deliberately documented workaround.</li>
+                        <li><strong>Auto-fix CI on the wiki repo.</strong> Spell-check / link-check failures spawn Claude via <code>anthropics/claude-code-action</code>, which fixes the root cause and opens its own PR (with Copilot reviewer auto-requested).</li>
+                        <li><strong>AI-driven localization.</strong> Diff-aware Claude Haiku pipeline translates only changed strings into 11 languages — cost-controlled by extracting just the new keys, not the whole file.</li>
+                        <li><strong>Repo health monitor.</strong> Cron job detects stuck PRs, re-dispatches reviews, and maintains a pinned automation-health issue.</li>
+                        <li><strong>Upstream-merged Claude Code workflow.</strong> Installed Claude Code into the libretro upstream itself (PR #107) — alongside 19 merged feature PRs covering save states, RetroAchievements, SIMD blitter, WASM/Emscripten, and Jaguar CD support.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>OSS velocity sustained at scale on a solo-maintainer schedule. The pipeline handles routine review, rebase conflicts, localization, and CI failures autonomously — escalating to me only when bounded review cycles complete or 3-cycle limits are hit. This is what "AI engineering leadership" looks like when it's real, not slideware.</p>
+
+                    <h5>Proof — read the code</h5>
+                    <ul>
+                        <li><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/ai-review.yml" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">ai-review.yml</a> — Sonnet vs Opus auto-selection by static diff analysis</li>
+                        <li><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/cursor-agent.yml" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">cursor-agent.yml</a> + <a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/kimi-agent.yml" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">kimi-agent.yml</a> — three agents, shared dispatch vocabulary</li>
+                        <li><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/copilot-review-poller.yml" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">copilot-review-poller.yml</a> — bot-actor gate bypass via scheduled cron</li>
+                        <li><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/auto-translate.yml" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">auto-translate.yml</a> — diff-aware Claude Haiku localization (11 languages)</li>
+                        <li><a href="https://github.com/Provenance-Emu/wiki/blob/master/.github/workflows/auto-fix-ci.yml" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">wiki/auto-fix-ci.yml</a> — Claude self-healing on CI failures</li>
+                        <li><a href="https://github.com/libretro/virtualjaguar-libretro/pull/107" target="_blank" rel="noopener" style="color:var(--accent-pink);text-decoration:none;border-bottom:1px dotted var(--accent-pink)">libretro PR #107</a> — Claude Code installed in upstream libretro</li>
+                    </ul>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Claude Code</span>
+                        <span class="cs-chip">Cursor</span>
+                        <span class="cs-chip">Kimi Code</span>
+                        <span class="cs-chip">Anthropic API</span>
+                        <span class="cs-chip">GitHub Actions</span>
+                        <span class="cs-chip">workflow_dispatch</span>
+                        <span class="cs-chip">MCP</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
     </div>
 </section>
 
@@ -2467,6 +2895,11 @@ const searchIndex = [
     // Sections
     { title: 'About', desc: '17+ years, engineering leader, mobile architect', section: 'about', icon: '👤', category: 'Sections' },
     { title: 'Featured Projects', desc: 'Provenance, Virtual Jaguar, iCube, iFly', section: 'projects', icon: '🚀', category: 'Sections' },
+    { title: 'Case Studies / Impact', desc: 'Wayfair $300k savings, NewsCorp leadership, Cameo, AI multi-agent CI', section: 'impact', icon: '📈', category: 'Sections' },
+    { title: 'Wayfair — $300k/year saved', desc: 'MP4 compression + caching, SwiftUI perf, Datadog bootup tracking', section: 'impact', icon: '💰', category: 'Case Studies' },
+    { title: 'NewsCorp — iOS past Android', desc: '8-region team, shared platform SDK, Knewz launch from scratch', section: 'impact', icon: '🌍', category: 'Case Studies' },
+    { title: 'Cameo — RN build + HD video', desc: 'Rebuilt React Native CI, shipped native HD video module', section: 'impact', icon: '🎥', category: 'Case Studies' },
+    { title: 'AI Multi-Agent CI Pipeline', desc: 'Claude + Cursor + Kimi orchestration across Provenance, wiki, libretro', section: 'impact', icon: '🤖', category: 'Case Studies' },
     { title: 'Experience', desc: 'Career timeline from 2007 to present', section: 'experience', icon: '💼', category: 'Sections' },
     { title: 'Skills', desc: 'Languages, tools, SDKs & APIs', section: 'skills', icon: '⚡', category: 'Sections' },
     { title: 'Open Source', desc: 'Community contributions and maintained projects', section: 'opensource', icon: '🌐', category: 'Sections' },
