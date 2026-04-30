@@ -1,0 +1,97 @@
+{
+  "_comment": "Cloudflare Transform Rules - Modify Response Header configuration for joemattiello.dev. Use this when proxying GitHub Pages through Cloudflare (Migration Option A). Reference: https://developers.cloudflare.com/rules/transform/response-header-modification/",
+  "_usage": "Cloudflare Dashboard -> [your zone: joemattiello.dev] -> Rules -> Transform Rules -> Modify Response Header -> Create rule. Use 'Custom filter expression' with the expression below, then add each header from 'set_headers' as a separate 'Set static' action.",
+  "rule": {
+    "name": "Security headers for joemattiello.dev",
+    "description": "Adds Mozilla Observatory recommended response headers to all responses",
+    "expression": "(http.host eq \"joemattiello.dev\") or (http.host eq \"www.joemattiello.dev\")",
+    "action": "rewrite",
+    "action_parameters": {
+      "headers": {
+        "Strict-Transport-Security": {
+          "operation": "set",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        "X-Frame-Options": {
+          "operation": "set",
+          "value": "DENY"
+        },
+        "X-Content-Type-Options": {
+          "operation": "set",
+          "value": "nosniff"
+        },
+        "Referrer-Policy": {
+          "operation": "set",
+          "value": "strict-origin-when-cross-origin"
+        },
+        "Permissions-Policy": {
+          "operation": "set",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        },
+        "Cross-Origin-Opener-Policy": {
+          "operation": "set",
+          "value": "same-origin"
+        },
+        "Cross-Origin-Resource-Policy": {
+          "operation": "set",
+          "value": "same-origin"
+        },
+        "Content-Security-Policy": {
+          "operation": "set",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://www.clarity.ms https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://plausible.io https://*.clarity.ms https://c.clarity.ms; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+        }
+      }
+    }
+  },
+  "_terraform_equivalent": {
+    "_comment": "If you prefer Terraform, this is the same rule via cloudflare_ruleset (phase=http_response_headers_transform):",
+    "resource": "cloudflare_ruleset.security_headers",
+    "kind": "zone",
+    "phase": "http_response_headers_transform",
+    "rules": [
+      {
+        "action": "rewrite",
+        "expression": "(http.host eq \"joemattiello.dev\") or (http.host eq \"www.joemattiello.dev\")",
+        "description": "Security headers for joemattiello.dev",
+        "action_parameters": {
+          "headers": {
+            "Strict-Transport-Security": { "operation": "set", "value": "max-age=63072000; includeSubDomains; preload" },
+            "X-Frame-Options": { "operation": "set", "value": "DENY" },
+            "X-Content-Type-Options": { "operation": "set", "value": "nosniff" },
+            "Referrer-Policy": { "operation": "set", "value": "strict-origin-when-cross-origin" },
+            "Permissions-Policy": { "operation": "set", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+            "Cross-Origin-Opener-Policy": { "operation": "set", "value": "same-origin" },
+            "Cross-Origin-Resource-Policy": { "operation": "set", "value": "same-origin" },
+            "Content-Security-Policy": { "operation": "set", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://www.clarity.ms https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://plausible.io https://*.clarity.ms https://c.clarity.ms; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests" }
+          }
+        }
+      }
+    ]
+  },
+  "_api_equivalent": {
+    "_comment": "Direct API call (PUT /zones/{zone_id}/rulesets/phases/http_response_headers_transform/entrypoint). Replace {zone_id} with the joemattiello.dev zone id.",
+    "method": "PUT",
+    "endpoint": "/client/v4/zones/{zone_id}/rulesets/phases/http_response_headers_transform/entrypoint",
+    "body": {
+      "rules": [
+        {
+          "action": "rewrite",
+          "expression": "(http.host eq \"joemattiello.dev\") or (http.host eq \"www.joemattiello.dev\")",
+          "description": "Mozilla Observatory headers",
+          "action_parameters": {
+            "headers": {
+              "Strict-Transport-Security": { "operation": "set", "value": "max-age=63072000; includeSubDomains; preload" },
+              "X-Frame-Options": { "operation": "set", "value": "DENY" },
+              "X-Content-Type-Options": { "operation": "set", "value": "nosniff" },
+              "Referrer-Policy": { "operation": "set", "value": "strict-origin-when-cross-origin" },
+              "Permissions-Policy": { "operation": "set", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+              "Cross-Origin-Opener-Policy": { "operation": "set", "value": "same-origin" },
+              "Cross-Origin-Resource-Policy": { "operation": "set", "value": "same-origin" },
+              "Content-Security-Policy": { "operation": "set", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://www.clarity.ms https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://plausible.io https://*.clarity.ms https://c.clarity.ms; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
