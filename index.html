@@ -49,6 +49,10 @@
         "sameAs": [
             "https://github.com/JoeMatt",
             "https://www.linkedin.com/in/joemattiello/",
+            "https://x.com/joemattiello",
+            "https://www.youtube.com/joemattiello",
+            "https://www.instagram.com/m2_cs_6mt/",
+            "https://soundcloud.com/joe-mattiello",
             "https://provenance-emu.com"
         ]
     }
@@ -272,7 +276,7 @@
         .hero h1 {
             font-family: var(--font-display);
             font-size: clamp(2.8rem, 6vw, 5rem);
-            font-weight: 800;
+            font-weight: 700;
             line-height: 1.05;
             letter-spacing: -0.03em;
             margin-bottom: 1rem;
@@ -516,7 +520,7 @@
         .stat-number {
             font-family: var(--font-display);
             font-size: 2.2rem;
-            font-weight: 800;
+            font-weight: 700;
             background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -579,6 +583,17 @@
             justify-content: center;
             font-size: 1.4rem;
             margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+        .project-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: inherit;
+        }
+        .project-icon svg {
+            width: 60%;
+            height: 60%;
         }
 
         .project-card h3 {
@@ -662,6 +677,44 @@
             width: 56px;
             height: 56px;
             font-size: 1.8rem;
+        }
+
+        /* Link hover previews (used on project cards, OSS grid, etc.) */
+        .link-preview {
+            position: fixed;
+            width: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 9000;
+            background: var(--bg-card);
+            display: none;
+        }
+
+        .link-preview.visible {
+            opacity: 1;
+            display: block;
+        }
+
+        .link-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .link-preview-label {
+            padding: 0.4rem 0.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
         }
 
         /* ===== EXPERIENCE TIMELINE ===== */
@@ -1146,6 +1199,60 @@
             line-height: 1.5;
         }
 
+        /* ===== BEYOND CODE ===== */
+        .beyond-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .beyond-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-expo);
+            text-decoration: none;
+            display: block;
+        }
+
+        .beyond-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.3);
+        }
+
+        .beyond-card-body {
+            padding: 1.5rem;
+        }
+
+        .beyond-card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .beyond-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .beyond-card p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .beyond-card .beyond-handle {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+
         /* ===== TUI DEMO ===== */
         .demo-container { max-width: 800px; }
 
@@ -1508,6 +1615,7 @@
         <li><a href="#opensource">Open Source</a></li>
         <li><a href="#press">Recognition</a></li>
         <li><a href="#education">Education</a></li>
+        <li><a href="#beyond">Life</a></li>
     </ul>
     <button class="search-trigger" id="searchTrigger" aria-label="Search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -1568,7 +1676,7 @@
             </p>
             <br>
             <p>
-                Outside of work, I maintain several high-profile open source projects (29k+ combined GitHub stars), build emulators that run on Apple Silicon without JIT, and write hardware drivers that ship in <strong>RetroArch</strong>'s mainline iOS/macOS builds. I use <strong>AI tooling heavily</strong> and build custom MCPs, skills, and automation for my teams.
+                Outside of work, I maintain several high-profile open source projects (29k+ combined GitHub stars), build emulators that run on Apple Silicon without JIT, and write hardware drivers that ship in <strong>RetroArch</strong>'s mainline iOS/macOS builds. <strong>Provenance</strong> is now on the App Store with 388k+ downloads. I use <strong>AI tooling heavily</strong> and build custom MCPs, skills, and automation for my teams.
             </p>
         </div>
         <div class="about-stats reveal">
@@ -1605,12 +1713,14 @@
         <!-- Provenance -->
         <div class="project-card featured reveal">
             <div>
-                <div class="project-icon" style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.2);">🎮</div>
+                <div class="project-icon" style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.2);"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance" loading="lazy"></div>
                 <span class="project-tag tag-creator">Creator &amp; PM</span>
-                <h3>Provenance <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">6.3k ⭐</span></h3>
-                <p>The most popular open-source multi-system emulator for iOS, tvOS, and macOS. 100k+ downloads, 38+ supported console systems. Full SwiftUI interface with Spotlight, QuickLook, FileProvider, and Siri integration. Upcoming: tvOS support, CloudKit sync, and first open-source Jaguar CD emulation.</p>
+                <h3>Provenance <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">6.3k ⭐ · App Store</span></h3>
+                <p>The most popular open-source multi-system emulator for iOS, tvOS, and macOS. Now on the App Store. 388k+ downloads, 50+ supported console systems. Full SwiftUI interface with iCloud Sync, Spotlight, QuickLook, FileProvider, and Siri integration. Upcoming: first open-source Jaguar CD emulation.</p>
                 <div class="project-links">
-                    <a href="https://provenance-emu.com" target="_blank" rel="noopener">🌐 Website</a>
+                    <a href="https://provenance-emu.com" target="_blank" rel="noopener">🌐 Website
+                        <div class="link-preview"><img src="https://provenance-emu.com/images/mobile.png" alt="Provenance on iOS" loading="lazy"><div class="link-preview-label">provenance-emu.com</div></div>
+                    </a>
                     <a href="https://provenance-emu.com/skins" target="_blank" rel="noopener">🎨 Skins Gallery</a>
                     <a href="https://github.com/Provenance-Emu/Provenance" target="_blank" rel="noopener">↗ GitHub</a>
                     <a href="https://wiki.provenance-emu.com" target="_blank" rel="noopener">📖 Wiki</a>
@@ -1620,12 +1730,15 @@
                 <div class="project-links" style="flex-direction:column;gap:0.75rem">
                     <a href="https://icube-emu.com" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
                         🟣 <strong style="color:var(--text-primary)">iCube</strong> — GameCube/Wii emulator for iOS. JIT-less optimized interpreter for Apple Silicon.
+                        <div class="link-preview"><img src="https://icube-emu.com/_next/static/media/iphone1-library.ef84696b.jpg" alt="iCube on iOS" loading="lazy"><div class="link-preview-label">icube-emu.com</div></div>
                     </a>
                     <a href="https://ifly-emu.com" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
                         🔵 <strong style="color:var(--text-primary)">iFly</strong> — Dreamcast emulator for iOS. JIT-less GPU/CPU interpreter for Apple Silicon.
+                        <div class="link-preview"><img src="https://ifly-emu.com/icon-512.png" alt="iFly app icon" loading="lazy"><div class="link-preview-label">ifly-emu.com</div></div>
                     </a>
-                    <a href="https://provenance-emu.itch.io/icube" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
-                        🕹️ itch.io — iCube &amp; iFly pages
+                    <a href="https://www.youtube.com/watch?v=OqKeJYLRwJI" target="_blank" rel="noopener" style="padding:0.6rem 1rem">
+                        ▶️ <strong style="color:var(--text-primary)">YouTube</strong> — "Mastering Retro Gaming on Your iPhone" (58k+ views)
+                        <div class="link-preview"><img src="https://i.ytimg.com/vi/OqKeJYLRwJI/hqdefault.jpg" alt="Provenance iOS Guide" loading="lazy"><div class="link-preview-label">youtube.com · Techjunkie Aman</div></div>
                     </a>
                 </div>
             </div>
@@ -1633,7 +1746,7 @@
 
         <!-- Virtual Jaguar -->
         <div class="project-card reveal">
-            <div class="project-icon" style="background:rgba(0,229,153,0.1);border:1px solid rgba(0,229,153,0.2);">🐆</div>
+            <div class="project-icon" style="background:rgba(0,229,153,0.1);border:1px solid rgba(0,229,153,0.2);"><svg viewBox="0 0 24 24" fill="none" stroke="#00e599" stroke-width="2" stroke-linecap="round"><path d="M4 4c2 5 4 8 7 12M9 3c1.5 5 3 9 5 13M14 2c1 5 2 9 3.5 14"/><circle cx="7" cy="19" r="1" fill="#00e599"/><circle cx="13" cy="19" r="1" fill="#00e599"/><circle cx="18.5" cy="19" r="1" fill="#00e599"/></svg></div>
             <span class="project-tag tag-maintainer">Maintainer</span>
             <h3>Virtual Jaguar (libretro)</h3>
             <p>Admin and maintainer. Delivering the first open-source Atari Jaguar CD emulation (only other implementation is MiSTer FPGA). Extensive accuracy and performance fixes. AI-assisted development with A/B image regression testing. Powers Jaguar emulation in both RetroArch and Provenance.</p>
@@ -1644,7 +1757,7 @@
 
         <!-- 240p Test Suite -->
         <div class="project-card reveal">
-            <div class="project-icon" style="background:rgba(240,160,48,0.1);border:1px solid rgba(240,160,48,0.2);">📺</div>
+            <div class="project-icon" style="background:rgba(240,160,48,0.1);border:1px solid rgba(240,160,48,0.2);"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="1" width="3" height="18" fill="#fff"/><rect x="4.5" y="1" width="3" height="18" fill="#ff0"/><rect x="8" y="1" width="3" height="18" fill="#0ff"/><rect x="11.5" y="1" width="3" height="18" fill="#0f0"/><rect x="15" y="1" width="3" height="18" fill="#f0f"/><rect x="18.5" y="1" width="3" height="18" fill="#f00"/><rect x="22" y="1" width="2" height="18" fill="#00f"/><rect x="1" y="20" width="23" height="3" rx="1" fill="#f0a030" opacity="0.6"/></svg></div>
             <span class="project-tag tag-maintainer">Maintainer</span>
             <h3>Jaguar 240p Test Suite</h3>
             <p>Display calibration and video output verification for Atari Jaguar hardware. Feature completeness, automated releases, screenshot A/B regression testing via GitHub Actions.</p>
@@ -1655,24 +1768,28 @@
 
         <!-- iCube -->
         <div class="project-card reveal">
-            <div class="project-icon" style="background:rgba(128,90,213,0.1);border:1px solid rgba(128,90,213,0.2);">🟣</div>
+            <div class="project-icon" style="background:rgba(128,90,213,0.1);border:1px solid rgba(128,90,213,0.2);"><img src="https://icube-emu.com/icon-1024.png" alt="iCube" loading="lazy"></div>
             <span class="project-tag tag-hiatus">Coming soon</span>
             <h3>iCube</h3>
             <p>GameCube &amp; Wii emulator for iOS and tvOS. JIT-less Dolphin fork with optimized CPU/GPU interpreter code purpose-built for Apple Silicon. Metal shaders.</p>
             <div class="project-links">
-                <a href="https://icube-emu.com" target="_blank" rel="noopener">🌐 Website</a>
+                <a href="https://icube-emu.com" target="_blank" rel="noopener">🌐 Website
+                    <div class="link-preview"><img src="https://icube-emu.com/_next/static/media/iphone1-library.ef84696b.jpg" alt="iCube on iOS" loading="lazy"><div class="link-preview-label">icube-emu.com</div></div>
+                </a>
                 <a href="https://provenance-emu.itch.io/icube" target="_blank" rel="noopener">🕹️ itch.io</a>
             </div>
         </div>
 
         <!-- iFly -->
         <div class="project-card reveal">
-            <div class="project-icon" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);">🔵</div>
+            <div class="project-icon" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);"><img src="https://ifly-emu.com/icon-512.png" alt="iFly" loading="lazy"></div>
             <span class="project-tag tag-hiatus">Coming soon</span>
             <h3>iFly</h3>
             <p>Dreamcast emulator for iOS and tvOS. JIT-less GPU/CPU interpreter optimized for Apple Silicon. Metal shaders, MFi controller support, save states, automatic cheat downloads.</p>
             <div class="project-links">
-                <a href="https://ifly-emu.com" target="_blank" rel="noopener">🌐 Website</a>
+                <a href="https://ifly-emu.com" target="_blank" rel="noopener">🌐 Website
+                    <div class="link-preview"><img src="https://ifly-emu.com/icon-512.png" alt="iFly app icon" loading="lazy"><div class="link-preview-label">ifly-emu.com</div></div>
+                </a>
                 <a href="https://provenance.itch.io/ifly" target="_blank" rel="noopener">🕹️ itch.io</a>
             </div>
         </div>
@@ -1686,7 +1803,7 @@
     <div class="reveal">
         <div class="section-label">Experience</div>
         <h2 class="section-title">Where I've worked</h2>
-        <p class="section-desc">Started before the App Store existed, now building the infrastructure behind apps with millions of users.</p>
+        <p class="section-desc">From pre-SDK jailbreak apps to platform infrastructure serving millions of users.</p>
     </div>
     <div class="timeline">
         <div class="timeline-item current reveal">
@@ -1698,11 +1815,11 @@
             <div class="timeline-role">L4 Mobile Engineer — App Infrastructure</div>
             <div class="timeline-location">New York, NY (Remote)</div>
             <ul class="timeline-details">
-                <li>Integrated Datadog RUM performance tracking, providing real-time visibility into UX metrics across releases</li>
-                <li>Built custom Datadog dashboards for cross-team performance triage and release-over-release comparison</li>
-                <li>Designed bootup task performance tracking system with companion reports surfacing regressions and improvements</li>
-                <li>Built AI-powered skills, plugins, and custom MCP servers for internal engineering teams</li>
-                <li>Developed Jira/GitHub automation flows and n8n workflows to streamline engineering processes</li>
+                <li>Instrumented Datadog RUM across the iOS app, giving the team release-over-release UX metrics for the first time</li>
+                <li>Built Datadog dashboards used by multiple teams for performance triage and release validation</li>
+                <li>Created a bootup task profiling system that catches performance regressions before they ship</li>
+                <li>Developed AI-powered skills, MCP servers, and plugins adopted by internal engineering teams</li>
+                <li>Automated cross-team workflows with n8n, Jira, and GitHub integrations</li>
             </ul>
         </div>
 
@@ -1715,9 +1832,9 @@
             <div class="timeline-role">L4 Mobile Engineer — Product Discovery</div>
             <div class="timeline-location">New York, NY (Remote)</div>
             <ul class="timeline-details">
-                <li>Led development of the product discovery feature-set, improving user engagement and conversion</li>
-                <li>Optimized application startup performance and reduced network overhead</li>
-                <li>Revamped homepage layout with modern UI elements including shimmer loading states</li>
+                <li>Owned the product discovery feature set on iOS, driving measurable gains in engagement and conversion</li>
+                <li>Cut app startup time and reduced network overhead through targeted profiling</li>
+                <li>Redesigned the homepage layout with shimmer states and modern interaction patterns</li>
             </ul>
         </div>
 
@@ -1730,9 +1847,9 @@
             <div class="timeline-role">Founder</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>Creator of Provenance-EMU, a multi-platform emulator for iOS/tvOS/macOS. 100k+ downloads</li>
-                <li>Ported dozens of C/C++ emulators to Swift Package Manager, optimized for ARM platforms</li>
-                <li>Full SwiftUI interface with Spotlight, QuickLook, FileProvider, Stickers, and Siri extensions</li>
+                <li>Creator of Provenance, the most popular open-source multi-system emulator for iOS/tvOS/macOS. Now on the App Store (388k+ downloads, 6.3k stars)</li>
+                <li>Ported 50+ C/C++ emulator cores to Swift Package Manager, optimized for ARM</li>
+                <li>Full SwiftUI interface with Spotlight, QuickLook, FileProvider, Stickers, and Siri integration</li>
             </ul>
         </div>
 
@@ -1745,9 +1862,9 @@
             <div class="timeline-role">Principal iOS Engineer</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>First native iOS hire on a mature ReactNative codebase; brought native performance to the platform</li>
-                <li>Integrated HD async video compression, significantly reducing bandwidth and AWS costs</li>
-                <li>Migrated CI/CD from shell scripts and CircleCI to GitHub Actions, cutting PR validation time by 10x</li>
+                <li>First native iOS hire on a fully ReactNative codebase. Rebuilt performance-critical paths in Swift</li>
+                <li>Added HD async video compression, cutting bandwidth costs and upload times</li>
+                <li>Migrated CI/CD from shell scripts and CircleCI to GitHub Actions (10x faster PR validation)</li>
             </ul>
         </div>
 
@@ -1760,10 +1877,9 @@
             <div class="timeline-role">Director iOS Platform (Global HQ)</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>Directed iOS developers across 8 global regions on platform and brand-specific applications</li>
-                <li>Built the core SDK foundation used by all NewsCorp brands (DowJones, NYPost, The Australian, Barrons, Times UK)</li>
-                <li>Hired and led the iOS team for Knewz — 4.5+ star rating, unsolicited Apple App Store promotion</li>
-                <li>Established satellite team in Barcelona; restaffed teams in Argentina, Bangalore, Ukraine/Russia</li>
+                <li>Ran iOS development across 8 regions. Built the core SDK used by DowJones, NYPost, The Australian, Barrons, Times UK</li>
+                <li>Hired and led the Knewz iOS team from zero. 4.5+ star rating, unsolicited App Store feature by Apple</li>
+                <li>Stood up a satellite team in Barcelona and restaffed engineering in Argentina, Bangalore, and Ukraine</li>
             </ul>
         </div>
 
@@ -1776,7 +1892,7 @@
             <div class="timeline-role">Lead Developer</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>Managed front-end team, led architectural design for 3rd-party vendor integrations</li>
+                <li>Ran the front-end team and led architecture for 3rd-party vendor integrations</li>
                 <li>Created the first Swift-native XML-SOAP framework with full Codable support</li>
             </ul>
         </div>
@@ -1790,9 +1906,9 @@
             <div class="timeline-role">Lead Mobile Architect / Team Lead</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>Maintained 4+ star App Store rating. 80% reduction in crashes, 30% reduction in memory footprint</li>
-                <li>Led architecture of new universal app (iOS 8+) using Swift 2.0, CoreData, CoreText</li>
-                <li>Built and deployed Hadoop analytics systems; managed office/colo network infrastructure</li>
+                <li>Took the app from constant crash reports to a 4+ star rating (80% crash reduction, 30% less memory)</li>
+                <li>Architected the universal app rewrite on Swift 2.0, CoreData, and CoreText</li>
+                <li>Set up Hadoop analytics systems and managed office and colo network infrastructure</li>
             </ul>
         </div>
 
@@ -1805,8 +1921,8 @@
             <div class="timeline-role">Software Engineer (iOS/macOS)</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>Bridged C#/Mono audio decoders to native Core Audio. Major contributions to Novell MonoMac project</li>
-                <li>Sole Objective-C developer and UI designer for the iOS sync/playback app</li>
+                <li>Bridged C#/Mono audio decoders to Core Audio. Wrote CoreMIDI and CoreAudio wrappers contributed to MonoMac</li>
+                <li>Sole Objective-C developer and UI designer for the Sooloos iOS sync and playback app</li>
             </ul>
         </div>
 
@@ -1819,9 +1935,9 @@
             <div class="timeline-role">Software Engineer (iOS/DevOps)</div>
             <div class="timeline-location">New York, NY</div>
             <ul class="timeline-details">
-                <li>Built Citysense for iPhone before the SDK existed. Named inventor on 3 US patents. Featured in GigaOM and the NY Times</li>
-                <li>Created CabSense, an NYC taxi availability app. Covered by VentureBeat, ZDNet, and the NY Times</li>
-                <li>Official FSF/GNU project developer via GNUstep PBXBuild patches</li>
+                <li>Built Citysense for iPhone before Apple released the SDK. Named inventor on 3 US patents. Company featured on the cover of Newsweek ("The Next Google")</li>
+                <li>Created CabSense, an NYC taxi availability app. Featured in the NY Times (3 articles), TechCrunch, VentureBeat, Wired UK, and more</li>
+                <li>Accepted as an official FSF/GNU developer through major GNUstep PBXBuild contributions</li>
             </ul>
         </div>
 
@@ -1829,13 +1945,13 @@
             <div class="timeline-dot"></div>
             <div class="timeline-header">
                 <span class="timeline-company">Earlier</span>
-                <span class="timeline-date">2007</span>
+                <span class="timeline-date">2006 — 2007</span>
             </div>
             <div class="timeline-role">People Security (Security Consultant) &bull; AT&amp;T Tech Channel (Producer)</div>
             <div class="timeline-location">New York, NY / Bedminster, NJ</div>
             <ul class="timeline-details">
-                <li>Developed secure coding training with Dr. Hugh Thompson (buffer overflows, stack exploits)</li>
-                <li>Managed bookings with Emanuel Goldstein (2600), Whit Diffie (RSA), Jack Dorsey (Twitter), H.D. Moore (Metasploit)</li>
+                <li>People Security: Developed secure coding training with Dr. Hugh Thompson (buffer overflows, stack exploits)</li>
+                <li>AT&amp;T: Booked and produced segments with Emanuel Goldstein (2600), Whit Diffie (RSA), Jack Dorsey (Twitter), H.D. Moore (Metasploit)</li>
             </ul>
         </div>
     </div>
@@ -1895,42 +2011,52 @@
         <a href="https://github.com/libretro/RetroArch" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>RetroArch</h4>
             <p>Authored Apple platform drivers: camera (AVFoundation), microphone, CoreMIDI, and WiFi — all merged to mainline iOS/macOS/tvOS builds</p>
+            <div class="link-preview"><img src="https://www.retroarch.com/images/logo.png" alt="RetroArch" loading="lazy"><div class="link-preview-label">github.com/libretro/RetroArch</div></div>
         </a>
         <a href="https://getutm.app/" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>UTM</h4>
             <p>Virtual machine host for iOS/macOS</p>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/49966544?v=4" alt="UTM" loading="lazy"><div class="link-preview-label">getutm.app</div></div>
         </a>
         <a href="https://github.com/HeroTransitions/Hero" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>Hero Transitions</h4>
             <p>Maintained custom view controller transition library for Swift</p>
+            <div class="link-preview"><img src="https://raw.githubusercontent.com/HeroTransitions/Hero/develop/Resources/Hero.png" alt="Hero" loading="lazy"><div class="link-preview-label">github.com/HeroTransitions/Hero · 22k+ ⭐</div></div>
         </a>
         <a href="https://github.com/RxSwiftCommunity/RxRealm" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>RxSwift Community</h4>
             <p>Maintainer of RxRealm &amp; RxReachability</p>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/15903991?v=4" alt="RxSwift Community" loading="lazy"><div class="link-preview-label">github.com/RxSwiftCommunity/RxRealm · 1.1k+ ⭐</div></div>
         </a>
         <a href="https://github.com/CoreOffice/XMLCoder" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>XMLCoder</h4>
             <p>Significant PRs — attributed intrinsic value coding, dynamic node encoding</p>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/65599322?v=4" alt="CoreOffice" loading="lazy"><div class="link-preview-label">github.com/CoreOffice/XMLCoder</div></div>
         </a>
         <a href="https://www.mono-project.com/" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>Mono / Xamarin</h4>
             <p>Authored CoreMIDI, CoreAudio, and Foundation C# wrappers for MonoMac</p>
+            <div class="link-preview"><img src="https://www.mono-project.com/images/mono-gorilla.svg" alt="Mono" loading="lazy"><div class="link-preview-label">github.com/mono/mono</div></div>
         </a>
         <a href="https://github.com/gonetz/GLideN64" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>GLideN64</h4>
             <p>Open-source N64 graphics plugin contributions</p>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/6205049?v=4" alt="mupen64plus org" loading="lazy"><div class="link-preview-label">github.com/gonetz/GLideN64</div></div>
         </a>
-        <a href="https://github.com/nythepegasus/SideJITServer" target="_blank" rel="noopener" class="oss-item reveal">
-            <h4>SideJITServer</h4>
-            <p>JIT enabler for sideloaded iOS apps</p>
+        <a href="https://github.com/SideStore/SideStore" target="_blank" rel="noopener" class="oss-item reveal">
+            <h4>SideStore</h4>
+            <p>21 merged PRs. Rust build integration, error handling, settings, pairing. Org member</p>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/105070799?v=4" alt="SideStore" loading="lazy"><div class="link-preview-label">github.com/SideStore/SideStore · 5.3k+ ⭐</div></div>
         </a>
-        <a href="https://github.com/libretro/PokeMini" target="_blank" rel="noopener" class="oss-item reveal">
-            <h4>PokeMini</h4>
-            <p>Buffer overflow fix for the Pokemon Mini Libretro core</p>
+        <a href="https://github.com/mupen64plus/mupen64plus-core" target="_blank" rel="noopener" class="oss-item reveal">
+            <h4>mupen64plus</h4>
+            <p>Buffer overflow fix in core, removed system() calls for iOS/tvOS compatibility</p>
+            <div class="link-preview"><img src="https://avatars.githubusercontent.com/u/6205049?v=4" alt="mupen64plus" loading="lazy"><div class="link-preview-label">github.com/mupen64plus/mupen64plus-core</div></div>
         </a>
         <a href="https://github.com/flyinghead/flycast" target="_blank" rel="noopener" class="oss-item reveal">
             <h4>Flycast (Dreamcast)</h4>
             <p>Metal renderer fixes, Vulkan portability, audio drift fixes (4 open PRs)</p>
+            <div class="link-preview"><img src="https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png" alt="Flycast" loading="lazy"><div class="link-preview-label">github.com/flyinghead/flycast</div></div>
         </a>
     </div>
     <div class="oss-more reveal">
@@ -1948,6 +2074,65 @@
     </div>
 
     <div class="press-grid">
+        <!-- Provenance Press — lead with the newest, most impressive -->
+        <div class="press-category reveal">
+            <h3 class="press-category-title">🎮 Provenance in the Press</h3>
+            <div class="press-items">
+                <a href="https://9to5mac.com/2024/04/19/provenance-playstation-emulator-app-store/" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">9to5Mac · 2024</div>
+                    <h4>Provenance emulator coming to the App Store</h4>
+                    <p>"Great news for game emulation fans who will for the first time have the opportunity to run PlayStation games on iOS."</p>
+                </a>
+                <a href="https://www.imore.com/gaming/the-provenance-playstation-nintendo-and-atari-game-emulator-is-now-available-for-beta-download-on-iphone-and-ipad-and-an-apple-tv-version-is-next" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">iMore · 2024 (Exclusive)</div>
+                    <h4>Provenance now available for iPhone, iPad, and Apple TV</h4>
+                    <p>Exclusive announcement. Pocket Gamer called it "all the nostalgic arcade goodness you want on mobile"</p>
+                </a>
+                <a href="https://www.pocketgamer.com/provenance/" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">Pocket Gamer · Dedicated Hub Page</div>
+                    <h4>"Developer Joseph Mattiello has launched a new emulator on mobile"</h4>
+                    <p>Pocket Gamer maintains a dedicated section for Provenance. Also covered by emulatorios.com ("The Apple-Style Emulator")</p>
+                </a>
+                <a href="https://www.youtube.com/watch?v=IM1HRfydB5o" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">YouTube · Major Channels</div>
+                    <h4>Featured by TWiT, ETA PRIME, Retro Game Corps, Spawn Wave, and more</h4>
+                    <p>Covered by TWiT (2.3M subs), ETA PRIME (2.2M), UFD Tech (1.5M), Spawn Wave (800k), Retro Game Corps (700k), MacRumors (350k), WULFF DEN (500k)</p>
+                </a>
+                <a href="https://www.reddit.com/r/apple/" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">Reddit · 607 pts on r/apple</div>
+                    <h4>Provenance following Delta onto the App Store</h4>
+                    <p>Top post on r/apple. Also 460+ pts on r/EmulationOnIOS and 149+ pts on r/emulation</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- GitHub Impact -->
+        <div class="press-category reveal">
+            <h3 class="press-category-title">⭐ Open Source Impact</h3>
+            <div class="press-items">
+                <a href="https://github.com/Provenance-Emu/Provenance" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">6,300+ stars · Creator · On the App Store</div>
+                    <h4>Provenance</h4>
+                    <p>Most popular open-source iOS emulator. 388k+ downloads, 710+ forks, 50+ systems. iCloud Sync, SwiftUI, Metal</p>
+                </a>
+                <a href="https://github.com/HeroTransitions/Hero" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">22,400+ stars · Admin</div>
+                    <h4>Hero Transitions</h4>
+                    <p>One of the most starred iOS libraries on GitHub. Custom view controller transitions in Swift</p>
+                </a>
+                <a href="https://github.com/RxSwiftCommunity/RxRealm" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">1,160+ stars · Maintainer</div>
+                    <h4>RxRealm (RxSwiftCommunity)</h4>
+                    <p>RxSwift bindings for Realm. Widely used in production iOS apps</p>
+                </a>
+                <a href="https://github.com/SideStore/SideStore" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">5,300+ stars · 21 PRs merged</div>
+                    <h4>SideStore</h4>
+                    <p>Org member. Rust build integration, error handling, settings, pairing file loading</p>
+                </a>
+            </div>
+        </div>
+
         <!-- Patents -->
         <div class="press-category reveal">
             <h3 class="press-category-title">🏛️ US Patents (Named Inventor)</h3>
@@ -1955,12 +2140,12 @@
                 <a href="https://patents.google.com/patent/US8224766B2/en" target="_blank" rel="noopener" class="press-item">
                     <div class="press-item-meta">US8224766B2 · 2012</div>
                     <h4>Comparing spatial-temporal trails in location analytics</h4>
-                    <p>Sense Networks — Methods for analyzing and comparing location-based behavioral patterns</p>
+                    <p>Sense Networks — methods for analyzing and comparing location-based behavioral patterns</p>
                 </a>
                 <a href="https://patents.google.com/patent/US8620624B2/en" target="_blank" rel="noopener" class="press-item">
                     <div class="press-item-meta">US8620624B2 · 2013</div>
                     <h4>Event identification in sensor analytics</h4>
-                    <p>Sense Networks — System for identifying real-world events from sensor data streams</p>
+                    <p>Sense Networks — system for identifying real-world events from sensor data streams</p>
                 </a>
                 <a href="https://patents.google.com/patent/US9571962B2/en" target="_blank" rel="noopener" class="press-item">
                     <div class="press-item-meta">US9571962B2 · 2017</div>
@@ -1970,51 +2155,24 @@
             </div>
         </div>
 
-        <!-- Press -->
+        <!-- Earlier Press -->
         <div class="press-category reveal">
-            <h3 class="press-category-title">📰 Press &amp; Media</h3>
+            <h3 class="press-category-title">📰 Earlier Press</h3>
             <div class="press-items">
-                <a href="https://techcrunch.com/2008/06/09/location-tracking-startup-sense-networks-emerges-from-stealth-to-answer-the-question-where-is-everybody/" target="_blank" rel="noopener" class="press-item">
-                    <div class="press-item-meta">TechCrunch · 2008</div>
-                    <h4>Sense Networks Emerges From Stealth</h4>
-                    <p>Citysense launch coverage — "Where Is Everybody?"</p>
-                </a>
-                <a href="https://venturebeat.com/business/cabsense-finds-available-taxis/" target="_blank" rel="noopener" class="press-item">
-                    <div class="press-item-meta">VentureBeat · 2010</div>
-                    <h4>CabSense finds available taxis</h4>
-                    <p>iOS app for finding NYC taxi availability using location analytics</p>
-                </a>
                 <a href="https://en.wikipedia.org/wiki/Sense_Networks" target="_blank" rel="noopener" class="press-item">
-                    <div class="press-item-meta">Wikipedia</div>
-                    <h4>Sense Networks</h4>
-                    <p>Notable for Citysense and CabSense. Also featured on GigaOM, NY Times, ZDNet</p>
+                    <div class="press-item-meta">Newsweek · 2009 (Cover Story)</div>
+                    <h4>Sense Networks: "The Next Google"</h4>
+                    <p>Cover of Newsweek. Named one of BusinessWeek's "25 Most Intriguing Startups in the World"</p>
                 </a>
-            </div>
-        </div>
-
-        <!-- GitHub Impact -->
-        <div class="press-category reveal">
-            <h3 class="press-category-title">⭐ Open Source Impact</h3>
-            <div class="press-items">
-                <a href="https://github.com/HeroTransitions/Hero" target="_blank" rel="noopener" class="press-item">
-                    <div class="press-item-meta">22,400+ stars · Admin</div>
-                    <h4>Hero Transitions</h4>
-                    <p>Custom view controller transition library for Swift — one of the most starred iOS libraries</p>
-                </a>
-                <a href="https://github.com/Provenance-Emu/Provenance" target="_blank" rel="noopener" class="press-item">
-                    <div class="press-item-meta">6,300+ stars · Creator</div>
-                    <h4>Provenance</h4>
-                    <p>Multi-platform emulator for iOS/tvOS/macOS. 100k+ downloads, 710+ forks</p>
-                </a>
-                <a href="https://github.com/RxSwiftCommunity/RxRealm" target="_blank" rel="noopener" class="press-item">
-                    <div class="press-item-meta">1,160+ stars · Maintainer</div>
-                    <h4>RxRealm (RxSwiftCommunity)</h4>
-                    <p>RxSwift bindings for Realm — widely used in production iOS apps</p>
+                <a href="https://www.nytimes.com/2010/04/03/nyregion/03icab.html" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">The New York Times · 3 articles</div>
+                    <h4>CabSense &amp; Citysense Coverage</h4>
+                    <p>"Need a Cab?" (2010), "Predicting Where You'll Go" (2008), "You're Leaving a Digital Trail" (2008). Also TechCrunch, VentureBeat, Wired UK</p>
                 </a>
                 <a href="https://lists.gnu.org/archive/html/gnustep-dev/2009-11/msg00046.html" target="_blank" rel="noopener" class="press-item">
                     <div class="press-item-meta">FSF/GNU · 2009</div>
                     <h4>GNUstep Official Developer</h4>
-                    <p>Major PBXBuild patches accepted — Xcode to GNU Makefile conversion</p>
+                    <p>Accepted as an official GNU/FSF project developer through major PBXBuild contributions</p>
                 </a>
             </div>
         </div>
@@ -2036,6 +2194,35 @@
             <p>University at Buffalo</p>
             <span class="edu-date">2004 — 2008</span>
         </div>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Beyond Code -->
+<section id="beyond">
+    <div class="reveal">
+        <div class="section-label">Off the Clock</div>
+        <h2 class="section-title">Beyond code</h2>
+        <p class="section-desc">When I'm not deep in Xcode or a debugger, I'm wrenching on my M2 CS or behind the decks.</p>
+    </div>
+    <div class="beyond-grid">
+        <a href="https://www.instagram.com/m2_cs_6mt/" target="_blank" rel="noopener" class="beyond-card reveal">
+            <div class="beyond-card-body">
+                <div class="beyond-card-icon">🏎️</div>
+                <h3>BMW M2 CS</h3>
+                <p>6-speed manual, track days, and weekend wrenching. Documenting the build and drives on Instagram.</p>
+                <span class="beyond-handle">@m2_cs_6mt</span>
+            </div>
+        </a>
+        <a href="https://soundcloud.com/joe-mattiello" target="_blank" rel="noopener" class="beyond-card reveal">
+            <div class="beyond-card-body">
+                <div class="beyond-card-icon">🎧</div>
+                <h3>Music &amp; Production</h3>
+                <p>DJ sets on SoundCloud. Build Max for Live patches and reverse-engineered USB/MIDI drivers for DJ controllers and synths.</p>
+                <span class="beyond-handle">joe-mattiello</span>
+            </div>
+        </a>
     </div>
 </section>
 
@@ -2102,7 +2289,15 @@
                 <h4>Connect</h4>
                 <a href="https://github.com/JoeMatt" target="_blank" rel="noopener">GitHub</a>
                 <a href="https://www.linkedin.com/in/joemattiello/" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://x.com/joemattiello" target="_blank" rel="noopener">X / Twitter</a>
+                <a href="https://www.youtube.com/joemattiello" target="_blank" rel="noopener">YouTube</a>
                 <a href="mailto:mail@joemattiello.com">Email</a>
+            </div>
+            <div class="footer-col">
+                <h4>Off the Clock</h4>
+                <a href="https://www.instagram.com/m2_cs_6mt/" target="_blank" rel="noopener">Instagram (@m2_cs_6mt)</a>
+                <a href="https://soundcloud.com/joe-mattiello" target="_blank" rel="noopener">SoundCloud</a>
+                <a href="https://www.twitch.tv/joe__codes" target="_blank" rel="noopener">Twitch</a>
             </div>
             <div class="footer-col">
                 <h4>Projects</h4>
@@ -2145,7 +2340,8 @@ const phrases = [
     '> 3 patents, 29k+ GitHub stars, 17 years deep',
     '> admin of Hero (22k stars) + creator of Provenance (6k stars)',
     '> building emulators that run on Apple Silicon without JIT',
-    '> wrote the camera, mic, and MIDI drivers in RetroArch for Apple'
+    '> wrote the camera, mic, and MIDI drivers in RetroArch for Apple',
+    '> wrench on an M2 CS and spin records when AFK'
 ];
 let phraseIdx = 0, charIdx = 0, deleting = false;
 const typedEl = document.getElementById('typed');
@@ -2277,14 +2473,23 @@ const searchIndex = [
     { title: 'Open Source', desc: 'Community contributions and maintained projects', section: 'opensource', icon: '🌐', category: 'Sections' },
     { title: 'Recognition', desc: 'Patents, press mentions, open source impact', section: 'press', icon: '🏆', category: 'Sections' },
     { title: 'Education', desc: 'BS Computer Science, University at Buffalo', section: 'education', icon: '🎓', category: 'Sections' },
+    { title: 'Beyond Code', desc: 'BMW M2 CS, music, DJ sets, off the clock', section: 'beyond', icon: '🏎️', category: 'Sections' },
     // Patents & Press
     { title: 'US Patent — Spatial-Temporal Trails', desc: 'US8224766B2 — Comparing spatial-temporal trails in location analytics (Sense Networks, 2012)', section: 'press', icon: '🏛️', category: 'Patents', url: 'https://patents.google.com/patent/US8224766B2/en' },
     { title: 'US Patent — Event Identification', desc: 'US8620624B2 — Event identification in sensor analytics (Sense Networks, 2013)', section: 'press', icon: '🏛️', category: 'Patents', url: 'https://patents.google.com/patent/US8620624B2/en' },
     { title: 'US Patent — Location Analytics', desc: 'US9571962B2 — System and method of performing location analytics (2017)', section: 'press', icon: '🏛️', category: 'Patents', url: 'https://patents.google.com/patent/US9571962B2/en' },
+    { title: 'Newsweek Cover — "The Next Google"', desc: 'Sense Networks featured on the cover of Newsweek (Feb 2009)', section: 'press', icon: '📰', category: 'Press' },
+    { title: 'BusinessWeek — 25 Most Intriguing Startups', desc: 'Sense Networks named one of the top startups in the world (2009)', section: 'press', icon: '📰', category: 'Press' },
+    { title: 'NY Times — CabSense', desc: '"Need a Cab? New Analysis Shows Where to Find One" (2010)', section: 'press', icon: '📰', category: 'Press', url: 'https://www.nytimes.com/2010/04/03/nyregion/03icab.html' },
     { title: 'TechCrunch — Sense Networks', desc: 'Citysense launch coverage — "Where Is Everybody?" (2008)', section: 'press', icon: '📰', category: 'Press', url: 'https://techcrunch.com/2008/06/09/location-tracking-startup-sense-networks-emerges-from-stealth-to-answer-the-question-where-is-everybody/' },
-    { title: 'VentureBeat — CabSense', desc: 'CabSense finds available taxis — NYC location analytics app (2010)', section: 'press', icon: '📰', category: 'Press', url: 'https://venturebeat.com/business/cabsense-finds-available-taxis/' },
+    { title: 'Citysense — Top 10 IoT Products', desc: 'Named Top 10 Internet of Things Products of 2009 by ReadWriteWeb', section: 'press', icon: '📰', category: 'Press' },
+    { title: '9to5Mac — Provenance App Store', desc: 'Provenance emulator coming to the App Store with PlayStation support (2024)', section: 'press', icon: '📰', category: 'Press', url: 'https://9to5mac.com/2024/04/19/provenance-playstation-emulator-app-store/' },
+    { title: 'iMore — Provenance Beta Launch', desc: 'Exclusive announcement of Provenance for iPhone, iPad, and Apple TV (2024)', section: 'press', icon: '📰', category: 'Press', url: 'https://www.imore.com/gaming/the-provenance-playstation-nintendo-and-atari-game-emulator-is-now-available-for-beta-download-on-iphone-and-ipad-and-an-apple-tv-version-is-next' },
+    { title: 'Pocket Gamer — Provenance Launch', desc: '"All the nostalgic arcade goodness you want on mobile" (Jan 2025)', section: 'press', icon: '📰', category: 'Press', url: 'https://www.pocketgamer.com/provenance/launch/' },
+    { title: 'Spawn Wave — Apple TV Emulation', desc: '"The Apple TV Is An Emulation Beast" featuring Provenance (1M+ subs)', section: 'press', icon: '📰', category: 'Press', url: 'https://www.youtube.com/watch?v=2MgJ6wsDvFU' },
+    { title: 'Provenance iOS Guide (58k views)', desc: '"Mastering Retro Gaming on Your iPhone" by Techjunkie Aman', section: 'press', icon: '▶️', category: 'YouTube', url: 'https://www.youtube.com/watch?v=OqKeJYLRwJI' },
     { title: 'Hero Transitions — 22k+ Stars', desc: 'Admin of one of the most starred iOS libraries on GitHub', section: 'press', icon: '⭐', category: 'Impact', url: 'https://github.com/HeroTransitions/Hero' },
-    { title: 'Provenance — 6.3k Stars', desc: 'Creator of the most popular open-source iOS emulator', section: 'press', icon: '⭐', category: 'Impact', url: 'https://github.com/Provenance-Emu/Provenance' },
+    { title: 'Provenance — 6.3k Stars', desc: 'Creator of the most popular open-source iOS emulator, now on the App Store', section: 'press', icon: '⭐', category: 'Impact', url: 'https://github.com/Provenance-Emu/Provenance' },
     // Experience
     { title: 'Wayfair — App Infrastructure', desc: 'Datadog RUM, custom dashboards, AI skills, MCP servers, n8n, Jira automation', section: 'experience', icon: '💼', category: 'Experience' },
     { title: 'Wayfair — Product Discovery', desc: 'Startup optimization, homepage revamp, shimmer UI, performance bottlenecks', section: 'experience', icon: '💼', category: 'Experience' },
@@ -2298,7 +2503,7 @@ const searchIndex = [
     { title: 'People Security', desc: 'Secure coding, buffer overflows, stack exploits, Dr. Hugh Thompson', section: 'experience', icon: '💼', category: 'Experience' },
     { title: 'AT&T Tech Channel', desc: 'Emanuel Goldstein, Whit Diffie, Jack Dorsey, H.D. Moore, Bell Labs', section: 'experience', icon: '💼', category: 'Experience' },
     // Projects
-    { title: 'Provenance', desc: '6.3k stars, most popular open-source iOS emulator, 38+ systems, SwiftUI, CloudKit sync, tvOS, 100k+ downloads', section: 'projects', icon: '🎮', category: 'Projects', url: 'https://provenance-emu.com' },
+    { title: 'Provenance', desc: '6.3k stars, most popular open-source iOS emulator, 50+ systems, SwiftUI, iCloud sync, App Store, 388k+ downloads', section: 'projects', icon: '🎮', category: 'Projects', url: 'https://provenance-emu.com' },
     { title: 'Virtual Jaguar (libretro)', desc: 'First open-source Jaguar CD emulation (only other is MiSTer FPGA), AI A/B testing, powers RetroArch + Provenance', section: 'projects', icon: '🐆', category: 'Projects', url: 'https://github.com/libretro/virtualjaguar-libretro' },
     { title: 'Jaguar 240p Test Suite', desc: 'Display calibration Atari Jaguar, automated releases, screenshot regression', section: 'projects', icon: '📺', category: 'Projects', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite' },
     { title: 'iCube', desc: 'GameCube/Wii emulator iOS, JIT-less Dolphin, Apple Silicon, Metal shaders', section: 'projects', icon: '🟣', category: 'Projects', url: 'https://icube-emu.com' },
@@ -2330,7 +2535,12 @@ const searchIndex = [
     { title: 'Hero Transitions', desc: 'Custom view controller transitions in Swift', section: 'opensource', icon: '🌐', category: 'Open Source', url: 'https://github.com/HeroTransitions/Hero' },
     { title: 'RxSwift Community', desc: 'Maintainer of RxRealm & RxReachability', section: 'opensource', icon: '🌐', category: 'Open Source', url: 'https://github.com/RxSwiftCommunity/RxRealm' },
     { title: 'XMLCoder', desc: 'Attributed intrinsic value coding, dynamic node encoding', section: 'opensource', icon: '🌐', category: 'Open Source', url: 'https://github.com/CoreOffice/XMLCoder' },
+    { title: 'SideStore', desc: '21 merged PRs — Rust build, error handling, pairing, settings. Org member', section: 'opensource', icon: '🌐', category: 'Open Source', url: 'https://github.com/SideStore/SideStore' },
+    { title: 'mupen64plus', desc: 'Buffer overflow fix, iOS/tvOS compatibility', section: 'opensource', icon: '🌐', category: 'Open Source', url: 'https://github.com/mupen64plus/mupen64plus-core' },
     { title: 'Mono / Xamarin', desc: 'CoreMIDI, CoreAudio C# wrappers for MonoMac', section: 'opensource', icon: '🌐', category: 'Open Source', url: 'https://www.mono-project.com/' },
+    // Beyond Code
+    { title: 'BMW M2 CS', desc: '@m2_cs_6mt — 6-speed manual, track days, weekend wrenching', section: 'beyond', icon: '🏎️', category: 'Life', url: 'https://www.instagram.com/m2_cs_6mt/' },
+    { title: 'Music & DJ Sets', desc: 'House, techno, mixes and original tracks on SoundCloud', section: 'beyond', icon: '🎧', category: 'Life', url: 'https://soundcloud.com/joe-mattiello' },
 ];
 
 const searchOverlay = document.getElementById('searchOverlay');
@@ -2458,6 +2668,26 @@ document.addEventListener('keydown', (e) => {
         e.preventDefault();
         navigateResult(results[activeResultIdx]);
     }
+});
+
+// ===== LINK PREVIEW POSITIONING =====
+document.querySelectorAll('.link-preview').forEach(preview => {
+    const parent = preview.parentElement;
+    document.body.appendChild(preview);
+    parent.addEventListener('mouseenter', () => {
+        const rect = parent.getBoundingClientRect();
+        const pw = 300;
+        let left = rect.left + rect.width / 2 - pw / 2;
+        if (left < 8) left = 8;
+        if (left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+        preview.style.left = left + 'px';
+        preview.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+        preview.style.top = 'auto';
+        preview.classList.add('visible');
+    });
+    parent.addEventListener('mouseleave', () => {
+        preview.classList.remove('visible');
+    });
 });
 </script>
 </body>
