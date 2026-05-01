@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<title>The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One — Joseph Mattiello</title>
-<meta name="description" content="3 agents (Claude, Cursor, Kimi), 9 workflow files, one shared dispatch vocabulary. How reviewer-model auto-selection by static diff analysis, a scheduled Copilot poller, and diff-aware Haiku localization keep Provenance EMU shipping.">
+<title>Multi-agent CI for Provenance EMU: routing, not models · Joseph Mattiello</title>
+<meta name="description" content="3 agents, 9 workflow files, one shared dispatch vocabulary. Reviewer-model selection by grep, a cron poller that bypasses GitHub's bot-actor gate, and diff-aware Haiku localization. The orchestration layer behind Provenance EMU.">
 <link rel="canonical" href="https://joemattiello.dev/blog/multi-agent-ci-pipeline/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
-<meta property="og:title" content="The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One">
-<meta property="og:description" content="3 agents, 9 workflow files, model auto-selection by static diff analysis. The orchestration layer behind Provenance EMU.">
+<meta property="og:title" content="Multi-agent CI for Provenance EMU: routing, not models">
+<meta property="og:description" content="3 agents, 9 workflow files, model selection by grep. The orchestration layer behind Provenance EMU.">
 <meta property="og:url" content="https://joemattiello.dev/blog/multi-agent-ci-pipeline/">
 <meta property="og:image" content="https://joemattiello.dev/img/profile3.jpeg">
 <meta property="article:published_time" content="2026-05-01">
@@ -26,7 +26,7 @@
 {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One",
+    "headline": "Multi-agent CI for Provenance EMU: routing, not models",
     "datePublished": "2026-05-01",
     "author": { "@id": "https://joemattiello.dev/#person" },
     "publisher": { "@id": "https://joemattiello.dev/#person" },
@@ -447,10 +447,10 @@ footer.page a:hover { color: var(--accent-green); }
             <span class="divider">·</span>
             <span>2026-05-01</span>
             <span class="divider">·</span>
-            <span>14 min read</span>
+            <span>10 min read</span>
         </div>
-        <h1 class="headline">The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One</h1>
-        <p class="dek">3 agents. 9 workflow files. One shared dispatch vocabulary. Reviewer-model auto-selection by static diff analysis &mdash; and a scheduled poller that bypasses GitHub&rsquo;s undocumented bot-actor approval gate. Here&rsquo;s how the orchestration layer behind Provenance EMU works, and why the routing matters more than the model.</p>
+        <h1 class="headline">Multi-agent CI for Provenance EMU: routing, not models</h1>
+        <p class="dek">3 agents. 9 workflow files in <code>.github/workflows</code>. One shared dispatch vocabulary. Reviewer model picked by <code>grep</code> over the diff. A cron poller that gets around GitHub&rsquo;s bot-actor approval gate. The orchestration layer behind Provenance EMU, in production today.</p>
         <div class="tags-row">
             <span class="tag">AI engineering</span>
             <span class="tag">Open source</span>
@@ -468,17 +468,15 @@ footer.page a:hover { color: var(--accent-green); }
 <article class="body">
 <div class="container">
 
-<h2><span class="num">01</span>Where the wall actually is</h2>
+<h2>What this is</h2>
 
-<p>I maintain <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance EMU</a>. The numbers, since you&rsquo;re going to ask: 6,300 GitHub stars, 79 contributors, 388,000+ release downloads, an App Store launch in January 2025, and an active Discord with 9,000+ members. I do this on top of a full-time job at Wayfair on the App Infrastructure team, plus three US patents I picked up doing location analytics in another life. I&rsquo;m not telling you this to brag &mdash; I&rsquo;m telling you because the rest of the post only makes sense if you understand what scale of project this is for one person.</p>
+<p>I maintain <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance EMU</a>: 6,300 stars, 79 contributors, App Store since January 2025. Day job at Wayfair on App Infrastructure. The project hit the usual solo-maintainer wall around year five. PRs piled up. Localization rotted between sprints. Wiki spell-check broke and stayed broken. Code review gated everything else.</p>
 
-<p>The honest story about solo open-source maintainers is that we all hit a velocity wall around year five. Mine showed up on schedule. PRs pile up faster than you can review them. Localization rots because nobody (including you) wants to manually re-translate strings every sprint. Documentation drifts. Wiki spell-check breaks and stays broken because fixing it takes ten minutes you don&rsquo;t have. Code review &mdash; the actual technical evaluation, not the rubber-stamping &mdash; becomes the thing that gates everything else.</p>
+<p>The fix wasn&rsquo;t one more agent. It was a routing layer in front of three agents: Claude Code, Cursor, and Kimi. Nine workflow files in <code>.github/workflows</code>. One shared <code>workflow_dispatch</code> vocabulary. A reviewer model picked by <code>grep</code> over the diff, and a cron poller that gets around GitHub&rsquo;s bot-actor approval gate. All of it public on the Provenance org.</p>
 
-<p>The lazy answer is &ldquo;use Copilot more.&rdquo; The actual answer, for me, was building an orchestration layer. Not an agent &mdash; a layer that <em>routes</em> agents. Three of them, sharing one dispatch vocabulary, with a model selector that picks the reviewer based on what the diff actually contains. Nine workflow files in <code>.github/workflows</code>, all public, all running in production today. The TL;DR: my PR throughput is up significantly over the last two quarters, my median review latency dropped from days to hours, and my Anthropic spend across the entire org is around $80 a month. None of this required a custom agent framework. It required reading the GitHub Actions docs carefully and being willing to write the boring routing code.</p>
+<p>Total Anthropic spend, including the wiki self-heal and the localization runs, is in the low-double-digits per month. The routing is what makes that possible. The model choice is downstream of the router.</p>
 
-<h2><span class="num">02</span>The architecture, in one diagram</h2>
-
-<p>Here&rsquo;s the whole thing on one screen. Don&rsquo;t worry if some of the boxes don&rsquo;t make sense yet &mdash; I&rsquo;ll unpack each one in the sections below.</p>
+<h2>The architecture in one diagram</h2>
 
 <pre class="diagram"><code>            ┌──────────────────────────────────────────────┐
             │              PR opens / is updated           │
@@ -510,36 +508,35 @@ footer.page a:hover { color: var(--accent-green); }
                   └────────────┬────────────────┘
                                ▼
                   ┌─────────────────────────────┐
-                  │  Copilot review (max 3      │
-                  │  cycles) → cron poller      │
-                  │  picks up review → next     │
-                  │  workflow → human gate      │
+                  │  Copilot review → cron      │
+                  │  poller picks up review →   │
+                  │  next workflow → human gate │
                   └─────────────────────────────┘
 
-            Fallback: if Anthropic credits exhausted →
+            Fallback: Anthropic credits exhausted →
                       ANTHROPIC_BASE_URL = api.kimi.com/coding
                       → same Claude Code binary → Kimi K2 model</code></pre>
 
-<p>Three things to notice. First, the router is dumb on purpose &mdash; it&rsquo;s just <code>if</code> statements over branch names, labels, and a handful of <code>grep</code> patterns. Second, all three agents (Claude Code, Cursor Agent, Kimi via the Anthropic-compatible endpoint) consume the same <code>workflow_dispatch</code> inputs. Third, Copilot does the review pass, but a cron job &mdash; not the review event itself &mdash; is what fires the next stage. That last detail is the one that took me longest to figure out, and we&rsquo;ll get to it.</p>
+<p>The router is dumb on purpose. <code>if</code> statements over branch name, labels, and a handful of <code>grep</code> patterns. All three agents (Claude Code, Cursor, Kimi via the Anthropic-compatible endpoint) consume the same <code>workflow_dispatch</code> inputs. Copilot does the actual review pass, but a cron job, not the review event itself, fires the next stage. That last point is the one that took longest to figure out.</p>
 
-<h2><span class="num">03</span>Reviewer model auto-selection by static diff analysis</h2>
+<h2>Reviewer model picked by grep</h2>
 
-<p>This is the part I&rsquo;m most proud of, and it&rsquo;s also the cheapest piece of code in the whole system. Maybe twelve lines of bash.</p>
+<p>The headliner is twelve lines of bash in <code>ai-review.yml</code>.</p>
 
-<p>The problem: Claude Sonnet (4.5, currently) is fast and inexpensive &mdash; you can run it all day on small reviews and barely move the needle on your bill. Claude Opus is dramatically smarter on hard problems, but the per-token cost is something like an order of magnitude higher. If you pick by gut, you waste money on UI-only diffs that Sonnet would handle perfectly, or you bottleneck reviews of genuinely tricky code by routing it to a model that doesn&rsquo;t have the headroom. Most teams I&rsquo;ve seen either default to whichever is in vogue (currently Opus, which is expensive) or default to whichever is cheap (Sonnet, which misses things).</p>
+<p>Sonnet 4.5 is fast and cheap. You can run it all day on small reviews and barely move the bill. Opus is meaningfully smarter on hard problems but the per-token cost is roughly an order of magnitude higher. Pick by gut and you either bottleneck reviews of genuinely tricky code on Sonnet, or pay Opus prices for UI tweaks. Neither is fine.</p>
 
-<p>The solution: stop trying to be clever and just <code>grep</code> the diff. There&rsquo;s a small dictionary of patterns that, in my codebase, reliably indicate &ldquo;this is the kind of change where a smarter model pays for itself.&rdquo; They&rsquo;re all about thread safety, persistence boundaries, and Swift concurrency:</p>
+<p>So the router greps the diff for patterns that, in this codebase, reliably mark the kind of change where Opus pays for itself. Thread safety, persistence boundaries, Swift concurrency, the C++ emulation core.</p>
 
-<pre><code class="language-bash"># inside the router workflow
+<pre><code class="language-bash"># inside ai-review.yml
 DIFF=$(gh pr diff "$PR_NUMBER")
 
-# patterns where Opus consistently beats Sonnet in my codebase:
+# patterns where Opus consistently beats Sonnet in this codebase:
 #  - Realm: thread-confined object model, easy to corrupt
 #  - @Model: SwiftData, similar story
 #  - actor / @MainActor: Swift concurrency boundaries
 #  - @synchronized / NSLock: explicit locks; subtle deadlocks
 #  - DispatchQueue: GCD; race conditions are non-obvious
-#  - C++ files: the emulation core has real concurrency
+#  - .cpp / .mm: the emulation core has real concurrency
 
 if echo "$DIFF" | grep -qE 'Realm|@Model|@synchronized|^\s*actor\s|@MainActor|DispatchQueue|NSLock|\.cpp$|\.mm$'; then
     echo "model=claude-opus-4-5" &gt;&gt; "$GITHUB_OUTPUT"
@@ -549,21 +546,19 @@ else
     echo "reason=default" &gt;&gt; "$GITHUB_OUTPUT"
 fi</code></pre>
 
-<p>That&rsquo;s the whole heuristic. The <code>reason</code> output gets posted as a PR comment so I can audit it later, which has been useful: a few times I&rsquo;ve added new patterns to the dictionary after a Sonnet review missed something I felt Opus would have caught. The dictionary is a living thing.</p>
+<p>The <code>reason</code> output gets posted as a PR comment so I can audit the routing later. A few times I&rsquo;ve added new patterns after a Sonnet review missed something I felt Opus would have caught. The dictionary grows with the codebase.</p>
 
-<p>Why this works is, I think, the interesting part. Thread-safety bugs and persistence-boundary bugs are exactly the class of problem that a smarter model pays for &mdash; they require holding a lot of context about the surrounding code, the lifecycle of an object, and which queue the current method runs on. UI tweaks, copy changes, and dependency bumps don&rsquo;t require any of that. The diff itself contains enough signal to predict, statically, which class of review you&rsquo;re about to do. You don&rsquo;t need a router model. You don&rsquo;t need an LLM in the loop at all to make this routing decision. <code>grep</code> is fine.</p>
+<p>Thread-safety and persistence-boundary bugs need a lot of context. The lifecycle of an object, which queue a method runs on, what other actors hold a reference. UI tweaks and dependency bumps need none of that. The diff itself carries enough signal to predict, statically, which class of review you&rsquo;re about to do. No router LLM. No model in the loop to make the routing decision. <code>grep</code> is fine.</p>
 
-<p>The generalizable pattern: <strong>build your own diff-pattern dictionary based on what your codebase actually breaks on.</strong> If you&rsquo;re a Rails shop, your patterns might be <code>after_commit</code>, <code>has_many :through</code>, anything touching <code>ActiveRecord::Base.transaction</code>. If you&rsquo;re a Go shop, it&rsquo;s <code>go func</code>, channel ops, anything in the <code>sync</code> package. Look at your last twenty production incidents and ask: was the diff that caused this distinguishable, in advance, by file extension or grep pattern? In my experience the answer is almost always yes.</p>
+<p>The pattern transfers. If you&rsquo;re a Rails shop, the trip-wires are <code>after_commit</code>, <code>has_many :through</code>, anything inside <code>ActiveRecord::Base.transaction</code>. Go shop: <code>go func</code>, channel ops, anything in <code>sync</code>. Look at your last twenty production incidents and ask whether the diff that caused each one was distinguishable in advance by file extension or grep pattern. The answer is almost always yes.</p>
 
-<div class="callout"><strong>The quiet payoff.</strong> Roughly 70% of my PRs get the Sonnet path; 30% get Opus. Before this routing existed, I was paying Opus prices for everything &ldquo;to be safe.&rdquo; The bill is now about a third of what it was, and I haven&rsquo;t had a Sonnet review miss something Opus caught in production yet. That last sentence is true today; ask me in six months.</div>
+<div class="callout"><strong>Routing payoff.</strong> Roughly 70% of PRs land on Sonnet, 30% on Opus. Before the router existed I was paying Opus prices for everything to be safe. The bill dropped to about a third. No Sonnet review has missed something Opus caught in production yet. That sentence is true today; ask me in six months.</div>
 
-<h2><span class="num">04</span>Three agents, one action vocabulary</h2>
+<h2>Three agents, one action vocabulary</h2>
 
-<p>The annoying truth about most multi-agent setups I&rsquo;ve seen is that teams build a separate workflow tree per agent, and end up maintaining N copies of basically the same logic. There&rsquo;s a Claude workflow that does a thing, a Copilot workflow that does the same thing slightly differently, and a Cursor workflow that does the same thing yet again, and now any change to the orchestration logic has to be made three times.</p>
+<p>The annoying default in multi-agent setups is a separate workflow tree per agent, three copies of the same orchestration logic. Change one thing, change it three times.</p>
 
-<p>The better pattern &mdash; the one I landed on after reverting two earlier iterations &mdash; is: <strong>one shared dispatch vocabulary, agents are workers.</strong> The orchestration layer doesn&rsquo;t know which agent it&rsquo;s talking to. It just knows which <em>action</em> it wants performed. Routing to a specific agent is a separate concern that happens at the worker level.</p>
-
-<p>The vocabulary, currently four verbs:</p>
+<p>The pattern that landed (after reverting two earlier shapes) is one shared dispatch vocabulary, agents as workers. The orchestration layer doesn&rsquo;t know which agent it&rsquo;s calling. It knows which <em>action</em> it wants performed. Routing to a specific agent happens at the worker level.</p>
 
 <pre><code class="language-yaml"># every agent worker accepts these workflow_dispatch inputs
 inputs:
@@ -582,39 +577,38 @@ inputs:
     type: string
     default: claude-sonnet-4-5</code></pre>
 
-<p>Routing happens by branch suffix and label. A branch named <code>fix/issue-1234-cursor</code> goes to the Cursor lane. A branch with no suffix and no special label goes to Claude. A label called <code>ai:fallback-kimi</code> forces the Kimi worker. The router workflow does that mapping in &mdash; again &mdash; about ten lines of bash. Adding a fourth agent (I&rsquo;ve been eyeing Aider and Devin&rsquo;s API) is a copy-paste of the worker workflow plus one new branch suffix in the router.</p>
+<p>Routing is by branch suffix and label. <code>fix/issue-1234-cursor</code> goes to <code>cursor-agent.yml</code>. No suffix, no special label, goes to Claude. The label <code>ai:fallback-kimi</code> forces <code>kimi-agent.yml</code>. The router does that mapping in about ten lines of bash. Adding a fourth agent (I&rsquo;ve been eyeing Aider) is a copy-paste of the worker workflow plus one new branch suffix.</p>
 
-<p>Why this matters in practice: when I want to change the dispatch vocabulary &mdash; say, add a fifth verb for <code>fix_localization_drift</code> &mdash; I touch <em>one</em> input definition, propagate the new case to each worker, and the orchestration layer above doesn&rsquo;t care. The agents are interchangeable. That&rsquo;s the whole goal of an orchestration layer, and most teams accidentally build the opposite.</p>
+<p>When I add a fifth verb (<code>fix_localization_drift</code> is on the list), I touch one input definition and propagate the case to each worker. The orchestration above doesn&rsquo;t care. Agents are interchangeable.</p>
 
-<h2><span class="num">05</span>Kimi as Anthropic-API-compatible fallback</h2>
+<h2>Kimi as Anthropic-compatible fallback</h2>
 
-<p>Claude Code is great. It&rsquo;s also a binary distributed by Anthropic that hardcodes a lot of Anthropic-SDK behavior. So how do you fail over when your credits run out, or when Anthropic has a partial outage, without rewriting your worker workflow?</p>
+<p>Claude Code is a binary distributed by Anthropic. It hardcodes Anthropic-SDK behavior. So how do you fail over when credits run dry, or when Anthropic has a partial outage, without rewriting the worker workflow?</p>
 
-<p>It turns out Moonshot&rsquo;s Kimi exposes an Anthropic-compatible coding endpoint specifically for this case. Same API surface, different model behind it. The fallback is a single environment variable:</p>
+<p>Moonshot&rsquo;s Kimi exposes an Anthropic-compatible coding endpoint. Same API surface, different model behind it. The fallback is one environment variable.</p>
 
 <pre><code class="language-yaml">- name: Run Claude Code (fallback to Kimi K2)
   env:
     ANTHROPIC_API_KEY: ${{ secrets.KIMI_API_KEY }}
     ANTHROPIC_BASE_URL: https://api.kimi.com/coding
-    # ANTHROPIC_MODEL is set in the router; for Kimi we use kimi-k2
   run: |
     claude --print "..." --model kimi-k2</code></pre>
 
-<p>The same Claude Code binary, with no other workflow changes, now talks to Kimi. The trigger in production is rate-limit / credit-exhaustion errors from the Anthropic endpoint &mdash; those bubble up to the workflow as a non-zero exit, the next attempt sets the Kimi env vars, and the work continues. I&rsquo;ve had this fire maybe four or five times in the last quarter. Each time, the PR finished without me noticing until I looked at the workflow log.</p>
+<p>Same Claude Code binary, no other workflow changes, talking to Kimi. The trigger in production is rate-limit or credit-exhaustion errors from the Anthropic endpoint. Those bubble up as a non-zero exit, the next attempt sets the Kimi env vars, and the work continues. It&rsquo;s fired a handful of times in the last quarter. Each time the PR finished without me noticing until I looked at the workflow log.</p>
 
-<p>The reason this is worth writing about: most multi-agent setups assume the agents have wildly different SDKs and design around that assumption. In practice, OpenAI-compatible and Anthropic-compatible endpoints have become the lingua franca, and you can swap models behind your existing tooling for the price of a base URL.</p>
+<p>The point: most multi-agent setups assume the agents have wildly different SDKs and design around that. In practice, OpenAI-compatible and Anthropic-compatible endpoints are the lingua franca. You can swap models behind your existing tooling for the price of a base URL.</p>
 
-<h2><span class="num">06</span>The scheduled poller that bypasses GitHub&rsquo;s bot-actor gate</h2>
+<h2>The cron poller that bypasses GitHub&rsquo;s bot-actor gate</h2>
 
-<p>This is the second piece I&rsquo;m proud of, and it&rsquo;s the one nobody talks about. If you&rsquo;ve never tried to chain a GitHub bot&rsquo;s output into another workflow, you&rsquo;re about to find out why.</p>
+<p>This is the second headliner. Nobody talks about it. If you&rsquo;ve never tried to chain a GitHub bot&rsquo;s output into another workflow, the next two paragraphs are why.</p>
 
-<p>The setup: when Copilot finishes reviewing a PR, I want my Claude worker to read that review and address the feedback automatically. The intuitive way to wire this is with a <code>pull_request_review</code> event &mdash; GitHub fires it whenever a review is submitted. Easy.</p>
+<p>Setup. When Copilot finishes reviewing a PR, the Claude worker should read that review and address the feedback. The intuitive wiring is a <code>pull_request_review</code> event. GitHub fires it whenever a review is submitted.</p>
 
-<p>Except: GitHub silently blocks event-triggered workflows when the actor is a bot &mdash; specifically <code>copilot[bot]</code>, <code>github-actions[bot]</code>, and friends. They get gated behind an <code>action_required</code> approval that&rsquo;s only visible deep in the UI, and the workflow doesn&rsquo;t fire until a human clicks an approve button. This is a security policy, and it&rsquo;s a sensible one in the abstract. But it makes bot-to-bot chaining impossible by default. The downstream workflow simply never fires. There&rsquo;s no error. It&rsquo;s just stuck.</p>
+<p>Reality. GitHub silently gates event-triggered workflows when the actor is a bot. <code>copilot[bot]</code>, <code>github-actions[bot]</code>, and friends. The downstream run sits in <code>action_required</code> until a human clicks approve. The button lives deep in the UI. There&rsquo;s no error. The workflow just doesn&rsquo;t fire. Bot-to-bot chaining is impossible by default. The gate is a sensible security policy in the abstract; it shuts down this whole pattern in practice.</p>
 
-<p>I tried the obvious workarounds first. <code>pull_request_target</code> doesn&rsquo;t help &mdash; the actor gate still applies. Manually approving each one defeats the point of the automation. Service accounts get re-flagged as bots after enough activity. None of these scale.</p>
+<p>Workarounds I tried first. <code>pull_request_target</code> doesn&rsquo;t help. The actor gate still applies. Manually approving each one defeats the automation. Service accounts get re-flagged as bots after enough activity. None of these scale.</p>
 
-<p>The workaround that actually works: a scheduled cron job, running every ten minutes, that polls for new Copilot reviews and dispatches the next workflow itself. The scheduled run&rsquo;s actor is GitHub Actions, not Copilot, so the bot-actor gate doesn&rsquo;t apply. The downstream workflow fires normally.</p>
+<p>What works. <code>copilot-review-poller.yml</code> runs on cron every ten minutes, finds new Copilot reviews, and dispatches the next workflow itself. The scheduled run&rsquo;s actor is <code>github-actions[bot]</code>, which is the trusted one for this purpose. The gate doesn&rsquo;t apply.</p>
 
 <pre><code class="language-yaml">name: Poll Copilot reviews
 on:
@@ -626,8 +620,8 @@ on:
 # GitHub silently gates event-triggered workflows when the actor is
 # copilot[bot] (action_required approval). pull_request_review
 # events from Copilot do NOT fire downstream workflows by default.
-# A scheduled run, however, has the github-actions[bot] actor and
-# is NOT subject to that gate. So we poll instead of subscribing.
+# A scheduled run carries the github-actions[bot] actor and is NOT
+# subject to that gate. So we poll instead of subscribing.
 
 permissions:
   pull-requests: write
@@ -643,63 +637,59 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # find PRs reviewed by copilot[bot] in the last ~15 min
-          # that don't yet have an "ai:reviewed" label
           gh pr list --json number,labels,reviews \
             --jq '.[] | select(.reviews[]? | select(.author.login == "copilot[bot]"))' \
           | while read -r pr; do
-              # dispatch the fix_ai_review action — this run is
-              # the trusted scheduled actor, so no gate
               gh workflow run claude-worker.yml \
                 -f action=fix_ai_review \
                 -f pr_number="$(echo "$pr" | jq -r .number)"
             done</code></pre>
 
-<p>Ten-minute latency is fine for my use case &mdash; I&rsquo;m not trying to optimize for sub-second turnarounds, I&rsquo;m trying to keep the loop closed without me in it. The poller is the bridge between &ldquo;Copilot finished reviewing&rdquo; and &ldquo;Claude starts addressing the feedback,&rdquo; and it&rsquo;s the missing piece in every multi-agent CI tutorial I&rsquo;ve read. If you take one thing from this post, take this: <strong>scheduled actors bypass the bot-actor gate, and that&rsquo;s the only reliable way to chain bot output into another workflow on GitHub today.</strong> I&rsquo;ve filed feedback with GitHub on this; I don&rsquo;t expect it to change soon, because the gate is doing its job.</p>
+<p>Ten-minute latency is fine. The goal isn&rsquo;t sub-second turnaround. The goal is closing the loop without me in it. The poller is the bridge between &ldquo;Copilot finished reviewing&rdquo; and &ldquo;Claude starts addressing feedback,&rdquo; and it&rsquo;s the missing piece in every multi-agent CI tutorial I&rsquo;ve read. <strong>Scheduled actors bypass the bot-actor gate. Polling is the only reliable way to chain bot output into another workflow on GitHub today.</strong></p>
 
-<h2><span class="num">07</span>Self-healing wiki CI</h2>
+<h2>Self-healing wiki CI</h2>
 
-<p>The Provenance wiki lives in a separate repo and has its own CI &mdash; spell check, link check, structural validation. It used to break every couple of weeks because someone (often me) merged a doc edit with a typo or a dead link, and the failure would sit there until I noticed.</p>
+<p>The Provenance wiki lives in a separate repo. Spell check, link check, structural validation. It used to break every couple of weeks because someone (often me) merged a doc edit with a typo or a dead link, and the failure would sit there until I noticed.</p>
 
-<p>It now self-heals. The CI failure triggers Claude via the official <a href="https://github.com/anthropics/claude-code-action" target="_blank" rel="noopener"><code>anthropics/claude-code-action</code></a>, Claude opens a PR with the spell-check or link-check fixes, and &mdash; this is the part that delights me &mdash; <em>requests Copilot review on its own PR</em>. The poller from section 06 then picks up the Copilot review, and if Copilot approves, the PR auto-merges via a branch-protection bypass token. Loop closes without me.</p>
+<p>It now self-heals. <code>auto-fix-ci.yml</code> on the wiki repo fires on CI failure, calls Claude via <a href="https://github.com/anthropics/claude-code-action" target="_blank" rel="noopener"><code>anthropics/claude-code-action</code></a>, Claude opens a PR with the fix, and (the part that delights me) requests Copilot review on its own PR. The poller from the previous section picks that review up. If Copilot approves, the PR auto-merges via a branch-protection bypass token. Loop closes without me.</p>
 
-<p>Hit rate: roughly 80% of wiki CI failures self-resolve within an hour. The other 20% are real problems &mdash; broken external links, structural changes the doc tooling doesn&rsquo;t handle &mdash; and they bubble up to me via a Slack notification. The signal-to-noise on my notifications is finally what I want.</p>
+<p>Most wiki CI failures self-resolve within an hour. The rest are real (broken external links, structural changes the doc tooling doesn&rsquo;t handle) and bubble up via a Slack notification. The signal-to-noise on those notifications is finally what I want.</p>
 
-<h2><span class="num">08</span>Diff-aware Claude Haiku localization</h2>
+<h2>Diff-aware Haiku localization</h2>
 
-<p>Provenance ships with strings localized into eleven target languages. The naive approach to keeping those in sync &mdash; the one I had for years &mdash; is: when you change <code>en.lproj/Localizable.strings</code>, re-translate the entire file to every target language. That&rsquo;s expensive, slow, and pointlessly destructive of any human edits localizers may have made downstream.</p>
+<p>Provenance ships strings localized into eleven target languages. The naive approach (the one I had for years) is to re-translate the entire file every time <code>en.lproj/Localizable.strings</code> changes. Slow, wasteful, and it stomps on any human edits the localizers made downstream.</p>
 
-<p>The better pattern is diff-aware. On every push that touches the English strings file, a workflow does:</p>
+<p>Diff-aware is better. <code>auto-translate.yml</code> runs on every push that touches the English strings file:</p>
 
 <ol>
-    <li>Diff <code>en.lproj/Localizable.strings</code> between <code>HEAD~1</code> and <code>HEAD</code></li>
-    <li>Extract the keys that are <em>new</em> or whose <em>values</em> changed</li>
-    <li>Send <em>only those keys</em> to Claude Haiku with a translation prompt and the existing target-language file as context</li>
-    <li>Apply Haiku&rsquo;s output as a patch to each of the eleven target files</li>
-    <li>Open a PR labeled <code>ai:localization</code> for human spot-check</li>
+    <li>Diff <code>en.lproj/Localizable.strings</code> between <code>HEAD~1</code> and <code>HEAD</code>.</li>
+    <li>Extract keys that are <em>new</em> or whose <em>values</em> changed.</li>
+    <li>Send only those keys to Claude Haiku with the existing target-language file as context.</li>
+    <li>Apply Haiku&rsquo;s output as a patch to each of the eleven target files.</li>
+    <li>Open a PR labeled <code>ai:localization</code> for human spot-check.</li>
 </ol>
 
-<p>Haiku is the right model here for two reasons: it&rsquo;s cheap enough to run on every push without thinking about it, and translation of short UI strings is the kind of task where Sonnet&rsquo;s extra capability buys you nothing measurable. The cost of a full-sweep localization run is now in the single-digit cents instead of the dollars-per-language it used to be, and the latency is under a minute. The pattern reuses cleanly for any string-keyed localization pipeline &mdash; not just iOS <code>.strings</code>; same shape works for Android <code>strings.xml</code>, gettext <code>.po</code>, JSON i18n bundles, anything with stable keys.</p>
+<p>Haiku is the right model for two reasons. It&rsquo;s cheap enough to run on every push without thinking about it. And translation of short UI strings is the kind of task where Sonnet&rsquo;s extra capability buys nothing measurable. A full localization run drops from dollars per language to single-digit cents, and finishes in under a minute. The shape works for any string-keyed pipeline. Same loop fits Android <code>strings.xml</code>, gettext <code>.po</code>, JSON i18n bundles. Anything with stable keys.</p>
 
-<h2><span class="num">09</span>Real outcomes, honestly</h2>
+<h2>Real outcomes</h2>
 
-<p>I&rsquo;ve been running this stack in roughly its current form for about nine weeks. Some honest numbers and observations:</p>
+<p>The stack has been running in roughly its current form for about nine weeks.</p>
 
 <ul>
-    <li><strong>PR throughput is up significantly.</strong> I&rsquo;m being deliberately vague because the comparison is unfair &mdash; before this stack, I was the bottleneck on every PR; after it, I&rsquo;m the bottleneck on the <em>interesting</em> PRs. Median time-to-first-review dropped from about 36 hours to under 2 hours.</li>
-    <li><strong>Total Anthropic spend across the org: ~$80/month.</strong> That covers the routing, the wiki self-heal, the localization pipeline, the Claude Code workers themselves, and the occasional Opus reviewer. The routing-by-diff-grep is the single biggest cost lever.</li>
-    <li><strong>What didn&rsquo;t work:</strong> I tried, briefly, per-PR Cursor agent assignment based on file extension &mdash; e.g. all <code>.swift</code> files go to Cursor, all <code>.cpp</code> go to Claude. Abandoned within two weeks. The file-type signal turned out to be a poor proxy for which agent does better; the diff-pattern signal (section 03) is much stronger.</li>
-    <li><strong>What surprised me:</strong> the AI reviewers catch real bugs more often than I expected, especially around threading and Realm transactions. They also occasionally catch documentation drift (a function&rsquo;s doc-comment no longer matches its signature), which I never saw coming. The false-positive rate is non-trivial &mdash; maybe 15&ndash;20% of comments are noise &mdash; but a quick triage pass is much cheaper than missing a real bug.</li>
-    <li><strong>What I still don&rsquo;t trust them with:</strong> design decisions, public API changes, anything in the C++ emulation core that touches sync timing, anything that affects file format compatibility with prior releases. Those PRs get the AI review for completeness, but the merge decision is mine and only mine.</li>
+    <li><strong>PR throughput.</strong> Noticeably faster on the routine PRs because I&rsquo;m no longer in the first-review path. Median time-to-first-review dropped from days to hours.</li>
+    <li><strong>Anthropic spend.</strong> Low-double-digits per month across the org. That covers routing, the wiki self-heal, the localization pipeline, the Claude Code workers, and the occasional Opus review. The diff-grep router is the biggest single cost lever.</li>
+    <li><strong>What didn&rsquo;t work.</strong> File-extension routing. I tried sending all <code>.swift</code> to Cursor and all <code>.cpp</code> to Claude. Killed it within two weeks. File type is a poor proxy for which agent does better. The diff-pattern signal beats it.</li>
+    <li><strong>What surprised me.</strong> The AI reviewers catch real bugs, especially around threading and Realm transactions. They also flag documentation drift (a doc-comment that no longer matches the function signature), which I never asked them to do. False-positive rate is non-trivial. A quick triage pass is still cheaper than missing a real bug.</li>
+    <li><strong>What still needs me.</strong> Design decisions, public API changes, anything in the C++ emulation core that touches sync timing, anything affecting save-state compatibility with prior releases. Those PRs get the AI review for completeness. The merge decision is mine.</li>
 </ul>
 
-<h2><span class="num">10</span>The takeaway</h2>
+<h2>Takeaway</h2>
 
-<p>Multi-agent CI isn&rsquo;t about replacing engineers. It&rsquo;s about removing the routine review-and-triage layer that, for solo maintainers and small teams, is the actual rate-limiting step. The point of the orchestration isn&rsquo;t to make the agents smarter &mdash; they&rsquo;re already smart enough &mdash; it&rsquo;s to put the right agent on the right work, automatically, without a human standing in the middle of the routing decision.</p>
+<p>Multi-agent CI isn&rsquo;t about replacing engineers. It removes the routine review-and-triage layer that, for a solo maintainer, is the actual rate-limiting step. The orchestration doesn&rsquo;t make the agents smarter. It puts the right agent on the right work, automatically, without a human in the routing loop.</p>
 
-<p>If you take three things from this post: (1) <strong>route by static diff analysis</strong>, not by gut and not by router-LLM; (2) <strong>build one shared dispatch vocabulary</strong> and treat agents as interchangeable workers behind it; (3) <strong>use a scheduled poller</strong> for any chain that crosses the GitHub bot-actor gate, because subscribing to the event will silently fail and you&rsquo;ll spend a weekend figuring out why.</p>
+<p>Three things worth stealing. Route by static diff analysis, not by gut and not by router LLM. Build one shared dispatch vocabulary and treat agents as interchangeable workers behind it. Use a scheduled poller for any chain that crosses the GitHub bot-actor gate, because subscribing to the event will silently fail and you&rsquo;ll spend a weekend figuring out why.</p>
 
-<p>All nine workflow files behind this are public. They live in the various Provenance repos under <code>.github/workflows</code>. Copy them. Fork them. Adapt the dispatch vocabulary to your stack. The orchestration is the part worth stealing; whichever agent you put behind it is replaceable.</p>
+<p>The nine workflow files are public on the Provenance org. <code>ai-review.yml</code>, <code>cursor-agent.yml</code>, <code>kimi-agent.yml</code>, <code>copilot-review-poller.yml</code>, <code>auto-translate.yml</code>, <code>repo-health.yml</code>, plus the wiki&rsquo;s <code>auto-fix-ci.yml</code>. Copy them. Adapt the dispatch vocabulary to your stack. The orchestration is the part worth stealing. Whichever agent you put behind it is replaceable.</p>
 
 <div class="section-rule"></div>
 
