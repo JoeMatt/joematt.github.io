@@ -179,6 +179,46 @@
                     "@type": "Answer",
                     "text": "Joseph built a production multi-agent CI orchestration system across the Provenance organization that routes work between Claude (Sonnet and Opus, auto-selected by static diff analysis), Cursor Agent, and Kimi Code. The pipeline includes diff-aware Claude Haiku localization, scheduled Copilot review polling that bypasses GitHub's bot-actor approval gate, auto-fix CI on the wiki repo, and a repo-health monitor. At Wayfair he builds custom MCP servers and AI-driven workflows for the App Infrastructure team."
                 }
+            },
+            {
+                "@type": "Question",
+                "name": "How does Joseph use AI in production engineering?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "He orchestrates Claude (Sonnet and Opus, auto-routed by static diff analysis), Cursor Agent, and Kimi Code as routable workers across the Provenance org's CI. He also builds custom MCP servers, Claude skills and plugins, and n8n workflows for the App Infrastructure team at Wayfair. The multi-agent CI architecture is documented in the impact case studies on joemattiello.dev."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long has Joseph been working on iOS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Since before Apple released the SDK in 2008. Joseph started by writing apps using reverse-engineered SDK headers on jailbroken hardware, including a tool called iPhreak hosted on Google Code. That was his portfolio when he applied to Sense Networks in 2008. Provenance, his most-known iOS project, has been running since 2013 — almost 13 years."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What makes the Mobile AI Launch Readiness Audit different from a generic mobile audit?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most mobile audits stop at performance and crash analysis. This one covers three intersecting risk surfaces: native iOS performance under MLX and Core ML inference, App Store review policies on AI content (sections 4.7, 5.1.5, 5.5), and the architectural debt that surfaces when teams bolt agents onto an app that wasn't built for them. The deliverable is a written report plus a prioritized fix list, sized so an internal team can act on it."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How can I see what Joseph has actually shipped?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Three places: github.com/JoeMatt for code, the Provenance App Store listing (apps.apple.com/us/app/provenance-app/id1596862805) for production work, and joemattiello.dev/#impact for narrative case studies with metrics."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What's the best way to start a conversation about a role or engagement?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For full-time roles, send a LinkedIn DM. For consulting engagements, the /consulting/ page on joemattiello.dev has a fixed-fee offer with a direct inquiry path. For everything else, email mail@joemattiello.com — replies usually within 48 hours."
+                }
             }
         ]
     }
@@ -807,6 +847,82 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             margin-top: 0.25rem;
+        }
+
+        /* ===== FAQ ===== */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s var(--ease-out-expo), background 0.3s var(--ease-out-expo);
+            scroll-margin-top: 6rem;
+        }
+        .faq-item:hover {
+            border-color: var(--border-glow);
+        }
+        .faq-item[open] {
+            background: var(--bg-deep);
+            border-color: var(--border-glow);
+        }
+        .faq-item summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            transition: color 0.2s var(--ease-out-expo);
+        }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::marker { display: none; }
+        .faq-item summary:hover .faq-q { color: var(--accent-green); }
+        .faq-q {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+            transition: color 0.2s var(--ease-out-expo);
+        }
+        .faq-toggle {
+            font-family: var(--font-mono);
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--accent-green);
+            line-height: 1;
+            flex-shrink: 0;
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+        .faq-item[open] .faq-toggle {
+            transform: rotate(45deg);
+        }
+        .faq-a {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.7;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 1.25rem;
+        }
+        .faq-a p + p {
+            margin-top: 0.75rem;
+        }
+        .faq-a a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.3);
+            transition: border-color 0.2s var(--ease-out-expo);
+        }
+        .faq-a a:hover {
+            border-bottom-color: var(--accent-cyan);
         }
 
         /* ===== CASE STUDIES ===== */
@@ -3061,6 +3177,127 @@
                 <span class="beyond-handle">joe-mattiello</span>
             </div>
         </a>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="reveal">
+        <div class="section-label">Common questions</div>
+        <h2 class="section-title">Answers to the things people ask</h2>
+        <p class="section-desc">Direct answers — engineering, consulting, hiring, and history. Each question has a permalink anchor.</p>
+    </div>
+    <div class="faq-list">
+        <details class="faq-item reveal" id="faq-who-is-joseph">
+            <summary>
+                <span class="faq-q">Who is Joseph Mattiello?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph Mattiello is a New York-based engineering leader and mobile architect with 17+ years of iOS experience. He is the creator of Provenance EMU — the most popular open-source multi-system emulator for iOS, tvOS, and macOS — and currently works on Wayfair's App Infrastructure team. He holds 3 US patents and builds production AI tooling using Claude, Cursor, and custom MCP servers.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-what-is-provenance">
+            <summary>
+                <span class="faq-q">What is Provenance EMU?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Provenance is the most popular open-source multi-system retro game emulator for iOS, tvOS, and macOS. Created by Joseph Mattiello in 2013, it has 6,304 GitHub stars, 79 contributors, 9,373 Discord members, and 388,000+ GitHub release downloads. Provenance launched on the Apple App Store in January 2025 and supports 50+ console systems through 60+ emulation cores.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-hire-consulting">
+            <summary>
+                <span class="faq-q">Can I hire Joseph Mattiello for AI or iOS consulting?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Yes. Joseph offers a Mobile AI Launch Readiness audit — a 3-week fixed-fee engagement ($25,000–$35,000) covering iOS performance, AI integration architecture, App Store review readiness, and on-device LLM/MLX/Core ML pipelines. He is currently considering 1-2 engagements for Q3 2026. See <a href="/consulting/">joemattiello.dev/consulting/</a> for details or email <a href="mailto:mail@joemattiello.com">mail@joemattiello.com</a>.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-patents">
+            <summary>
+                <span class="faq-q">What patents does Joseph Mattiello hold?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph Mattiello is a named inventor on three US patents from his time at Sense Networks: US8224766B2 (Comparing spatial-temporal trails in location analytics), US8620624B2 (Event identification in sensor analytics), and US9571962B2 (System and method of performing location analytics). The patent portfolio was acquired twice — first by YP/YellowPages in 2014, then by Verve in 2017.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-location">
+            <summary>
+                <span class="faq-q">Where is Joseph Mattiello based?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>New York City. Available for hybrid roles in NYC and remote engagements globally.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-roles">
+            <summary>
+                <span class="faq-q">What types of roles is Joseph Mattiello considering?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph is selectively considering Head of AI Platform, Head of AI Infrastructure, VP Engineering, Director of Mobile, and CTO roles. He also takes on a small number of fractional and advisory engagements per year.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-ai-tooling">
+            <summary>
+                <span class="faq-q">What AI tooling has Joseph Mattiello built?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph built a production multi-agent CI orchestration system across the Provenance organization that routes work between Claude (Sonnet and Opus, auto-selected by static diff analysis), Cursor Agent, and Kimi Code. The pipeline includes diff-aware Claude Haiku localization, scheduled Copilot review polling that bypasses GitHub's bot-actor approval gate, auto-fix CI on the wiki repo, and a repo-health monitor. At Wayfair he builds custom MCP servers and AI-driven workflows for the App Infrastructure team.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-ai-production">
+            <summary>
+                <span class="faq-q">How does Joseph use AI in production engineering?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>He orchestrates Claude (Sonnet and Opus, auto-routed by static diff analysis), Cursor Agent, and Kimi Code as routable workers across the Provenance org's CI. He also builds custom MCP servers, Claude skills/plugins, and n8n workflows for the App Infrastructure team at Wayfair. See the <a href="#impact">case study on the multi-agent CI</a> for architecture details.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-ios-history">
+            <summary>
+                <span class="faq-q">How long has Joseph been working on iOS?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Since before Apple released the SDK in 2008. He started by writing apps using reverse-engineered SDK headers on jailbroken hardware, including a tool called iPhreak hosted on Google Code. That was his portfolio when he applied to Sense Networks in 2008. Provenance, his most-known iOS project, has been running since 2013 — almost 13 years.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-audit-difference">
+            <summary>
+                <span class="faq-q">What makes the Mobile AI Launch Readiness Audit different from a generic mobile audit?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Most mobile audits stop at performance and crash analysis. This one goes through three intersecting risk surfaces: native iOS performance under MLX/Core ML inference, App Store review policies on AI content (sections 4.7, 5.1.5, 5.5), and the architectural debt that surfaces when teams bolt agents onto an app that wasn't built for them. The deliverable is a written report plus prioritized fix list, sized so an internal team can act on it.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-shipped-work">
+            <summary>
+                <span class="faq-q">How can I see what Joseph has actually shipped?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Three places: (1) <a href="https://github.com/JoeMatt" target="_blank" rel="noopener">github.com/JoeMatt</a> for code, (2) <a href="https://apps.apple.com/us/app/provenance-app/id1596862805" target="_blank" rel="noopener">the Provenance App Store listing</a> for production work, (3) <a href="#impact">joemattiello.dev/#impact</a> for narrative case studies with metrics.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-start-conversation">
+            <summary>
+                <span class="faq-q">What's the best way to start a conversation about a role or engagement?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>For full-time roles: LinkedIn DM. For consulting engagements: the <a href="/consulting/">/consulting/</a> page has a fixed-fee offer with a direct inquiry path. For everything else: <a href="mailto:mail@joemattiello.com">mail@joemattiello.com</a> — replies usually within 48 hours.</p>
+            </div>
+        </details>
     </div>
 </section>
 
