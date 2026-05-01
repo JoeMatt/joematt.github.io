@@ -45,7 +45,7 @@ jobs:
         run: |
           htmlproofer ./static-site \
             --checks Links,Images,Scripts,OpenGraph \
-            --ignore-urls "/localhost/,/twitter\.com/,/x\.com/,/linkedin\.com/,/instagram\.com/,/discord\.gg/,/api\.github\.com/,/github\.com\/login/,/fonts\.gstatic\.com/,/fonts\.googleapis\.com/,/observatory-api/,/ssllabs/,/spotify\.com/" \
+            --ignore-urls "/localhost/,/twitter\.com/,/x\.com/,/linkedin\.com/,/instagram\.com/,/discord\.gg/,/api\.github\.com/,/github\.com\/login/,/fonts\.gstatic\.com/,/fonts\.googleapis\.com/,/observatory-api/,/ssllabs/,/spotify\.com/,/joemattiello\.dev/" \
             --ignore-status-codes "0,429,999,403" \
             --ignore-files "/status\/index\.html/" \
             2>&1 | tee htmlproofer-output.txt
