@@ -2563,6 +2563,69 @@
             </div>
         </article>
 
+        <!-- Case Study 5: 240p Test Suite — AI on Bare-Metal Jaguar -->
+        <article class="case-study reveal" style="--cs-accent: var(--accent-amber);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>Atari Jaguar 240p Test Suite</strong> · Maintainer · 2026 (April)</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">AI-Assisted Dev</span>
+                    <span class="cs-tag">Bare-Metal</span>
+                    <span class="cs-tag">Adversarial Review</span>
+                    <span class="cs-tag">Open Source</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">Built a homebrew test ROM for 30-year-old hardware with AI as primary author — on a platform LLMs have effectively zero training data for.</h3>
+            <p class="cs-subhead">Port of Artemio Urbina's 240p Test Suite to Atari Jaguar. m68k + Tom/Jerry RISC, cross-compiler that hasn't been touched in two decades, no Stack Overflow answers, no GitHub Copilot context to pattern-match against. Used Claude Code as primary author paired with GitHub Copilot and Qodo as adversarial reviewers — every PR ran a ship → AI review → address feedback loop, captured in the commit log itself.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">36</div>
+                    <div class="cs-metric-label">PRs merged in 10 days</div>
+                    <div class="cs-metric-sub">~84% with explicit AI authorship trailers. From empty repo to v1.3.1 in less than two weeks.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>Bare-metal Atari Jaguar is the kind of hardware LLMs <em>don't</em> know — released 1993, niche m68k+RISC architecture, ~half a dozen active homebrew developers worldwide, a cross-compiler that hasn't seen a release in 20 years. Conventional wisdom says "AI can't help here." This case study disproves that.</p>
+
+                    <h5>What I built</h5>
+                    <ul>
+                        <li><strong>Three-agent ship→review→address-feedback loop captured in the commit log.</strong> Examples: <code>cd97ceb</code> "review: address Copilot/Qodo feedback on PR #5"; PR #25 entirely dedicated to addressing Copilot review on merged PR #24. The iteration is in the git history, not just the chat transcripts.</li>
+                        <li><strong>Cross-cutting hardware-aware change.</strong> PR #27 (PAL pass) — region-override toggle in Options menu, region-aware geometry replacing hardcoded <code>H=240</code> with <code>PALNTSC ? 240 : 288</code> across 10 procedural pattern functions, 50 Hz timing for AudioSync + MDFourier, plus VDP register diagnostics. Exactly the type of cross-cutting refactor LLMs typically struggle on bare-metal.</li>
+                        <li><strong>7 hardware probe features shipped.</strong> 93C46 EEPROM read/write, Jaguar CD/Butch probe, JagLink serial test, Memory Track EEPROM, Sprite Stress / OP saturation, Pro Controller + Rotary controller, Video Mode TOM register probe.</li>
+                        <li><strong>Custom Jaguar SDK in a Docker image, published to GHCR.</strong> The <code>.github/workflows/sdk-image.yml</code> builds <code>ghcr.io/joematt/jaguar-sdk</code> (m68k-atari-mint-gcc, mac, aln, jlibc/rmvlib) so build/release can pull it instead of recreating the toolchain. Solves the "exotic cross-compile toolchain" problem by containerizing it.</li>
+                        <li><strong>Image-diff-style smoke-test CI.</strong> <code>.github/workflows/build.yml</code>'s <code>smoke-test</code> job checks out <code>libretro/virtualjaguar-libretro</code> upstream, caches the built core keyed on resolved upstream SHA, boots the freshly built ROM via a Python <code>libretro.py</code> harness for 60 frames, dumps the framebuffer as a PNG artifact, and verifies fastboot signature byte-identical to upstream. Real visual regression testing for a ROM project.</li>
+                        <li><strong>Visual regression harness.</strong> PR #35 / commit <code>0fc3eb3</code> expands a scripted screenshot tour from 19 → 47 navigable test screens, captured automatically via <code>scripts/screenshot-tour.py</code>. Closest thing the bare-metal codebase has to visual diffing.</li>
+                        <li><strong>Disciplined release engineering.</strong> 12 tagged releases (v0.6.4 → v1.3.1) in 10 days. Each feature PR followed by a dedicated <code>release: bump version to X.Y.Z</code> PR.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>Goes against the prevailing narrative that AI-assisted development only works on well-trodden stacks. Bare-metal Jaguar is the test case where it absolutely shouldn't work — and the git history shows it does. The pattern is the durable insight: AI as primary author + adversarial reviewers + iteration captured in commit history.</p>
+
+                    <h5>Proof — read the code</h5>
+                    <ul>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">PR #27</a> — PAL pass, region-aware geometry across 10 pattern functions</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/25" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">PR #25</a> — entirely addresses Copilot review of merged PR #24</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/35" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">PR #35</a> — Screenshot tour expanded to 47 screens</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">build.yml</a> — smoke-test CI booting every PR ROM</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/sdk-image.yml" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">sdk-image.yml</a> — Custom Jaguar SDK Docker image</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/releases" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">Releases</a> — 12 releases in 10 days</li>
+                    </ul>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Claude Code</span>
+                        <span class="cs-chip">GitHub Copilot</span>
+                        <span class="cs-chip">Qodo</span>
+                        <span class="cs-chip">m68k</span>
+                        <span class="cs-chip">Atari Jaguar</span>
+                        <span class="cs-chip">libretro</span>
+                        <span class="cs-chip">Docker</span>
+                        <span class="cs-chip">GitHub Actions</span>
+                        <span class="cs-chip">Python harness</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
     </div>
 </section>
 
