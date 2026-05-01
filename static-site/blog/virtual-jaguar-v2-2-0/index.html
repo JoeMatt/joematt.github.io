@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>Virtual Jaguar v2.2.0: The Atari Jaguar That Boots Without a BIOS — Joseph Mattiello</title>
+<meta name="description" content="76 commits, single-author. A high-level emulation BIOS that boots most commercial Jaguar titles without a real BIOS image. 22 previously-broken games now functional, including Doom, Syndicate, and Atari Karts. Save states, rewind, RetroAchievements, and a 2x speedup on hot paths.">
+<link rel="canonical" href="https://joemattiello.dev/blog/virtual-jaguar-v2-2-0/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Virtual Jaguar v2.2.0: The Atari Jaguar That Boots Without a BIOS">
+<meta property="og:description" content="An HLE BIOS for the Atari Jaguar, 22 games unlocked (Doom, Syndicate, Atari Karts, more), save states, rewind, and RetroAchievements. 76 commits, single author.">
+<meta property="og:url" content="https://joemattiello.dev/blog/virtual-jaguar-v2-2-0/">
+<meta property="og:image" content="https://joemattiello.dev/img/profile3.jpeg">
+<meta property="article:published_time" content="2026-05-01">
+<meta property="article:author" content="Joseph Mattiello">
+<meta property="article:tag" content="Open Source">
+<meta property="article:tag" content="Emulation">
+<meta property="article:tag" content="Atari Jaguar">
+<meta property="article:tag" content="libretro">
+<meta property="article:tag" content="C/C++">
+
+<!-- JSON-LD: Article -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Virtual Jaguar v2.2.0: The Atari Jaguar That Boots Without a BIOS",
+    "datePublished": "2026-05-01",
+    "author": { "@id": "https://joemattiello.dev/#person" },
+    "publisher": { "@id": "https://joemattiello.dev/#person" },
+    "url": "https://joemattiello.dev/blog/virtual-jaguar-v2-2-0/"
+}
+</script>
+
+<link rel="icon" href="/favicon.ico">
+<style>
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+}
+
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --text-primary: #e4e6ea;
+    --text-secondary: #b3b6bc;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    font-size: 17px;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; border-bottom: 1px solid rgba(0,229,153,0.25); }
+a:hover { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); }
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+.container-wide { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.nav-brand a { color: var(--text-primary); border-bottom: none; }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back { border-bottom: 1px solid var(--border-subtle); }
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Article header */
+header.article-head {
+    padding: 4rem 0 2rem;
+}
+.byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.byline .author { color: var(--accent-green); }
+.byline .author a { color: var(--accent-green); border-bottom: none; }
+.byline .divider { color: var(--text-muted); }
+h1.headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+.dek {
+    font-size: 1.18rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+.tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1.5rem;
+}
+.tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    background: var(--bg-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.head-rule {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 1rem 0 0;
+}
+
+/* Article body */
+article.body {
+    padding: 2rem 0 3rem;
+}
+article.body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 3rem 0 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+article.body h2 .num {
+    color: var(--accent-green);
+    font-size: 0.8em;
+    margin-right: 0.5rem;
+    font-weight: 400;
+}
+article.body h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin: 2rem 0 0.85rem;
+    color: var(--text-primary);
+}
+article.body p {
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+article.body p code, article.body li code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    color: var(--accent-green);
+}
+article.body ul, article.body ol {
+    margin: 0 0 1.5rem 1.5rem;
+    color: var(--text-primary);
+}
+article.body li { margin-bottom: 0.5rem; }
+article.body strong { color: var(--text-primary); font-weight: 600; }
+article.body em { color: var(--text-primary); font-style: italic; }
+article.body blockquote {
+    border-left: 3px solid var(--accent-green);
+    padding: 0.5rem 0 0.5rem 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+article.body pre {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+article.body pre code {
+    font-family: var(--font-mono);
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+article.body pre.diagram {
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    line-height: 1.4;
+    background: var(--bg-deep);
+}
+.callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    margin: 1.75rem 0;
+    font-size: 0.96rem;
+    color: var(--text-secondary);
+}
+.callout strong { color: var(--accent-cyan); }
+.section-rule {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 3rem 0 0;
+}
+
+/* About author */
+.about-author {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 2.25rem 2.5rem;
+    margin: 3rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.about-author::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.about-author h3 {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent-green);
+    margin-bottom: 0.85rem;
+}
+.about-author .author-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+.about-author p {
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+.about-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+.about-cta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.about-cta:hover { border-color: var(--border-glow); color: var(--accent-green); }
+.about-cta.primary {
+    background: var(--accent-green);
+    color: var(--bg-deep);
+    border-color: var(--accent-green);
+    font-weight: 700;
+}
+.about-cta.primary:hover { background: #33edb3; color: var(--bg-deep); }
+
+/* Article footer nav */
+.article-foot-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+}
+.article-foot-nav a { color: var(--text-secondary); border-bottom: none; }
+.article-foot-nav a:hover { color: var(--accent-green); }
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); border-bottom: none; }
+footer.page a:hover { color: var(--accent-green); }
+
+@media (max-width: 700px) {
+    body { font-size: 16px; }
+    h1.headline { font-size: 1.7rem; }
+    .about-author { padding: 1.75rem 1.5rem; }
+    article.body pre { font-size: 0.78rem; padding: 1rem; }
+    article.body pre.diagram { font-size: 0.62rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+    <div class="container-wide nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <a href="/blog/" style="color:var(--text-secondary);border-bottom:none">blog</a>
+            <span class="crumb">/</span>
+            <span class="here">virtual-jaguar-v2-2-0</span>
+        </div>
+        <a href="/blog/" class="nav-back">← All posts</a>
+    </div>
+</nav>
+
+<header class="article-head">
+    <div class="container">
+        <div class="byline">
+            <span class="author">By <a href="/">Joseph Mattiello</a></span>
+            <span class="divider">·</span>
+            <span>2026-05-01</span>
+            <span class="divider">·</span>
+            <span>13 min read</span>
+        </div>
+        <h1 class="headline">Virtual Jaguar v2.2.0: The Atari Jaguar That Boots Without a BIOS</h1>
+        <p class="dek">76 commits, single author, one weekend cutover from a half-working core to a release that actually deserves the version bump. A high-level emulation BIOS that boots most commercial Jaguar titles without a real BIOS image. 22 previously-broken games now functional &mdash; including Doom, Syndicate, and Atari Karts. Save states, rewind, RetroAchievements, and a 2x speedup on the hot paths.</p>
+        <div class="tags-row">
+            <span class="tag">Open Source</span>
+            <span class="tag">Emulation</span>
+            <span class="tag">Atari Jaguar</span>
+            <span class="tag">libretro</span>
+            <span class="tag">C/C++</span>
+        </div>
+        <div class="head-rule"></div>
+    </div>
+</header>
+
+<main>
+<article class="body">
+<div class="container">
+
+<h2><span class="num">01</span>Why this release matters</h2>
+
+<p>The Atari Jaguar shipped in 1993. It sold roughly 250,000 units before Atari pulled the plug, ending the company&rsquo;s run as a hardware maker. If you grew up with one, you&rsquo;re part of a small club. If you&rsquo;re trying to play one today, you&rsquo;re hitting a wall that has nothing to do with the games and everything to do with the boot ROM.</p>
+
+<p>The Jaguar&rsquo;s real BIOS image is not legally distributable. It&rsquo;s not on Archive.org, it&rsquo;s not in any of the big ROM sets, and Atari&rsquo;s successor companies have never released it. So Jaguar emulation, in practice, has always required one of two compromises: (a) you have to dump the BIOS yourself off a real Jaguar &mdash; assuming you own one and the cartridge port still works &mdash; or (b) the emulator hard-patches the game ROM at load time to skip the boot sequence entirely, which subtly breaks any game that relies on BIOS-initialized state.</p>
+
+<p>v2.2.0 takes a third path. Instead of asking the user to provide a BIOS, or pretending the boot sequence didn&rsquo;t happen, it <em>re-implements</em> the BIOS at the function level &mdash; what&rsquo;s called <strong>high-level emulation</strong>. You boot any game cartridge ROM and the emulator runs the same handful of init steps the real BIOS would have run, lands the hardware in the same state, then hands control to the game. No copyrighted file ever touches your machine. The longest-standing barrier to entry for Jaguar emulation is now optional.</p>
+
+<p>That&rsquo;s the headliner. The other 75 commits are the part where 22 previously-broken games &mdash; including Doom, Syndicate, and Atari Karts &mdash; now actually run; where save states, rewind, and RetroAchievements show up for the first time; where the audio pipeline finally stops dropping frame-edge samples; and where the hot paths got roughly 2x faster. Pre-built cores ship for 14 platforms. The whole release is a single-author push to master, which is how a small project moves when there&rsquo;s nobody to wait on.</p>
+
+<h2><span class="num">02</span>The HLE BIOS, in depth</h2>
+
+<p>This is the part of the release I spent the most time on, and it&rsquo;s the part that changes who can actually use the emulator.</p>
+
+<p>The Atari Jaguar boots in a specific order. Power on, the m68k starts executing from the BIOS ROM at <code>$E00000</code>. The BIOS does cartridge authentication (a signature check on the cart header), then memory clear, then hardware init &mdash; setting up the Tom and Jerry register banks, configuring the Object Processor, initializing the DSP into a known idle state, then running the boot logo animation, and finally jumping to the cart&rsquo;s entry point. Each step leaves the hardware in a state that games legitimately depend on.</p>
+
+<p>What I want to be clear about: the HLE BIOS is <em>not</em> a reverse-engineered copy of the real BIOS image. It doesn&rsquo;t contain disassembled BIOS code, doesn&rsquo;t reproduce the boot logo, doesn&rsquo;t replicate any Atari-copyrighted asset. What it does is re-implement the <em>specification</em> the BIOS implements: it puts the hardware in the same observable state by the time the game gets control. It&rsquo;s the same legal basis Saturn and PSP HLE BIOSes have used for years. The emulator no longer needs the cartridge to have been blessed by a real boot ROM &mdash; it acts as if it had been.</p>
+
+<p>The hard parts:</p>
+
+<ul>
+    <li><strong>Cart auth</strong>. The Jaguar BIOS verifies a small signature region in the cart header. The signature isn&rsquo;t a cryptographic hash &mdash; it&rsquo;s a sequence of expected bytes &mdash; but the BIOS will refuse to boot if it doesn&rsquo;t see them. Games written under license all have valid signatures; homebrew sometimes doesn&rsquo;t. The HLE replacement validates the same region but is more permissive on the homebrew path, so legitimately-built indie ROMs (like the <a href="/#projects">240p Test Suite port</a>) boot without rejection.</li>
+    <li><strong>OS init</strong>. The Tom and Jerry chips have dozens of memory-mapped registers that the BIOS pre-configures &mdash; clock dividers, DRAM refresh timing, the OP&rsquo;s linked-list base pointer, the DSP&rsquo;s default sample rate. Games assume those registers have specific values at entry. The HLE init writes the same defaults in the same order.</li>
+    <li><strong>Audio init</strong>. This was the one that ate two days. The DSP has to land in an exact idle state &mdash; specific PC, specific register file, specific RAM contents at a couple of fixed addresses &mdash; or games that probe the DSP at startup (which is more of them than you&rsquo;d think) will fail their detection check and refuse to use audio. Getting that state bit-exact with a real Jaguar required diffing the post-boot DSP RAM dump from a real machine against the HLE-initialized version, byte by byte, until they matched.</li>
+</ul>
+
+<p>The payoff is bigger than &ldquo;one fewer file to download.&rdquo; It removes the last legal/ethical concern from the on-ramp. Every other modern emulation platform &mdash; SNES, Genesis, PS1 &mdash; has always-free, always-legal entry. Jaguar is now in that category for the first time. It also sets a useful precedent: the HLE-first approach is the right move for any console where BIOS dumps are scarce, hostile to redistribution, or fragmented across regional revisions. (Compare to similar HLE work on Saturn, PSP, and PS3 &mdash; same shape, different consoles.)</p>
+
+<h2><span class="num">03</span>22 games that now work</h2>
+
+<p>The compatibility table for Jaguar emulation has been famously bad. Even the games that &ldquo;worked&rdquo; in older builds often had specific glitches &mdash; missing audio, broken sprite layers, hangs on level transitions. v2.2.0 fixes 22 titles that previously didn&rsquo;t boot or didn&rsquo;t run far enough to be playable. The four I want to walk through specifically:</p>
+
+<ul>
+    <li><strong>Doom</strong>. The white whale. Doom on Jaguar is a tightly-tuned port that pushes the blitter harder than almost any other commercial game, and it&rsquo;s extremely sensitive to blitter-pipeline timing. The previous core had a one-cycle race in the blitter&rsquo;s outer-loop dispatch that Doom would trip about 30 frames into the title screen; the symptom was a freeze with garbled VRAM. The fix was reordering two blitter-state transitions so the cycle accounting matches what the real chip does. Doom now boots, plays, and runs at full speed.</li>
+    <li><strong>Syndicate</strong>. Syndicate&rsquo;s audio code does something cute: it polls the DSP&rsquo;s status register every audio frame to decide whether to push a new sample buffer. The old core handled that poll lazily and would occasionally return a stale value when the DSP was mid-transition; Syndicate would mistake that for a hang and crash itself out of the audio thread. Tightening the DSP status-register read to be cycle-accurate fixed it.</li>
+    <li><strong>Atari Karts</strong>. The Object Processor builds the Jaguar&rsquo;s sprite layers from a linked list of OP descriptors. Atari Karts uses a non-standard descriptor ordering for the road-and-kart layers that the old OP implementation walked in the wrong direction, drawing karts <em>under</em> the track surface. The fix was a respectful re-read of the OP datasheet and a small change to how the descriptor list is traversed.</li>
+    <li><strong>Iron Soldier 2</strong>. Used to hang on the mission-select screen because of a missed interrupt during cart-bank switching. The bank-switch path now flushes pending interrupts before swapping, which matches real-hardware behavior.</li>
+</ul>
+
+<p>The other 18 are a mix of audio fixes, OP fixes, m68k addressing-mode corner cases, and DSP timing improvements. Rather than list them with shallow notes here, the full compatibility table is on the wiki. The point is: if the title you wanted to play was broken before, give v2.2.0 a try. There&rsquo;s a real chance it works now.</p>
+
+<h2><span class="num">04</span>Audio pipeline rewrite</h2>
+
+<p>The frame-edge dropout bug is older than I am, in emulator-time. It&rsquo;s been in the core since at least 2014. Symptom: every few seconds, you&rsquo;d hear a brief click or a half-sample of silence right at the audio-frame boundary. Not catastrophic, but enough to make extended play sessions unpleasant.</p>
+
+<p>The diagnostic process took longer than the fix did. I built a <strong>bit-exactness test harness</strong>: capture the DSP&rsquo;s sample output from a real Jaguar across a known scene from a known game, capture the same output from the emulator, and diff them sample-by-sample. The diff was almost always zero &mdash; the two waveforms were sample-identical &mdash; <em>except</em> at frame boundaries, where the emulator was occasionally emitting a sample that had been written half a cycle late. The DSP scheduler was draining its sample buffer just before the audio mixer pulled, instead of just after.</p>
+
+<p>The fix was a one-line ordering change in the per-frame schedule. The validation took a week: I ran the bit-exactness harness across 31 games, each across a 60-second scene, and confirmed zero mismatches anywhere. SIMD shows up in this part of the pipeline too &mdash; the per-sample mixing stage uses SSE/NEON intrinsics where available, falls back to plain C where it doesn&rsquo;t, and the test harness catches any divergence between the two paths to single-sample precision. That same harness is now part of CI, so a regression in the audio path can&rsquo;t merge silently.</p>
+
+<h2><span class="num">05</span>Save states, rewind, and RetroAchievements</h2>
+
+<p>The modern-emulator feature trio. None of these existed in the previous core. Each was harder than it sounds.</p>
+
+<p><strong>Save states</strong> are conceptually simple &mdash; serialize the entire machine state to a blob, deserialize later &mdash; but the Jaguar is unusually heterogeneous. There are six chips that hold state: the m68k CPU, the GPU (a RISC core), the DSP (another RISC core, different ISA), the Object Processor, the Blitter, and the audio subsystem. Each had its own ad-hoc representation of state, and several of them held pointers into shared memory that didn&rsquo;t serialize cleanly. The work was making each chip&rsquo;s state <em>deterministically serializable</em>: a stable byte layout, no embedded pointers, no undefined fields. With that done, saving and loading is the obvious thing.</p>
+
+<p><strong>Rewind</strong> is built on top of save states with a circular buffer. Every N frames (currently 4), the emulator captures a state, ring-buffers it, and on rewind walks the ring backwards. The buffer is sized for ~30 seconds of rewind by default. The cost is mostly memory; CPU overhead is negligible because the per-frame capture is well under a millisecond on a modern machine.</p>
+
+<p><strong>RetroAchievements</strong> integration is the one I&rsquo;m most personally happy about. The Jaguar has been one of the few major retro consoles with no achievement support &mdash; users in the RA community had no Jaguar sets to work on, no way to track progress, and the platform was effectively invisible to that whole sub-community. v2.2.0 wires up the standard RA hooks (memory-map exposure, frame-tick callbacks, hardcore-mode enforcement) and there are now ~20 fresh achievement sets being authored on RA&rsquo;s side. If you&rsquo;ve been waiting to see Jaguar appear in your RA profile, it&rsquo;s there now.</p>
+
+<p>SRAM and EEPROM persistence got fixed in the same release. Save data now survives soft resets, which it didn&rsquo;t before for cartridges that used the on-cart EEPROM (a small but loud subset of the library, including most of the racing titles).</p>
+
+<h2><span class="num">06</span>The 21-key controller, sanely remapped</h2>
+
+<p>The Jaguar controller is the most maligned piece of plastic in retro gaming, and not entirely without reason. It&rsquo;s a digital d-pad, three face buttons (A, B, C), a Pause button, an Option button, and &mdash; the part that gets the eye-rolls &mdash; a numeric keypad with twelve keys (0-9, asterisk, hash). The design assumed games would ship with paper overlays you&rsquo;d snap onto the controller to label what each keypad key does in that specific game. It was very 1993.</p>
+
+<p>The problem for emulation is that no modern controller has 21 inputs, and the keypad keys are <em>load-bearing</em> for a lot of titles &mdash; Alien vs. Predator uses the keypad for door codes and inventory; Iron Soldier uses it for weapon selection; the homebrew scene uses it constantly. Just dropping the keypad onto &ldquo;keyboard only&rdquo; isn&rsquo;t acceptable on platforms like iOS where there is no keyboard.</p>
+
+<p>v2.2.0 ships <strong>per-button remapping</strong> for the entire 21-key layout. Every keypad key is independently assignable to any controller input the libretro frontend exposes &mdash; analog-stick directions, modifier-button combos, on-screen overlays, whatever your frontend supports. The default mapping is sensible for the most-used titles (the keypad is mapped to a virtual on-screen overlay on touch platforms, and to combo-buttons on traditional controllers), but the override path is one menu deep. Frontend authors can ship per-game default mappings; users can override per-game.</p>
+
+<h2><span class="num">07</span>~2x speedup on the hot paths</h2>
+
+<p>I didn&rsquo;t set out to optimize for performance in this release &mdash; I was chasing correctness &mdash; but several of the correctness fixes turned out to also be much faster than what they replaced. The headline number is roughly 2x speedup on the hot paths, which is profile-driven and measured against v2.1 on the same hardware running the same scenes.</p>
+
+<p>The biggest single win was the blitter. The old blitter implementation was a giant interpreter loop that re-decoded the blitter&rsquo;s mode register on every operation. The rewrite hoists the mode decoding out of the inner loop, pre-computes a small dispatch table, and uses SIMD for the actual pixel-fill stages where the blitter is moving large rectangular spans. SSE on x86, NEON on ARM, scalar fallback on platforms without either. The bit-exactness test harness from section 04 also covers the blitter rewrite &mdash; pixel-perfect output across a battery of test scenes, with any divergence between SIMD and scalar paths failing CI immediately.</p>
+
+<p>Other wins were less dramatic: tightening the m68k decoder&rsquo;s common-case dispatch, replacing a few <code>memcpy</code> calls with structured assignment in the OP&rsquo;s descriptor walk, and inlining a couple of accessor functions that the compiler wasn&rsquo;t consistently inlining on its own. Plain C where it helps; SIMD where it really helps.</p>
+
+<p>The lesson I want to flag: the bit-exactness harness made all of this safe. Without it, a SIMD blitter rewrite is the kind of change you&rsquo;re scared to merge because regressions are subtle and visible only in specific games on specific scenes. With pixel-perfect comparison against a known-good baseline, the regression surface collapses to &ldquo;does the harness still pass?&rdquo;</p>
+
+<h2><span class="num">08</span>What&rsquo;s next</h2>
+
+<p>The next major frontier is <strong>Jaguar CD</strong>. The Atari Jaguar CD add-on was a commercial flop that shipped a small but interesting library &mdash; including some of the most graphically ambitious Jaguar software made &mdash; and emulation of it has been historically poor. Today, the only meaningful Jaguar CD emulation outside MiSTer FPGA is fragmentary. Bringing it into virtualjaguar-libretro is the logical next step, and v2.2.0&rsquo;s improved core makes that work substantially easier.</p>
+
+<p>On the distribution side: <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance</a> ships virtualjaguar-libretro as one of its Jaguar cores, so users on iOS, tvOS, and macOS will pick up all of v2.2.0&rsquo;s improvements automatically in the next core update. No re-downloading, no BIOS sourcing, no setup. The HLE BIOS path is especially nice on iOS, where filesystem access for BIOS files is awkward at best.</p>
+
+<p>And there&rsquo;s related work in flight in the <a href="/#projects">JoeMatt/atari_jaguar_240p_test_suite</a> repo &mdash; a bare-metal Jaguar port of Artemio Urbina&rsquo;s 240p Test Suite, built end-to-end with Claude Code as the primary author and Copilot/Qodo as adversarial reviewers. That project is one of the few things actively producing new homebrew Jaguar ROMs, which means it&rsquo;s also one of the best stress-tests for the core: every release I cut on the test suite immediately exercises virtualjaguar-libretro&rsquo;s edge cases. The two projects feed each other.</p>
+
+<h2><span class="num">09</span>The takeaway</h2>
+
+<p>If you&rsquo;ve been waiting to try Jaguar emulation but didn&rsquo;t want to deal with sourcing a BIOS file you&rsquo;re not sure is legal to download, v2.2.0 is the version that makes that excuse obsolete. The HLE BIOS works for the great majority of commercial titles. Doom runs. Syndicate runs. Atari Karts runs. Save states, rewind, and RetroAchievements are in. Builds for 14 platforms are on the <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.2.0" target="_blank" rel="noopener">release page</a>. Provenance for iOS, tvOS, and macOS will pick these changes up in the next core update.</p>
+
+<p>If you find a regression, file an issue. Single-author releases are fast, but they also have single-author blind spots. The bit-exactness test harness catches a lot, but it doesn&rsquo;t catch everything &mdash; especially anything the harness doesn&rsquo;t have a baseline for yet. The compatibility table on the wiki is the best place to confirm whether a specific title is verified, and PRs against that table are welcome from anyone who can run a few minutes of a game and report what they see.</p>
+
+<div class="section-rule"></div>
+
+<aside class="about-author">
+    <h3>About the author</h3>
+    <div class="author-name">Joseph Mattiello</div>
+    <p>L4 Mobile Engineer on Wayfair&rsquo;s App Infrastructure team. Maintainer of <a href="https://github.com/libretro/virtualjaguar-libretro" target="_blank" rel="noopener">virtualjaguar-libretro</a> and creator of <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance EMU</a> &mdash; 6,300 stars, 79 contributors, on the App Store since January 2025. 17+ years iOS, three US patents (Sense Networks, acquired twice), former Director of iOS Platform at NewsCorp. Based in NYC. Currently considering 1&ndash;2 consulting engagements for Q3 2026.</p>
+    <div class="about-cta-row">
+        <a href="/consulting/" class="about-cta primary">Consulting →</a>
+        <a href="/" class="about-cta">About</a>
+        <a href="https://github.com/JoeMatt" target="_blank" rel="noopener" class="about-cta">GitHub</a>
+        <a href="https://www.linkedin.com/in/joemattiello/" target="_blank" rel="noopener" class="about-cta">LinkedIn</a>
+    </div>
+</aside>
+
+<nav class="article-foot-nav">
+    <a href="/blog/">← All posts</a>
+    <a href="/">Back to joemattiello.dev →</a>
+</nav>
+
+</div>
+</article>
+</main>
+
+<footer class="page">
+    <div class="container-wide">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/blog/">Blog index</a> · <a href="/status/">Site status</a> · <a href="/consulting/">Consulting</a></p>
+    </div>
+</footer>
+
+</body>
+</html>

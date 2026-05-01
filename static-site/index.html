@@ -2513,10 +2513,12 @@
         <!-- Virtual Jaguar -->
         <div class="project-card reveal">
             <div class="project-icon" style="background:rgba(0,229,153,0.1);border:1px solid rgba(0,229,153,0.2);"><svg viewBox="0 0 24 24" fill="none" stroke="#00e599" stroke-width="2" stroke-linecap="round"><path d="M4 4c2 5 4 8 7 12M9 3c1.5 5 3 9 5 13M14 2c1 5 2 9 3.5 14"/><circle cx="7" cy="19" r="1" fill="#00e599"/><circle cx="13" cy="19" r="1" fill="#00e599"/><circle cx="18.5" cy="19" r="1" fill="#00e599"/></svg></div>
-            <span class="project-tag tag-maintainer">Maintainer</span>
-            <h3>Virtual Jaguar (libretro)</h3>
-            <p>Admin and maintainer. Delivering the first open-source Atari Jaguar CD emulation (only other implementation is MiSTer FPGA). Extensive accuracy and performance fixes. AI-assisted development with A/B image regression testing. Powers Jaguar emulation in both RetroArch and Provenance.</p>
+            <span class="project-tag tag-maintainer">Maintainer · v2.2.0 just shipped</span>
+            <h3>Virtual Jaguar (libretro) <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">v2.2.0 · 76 commits · solo</span></h3>
+            <p>Admin and maintainer. <strong>v2.2.0 (May 2026)</strong> shipped a high-level emulation BIOS that boots most commercial titles without a real BIOS image — removing the longest-standing barrier to entry — plus 22 previously-broken games now functional (Doom, Syndicate, Atari Karts), save states, rewind, RetroAchievements, ~2× speedup on hot paths, audio-pipeline rewrite fixing a 12-year-old bug. <strong>76 commits, all single-author.</strong> Powers Jaguar emulation in both RetroArch and Provenance.</p>
             <div class="project-links">
+                <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.2.0" target="_blank" rel="noopener">↗ v2.2.0 release notes</a>
+                <a href="/blog/virtual-jaguar-v2-2-0/">📖 Blog post</a>
                 <a href="https://github.com/libretro/virtualjaguar-libretro" target="_blank" rel="noopener">↗ GitHub</a>
             </div>
         </div>
@@ -3788,7 +3790,8 @@ const searchIndex = [
     { title: 'AT&T Tech Channel', desc: 'Emanuel Goldstein, Whit Diffie, Jack Dorsey, H.D. Moore, Bell Labs', section: 'experience', icon: '💼', category: 'Experience' },
     // Projects
     { title: 'Provenance', desc: '6.3k stars, most popular open-source iOS emulator, 50+ systems, SwiftUI, iCloud sync, App Store, 388k+ downloads', section: 'projects', icon: '🎮', category: 'Projects', url: 'https://provenance-emu.com' },
-    { title: 'Virtual Jaguar (libretro)', desc: 'First open-source Jaguar CD emulation (only other is MiSTer FPGA), AI A/B testing, powers RetroArch + Provenance', section: 'projects', icon: '🐆', category: 'Projects', url: 'https://github.com/libretro/virtualjaguar-libretro' },
+    { title: 'Virtual Jaguar v2.2.0 (just shipped!)', desc: '76 single-author commits · HLE BIOS · 22 games unlocked (Doom, Syndicate, Atari Karts) · save states, rewind, RetroAchievements · 2x speedup', section: 'projects', icon: '🐆', category: 'Projects', url: 'https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.2.0' },
+    { title: 'Virtual Jaguar v2.2.0 (blog)', desc: 'Long-form: HLE BIOS, audio rewrite, save states/rewind/RA, 22 games unlocked', section: 'blog', icon: '✍️', category: 'Writing', url: '/blog/virtual-jaguar-v2-2-0/' },
     { title: 'Jaguar 240p Test Suite', desc: '36 PRs in 10 days · 84% AI co-authored · Claude Code + Copilot + Qodo on bare-metal m68k Atari Jaguar', section: 'projects', icon: '📺', category: 'Projects', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite' },
     { title: '240p Test Suite — PAL pass PR', desc: 'Cross-cutting region switch on bare-metal Jaguar — PAL/NTSC, 50Hz timing, VDP register diagnostics', section: 'projects', icon: '🤖', category: 'AI-assisted dev', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27' },
     { title: 'Jaguar smoke-test CI', desc: 'libretro virtualjaguar boots every PR ROM, uploads framebuffer as artifact, signature verifier', section: 'projects', icon: '🤖', category: 'AI-assisted dev', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml' },
