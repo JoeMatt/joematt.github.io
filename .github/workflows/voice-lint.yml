@@ -1,0 +1,120 @@
+name: Voice Lint
+
+on:
+  pull_request:
+    paths:
+      - 'static-site/**/*.html'
+      - 'static-site/**/*.md'
+      - 'scripts/voice-lint.py'
+      - 'VOICE.md'
+      - '.github/workflows/voice-lint.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'static-site/**/*.html'
+      - 'static-site/**/*.md'
+      - 'scripts/voice-lint.py'
+      - 'VOICE.md'
+      - '.github/workflows/voice-lint.yml'
+
+concurrency:
+  group: voice-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  voice-lint:
+    name: Voice Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run voice-lint
+        id: lint
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          # --warn-ok keeps the gate green on warn-only files; BLOCK still
+          # fails the run.
+          python3 scripts/voice-lint.py --warn-ok 'static-site/**/*.html' 2>&1 | tee voice-lint-output.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voice-lint-output
+          path: voice-lint-output.txt
+          retention-days: 14
+
+      - name: Job summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Voice Lint"
+            echo
+            echo '```'
+            cat voice-lint-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Sticky PR comment
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '';
+            try {
+              body = fs.readFileSync('voice-lint-output.txt', 'utf8');
+            } catch (e) {
+              body = '(no output captured)';
+            }
+            const marker = '<!-- voice-lint-sticky -->';
+            const exitCode = '${{ steps.lint.outputs.exit_code }}';
+            const status = exitCode === '0'
+              ? '✅ All voice-lint checks passed (warns may still appear).'
+              : '❌ Voice-lint found BLOCK-severity issues.';
+            const commentBody = [
+              marker,
+              '## Voice Lint',
+              status,
+              '',
+              '```',
+              body.trim() || '(empty)',
+              '```',
+            ].join('\n');
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const existing = await github.paginate(
+              github.rest.issues.listComments,
+              { owner, repo, issue_number, per_page: 100 },
+            );
+            const prior = existing.find(c => c.body && c.body.includes(marker));
+            if (prior) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: prior.id, body: commentBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number, body: commentBody,
+              });
+            }
+
+      - name: Fail run on BLOCK
+        if: steps.lint.outputs.exit_code != '0'
+        shell: bash
+        run: |
+          echo "Voice-lint reported BLOCK-severity violations."
+          exit 1
