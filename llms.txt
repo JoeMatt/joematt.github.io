@@ -17,7 +17,7 @@
 - [Virtual Jaguar (libretro)](https://github.com/libretro/virtualjaguar-libretro): Maintainer. Delivered the first open-source Atari Jaguar CD emulation. 28 merged PRs.
 - [iCube](https://icube-emu.com): GameCube/Wii emulator for iOS using a JIT-less interpreter optimized for Apple Silicon.
 - [iFly](https://ifly-emu.com): Dreamcast emulator for iOS using a JIT-less GPU/CPU interpreter for Apple Silicon.
-- [Jaguar 240p Test Suite](https://github.com/JoeMatt/atari_jaguar_240p_test_suite): Display calibration suite for Atari Jaguar hardware. Maintainer.
+- [Jaguar 240p Test Suite](https://github.com/JoeMatt/atari_jaguar_240p_test_suite): Port of Artemio Urbina's 240p Test Suite to Atari Jaguar — bare-metal m68k+RISC platform with effectively no LLM training data. Built end-to-end with Claude Code as primary author + Copilot and Qodo as adversarial reviewers. 36 PRs merged in 10 days, ~84% with explicit AI authorship. Shipped 12 tagged releases (v0.6.4 → v1.3.1) including full PAL/NTSC region switching, 7 hardware probes (93C46 EEPROM read/write, Jaguar CD/Butch, JagLink, TOM registers), and a libretro-based smoke-test CI that boots every PR's ROM and uploads the framebuffer as an artifact.
 
 ## Open source contributions
 

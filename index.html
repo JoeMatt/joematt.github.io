@@ -2286,11 +2286,14 @@
         <!-- 240p Test Suite -->
         <div class="project-card reveal">
             <div class="project-icon" style="background:rgba(240,160,48,0.1);border:1px solid rgba(240,160,48,0.2);"><svg viewBox="0 0 24 24" fill="none"><rect x="1" y="1" width="3" height="18" fill="#fff"/><rect x="4.5" y="1" width="3" height="18" fill="#ff0"/><rect x="8" y="1" width="3" height="18" fill="#0ff"/><rect x="11.5" y="1" width="3" height="18" fill="#0f0"/><rect x="15" y="1" width="3" height="18" fill="#f0f"/><rect x="18.5" y="1" width="3" height="18" fill="#f00"/><rect x="22" y="1" width="2" height="18" fill="#00f"/><rect x="1" y="20" width="23" height="3" rx="1" fill="#f0a030" opacity="0.6"/></svg></div>
-            <span class="project-tag tag-maintainer">Maintainer</span>
-            <h3>Jaguar 240p Test Suite</h3>
-            <p>Display calibration and video output verification for Atari Jaguar hardware. Feature completeness, automated releases, screenshot A/B regression testing via GitHub Actions.</p>
+            <span class="project-tag tag-maintainer">Maintainer · AI-built</span>
+            <h3>Jaguar 240p Test Suite <span style="font-size:0.7rem;color:var(--accent-amber);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">36 PRs · 10 days · v1.3.1</span></h3>
+            <p>Port of Artemio Urbina's 240p Test Suite to <strong>Atari Jaguar hardware</strong> — exotic m68k+RISC platform with no LLM training data and a cross-compiler that hasn't been touched in two decades. Built end-to-end with <strong>Claude Code as primary author + Copilot &amp; Qodo as adversarial reviewers</strong>. Every PR ran a ship→review→address-feedback loop, all captured in the commit log. <strong>36 PRs merged in 10 days</strong>, ~84% with explicit AI authorship. Shipped 12 tagged releases including full PAL/NTSC region switching, 7 hardware probes (93C46 EEPROM, Jaguar CD/Butch, JagLink, TOM registers), and a libretro-based smoke-test CI that boots every PR's ROM in virtualjaguar and uploads the framebuffer as an artifact.</p>
             <div class="project-links">
                 <a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite" target="_blank" rel="noopener">↗ GitHub</a>
+                <a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27" target="_blank" rel="noopener">PR #27 (PAL pass)</a>
+                <a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml" target="_blank" rel="noopener">smoke-test CI</a>
+                <a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/sdk-image.yml" target="_blank" rel="noopener">Jaguar SDK image</a>
             </div>
         </div>
 
@@ -3278,7 +3281,9 @@ const searchIndex = [
     // Projects
     { title: 'Provenance', desc: '6.3k stars, most popular open-source iOS emulator, 50+ systems, SwiftUI, iCloud sync, App Store, 388k+ downloads', section: 'projects', icon: '🎮', category: 'Projects', url: 'https://provenance-emu.com' },
     { title: 'Virtual Jaguar (libretro)', desc: 'First open-source Jaguar CD emulation (only other is MiSTer FPGA), AI A/B testing, powers RetroArch + Provenance', section: 'projects', icon: '🐆', category: 'Projects', url: 'https://github.com/libretro/virtualjaguar-libretro' },
-    { title: 'Jaguar 240p Test Suite', desc: 'Display calibration Atari Jaguar, automated releases, screenshot regression', section: 'projects', icon: '📺', category: 'Projects', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite' },
+    { title: 'Jaguar 240p Test Suite', desc: '36 PRs in 10 days · 84% AI co-authored · Claude Code + Copilot + Qodo on bare-metal m68k Atari Jaguar', section: 'projects', icon: '📺', category: 'Projects', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite' },
+    { title: '240p Test Suite — PAL pass PR', desc: 'Cross-cutting region switch on bare-metal Jaguar — PAL/NTSC, 50Hz timing, VDP register diagnostics', section: 'projects', icon: '🤖', category: 'AI-assisted dev', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27' },
+    { title: 'Jaguar smoke-test CI', desc: 'libretro virtualjaguar boots every PR ROM, uploads framebuffer as artifact, signature verifier', section: 'projects', icon: '🤖', category: 'AI-assisted dev', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml' },
     { title: 'iCube', desc: 'GameCube/Wii emulator iOS, JIT-less Dolphin, Apple Silicon, Metal shaders', section: 'projects', icon: '🟣', category: 'Projects', url: 'https://icube-emu.com' },
     { title: 'iFly', desc: 'Dreamcast emulator iOS, JIT-less interpreter, Apple Silicon, Metal, MFi', section: 'projects', icon: '🔵', category: 'Projects', url: 'https://ifly-emu.com' },
     // Skills
