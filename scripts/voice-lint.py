@@ -340,6 +340,20 @@ def find_triplet_violations(segments: list[tuple[int, str]]) -> list[Violation]:
             # tails out of normal sentences otherwise).
             if any(it.lower() in _STOP_WORDS for it in items):
                 continue
+            # Skip if this is the tail of a longer enumeration. If we see
+            # another comma within ~50 chars BEFORE the match, this is
+            # likely the last 3 items of a 4+-item list (a factual
+            # enumeration: "London, Argentina, Hong Kong, Sydney, and
+            # Bangalore"), not a rhetorical triplet ("fast, reliable,
+            # and scalable").
+            preceding = seg[max(0, m.start() - 50): m.start()]
+            if "," in preceding:
+                continue
+            # Skip if the words immediately before the match suggest the
+            # subject is a list (e.g., "8 regions:", "stack:", "tools:").
+            # A colon-introduced list is structural, not rhetorical.
+            if ":" in seg[max(0, m.start() - 40): m.start()]:
+                continue
             phrase = f"{a}, {b}, {c}"
             out.append(Violation(
                 line=line,
