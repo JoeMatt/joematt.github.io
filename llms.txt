@@ -2,6 +2,14 @@
 
 > Engineering Leader and Mobile Architect with 17+ years of iOS experience. Creator of Provenance EMU (the most popular open-source multi-system emulator for iOS, tvOS, and macOS). Currently on Wayfair's App Infrastructure team. Holds 3 US patents from Sense Networks. Builds production AI tooling using Claude, Cursor, and custom MCP servers. Based in New York City.
 
+## AI Engineering
+
+Joseph Mattiello consolidates his AI engineering work at https://joemattiello.dev/ai/ — including:
+- Multi-agent CI orchestration across the Provenance organization (Claude Sonnet+Opus auto-routed, Cursor Agent, Kimi Code)
+- 240p Test Suite — Atari Jaguar bare-metal port built end-to-end with Claude Code as primary author + Copilot/Qodo adversarial reviewers (36 PRs in 10 days)
+- Custom MCP servers, Claude skills/plugins, n8n workflows at Wayfair
+- Architectural patterns: reviewer-model auto-selection by static diff analysis, shared dispatch vocabulary across heterogeneous agents, Anthropic-API-compatible fallbacks
+
 ## Quick facts
 
 - **Role**: L4 Mobile Engineer, App Infrastructure at Wayfair (2025–present)
@@ -59,6 +67,11 @@ Three US patents from Sense Networks (acquired twice — by YP/YellowPages in 20
 ## Education
 
 BS Computer Science, University at Buffalo (2004–2008)
+
+## Writing
+
+Long-form writing at https://joemattiello.dev/blog/. Recent:
+- 2026-05-01 — [The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One](https://joemattiello.dev/blog/multi-agent-ci-pipeline/) — Production multi-agent CI across the Provenance organization. Three agents (Claude, Cursor, Kimi), one dispatch vocabulary, reviewer-model auto-selection by static diff analysis, scheduled poller workaround for GitHub bot-actor gates.
 
 ## Press
 

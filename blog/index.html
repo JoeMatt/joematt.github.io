@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>Writing — Joseph Mattiello | Notes from the inside</title>
+<meta name="description" content="Long-form writing on AI engineering, mobile architecture, and the production stuff that doesn't fit on Twitter. By Joseph Mattiello — creator of Provenance EMU.">
+<link rel="canonical" href="https://joemattiello.dev/blog/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Writing — Joseph Mattiello">
+<meta property="og:description" content="Long-form writing on AI engineering, mobile architecture, and production systems. Sparse — only when there's something genuinely worth saying.">
+<meta property="og:url" content="https://joemattiello.dev/blog/">
+<meta property="og:image" content="https://joemattiello.dev/img/profile3.jpeg">
+
+<!-- JSON-LD: Blog -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Joseph Mattiello — Writing",
+    "url": "https://joemattiello.dev/blog/",
+    "author": { "@id": "https://joemattiello.dev/#person" },
+    "description": "Long-form writing on AI engineering, mobile architecture, and production systems."
+}
+</script>
+
+<link rel="icon" href="/favicon.ico">
+<style>
+/* Self-hosted fonts (replaces Google Fonts) */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+}
+
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --text-primary: #e4e6ea;
+    --text-secondary: #8c919a;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-cyan); }
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.nav-brand a { color: var(--text-primary); }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Hero */
+header.hero {
+    padding: 5rem 0 3rem;
+}
+.hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    background: rgba(0,229,153,0.06);
+    border: 1px solid rgba(0,229,153,0.2);
+    border-radius: 99px;
+}
+h1.title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    max-width: 900px;
+}
+h1.title .accent { color: var(--accent-green); }
+.lede {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 720px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Article list */
+.posts {
+    margin-bottom: 4rem;
+}
+.post-item {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 2rem 2.25rem;
+    margin-bottom: 1.25rem;
+    transition: all 0.3s var(--ease-out-expo);
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+}
+.post-item:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+    color: inherit;
+}
+.post-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent-green), var(--accent-cyan));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.post-item:hover::before { opacity: 1; }
+.post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.post-meta .date { color: var(--accent-green); }
+.post-meta .divider { color: var(--text-muted); }
+.post-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.85rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+.post-item:hover .post-title { color: var(--accent-green); }
+.post-dek {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+}
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+.post-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    background: var(--bg-surface);
+}
+
+/* Stay-in-touch block */
+.stay {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 2.25rem 2.5rem;
+    margin-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+.stay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.stay h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin-bottom: 0.6rem;
+}
+.stay p {
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.65;
+}
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); }
+
+@media (max-width: 700px) {
+    .post-item { padding: 1.5rem 1.5rem; }
+    h1.title { font-size: 1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+    <div class="container nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <span class="here">blog</span>
+        </div>
+        <a href="/" class="nav-back">← Back to site</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container">
+        <div class="hero-tag">Writing</div>
+        <h1 class="title">Notes from the <span class="accent">inside</span>.</h1>
+        <p class="lede">Long-form writing on AI engineering, mobile architecture, and the production stuff that doesn&rsquo;t fit on Twitter. Sparse &mdash; only when there&rsquo;s something genuinely worth saying.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="posts">
+        <a href="/blog/multi-agent-ci-pipeline/" class="post-item">
+            <div class="post-meta">
+                <span class="date">2026-05-01</span>
+                <span class="divider">·</span>
+                <span>14 min read</span>
+                <span class="divider">·</span>
+                <span>AI engineering</span>
+            </div>
+            <h2 class="post-title">The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One</h2>
+            <p class="post-dek">I maintain Provenance EMU &mdash; 6,300 stars, 388k+ downloads &mdash; solo while working full-time. The thing that makes the velocity sustainable is a 3-agent CI orchestration that runs Claude, Cursor, and Kimi as routable workers sharing one dispatch vocabulary. Here&rsquo;s how it works, and why model auto-selection by static diff analysis matters more than picking a smart model.</p>
+            <div class="post-tags">
+                <span class="post-tag">AI engineering</span>
+                <span class="post-tag">Open source</span>
+                <span class="post-tag">GitHub Actions</span>
+                <span class="post-tag">Multi-agent</span>
+            </div>
+        </a>
+    </section>
+
+    <section class="stay">
+        <h3>Stay in touch</h3>
+        <p>No newsletter, no email capture &mdash; I don&rsquo;t want to harvest addresses. Follow on <a href="https://github.com/JoeMatt" target="_blank" rel="noopener">GitHub</a> or <a href="https://www.linkedin.com/in/joemattiello/" target="_blank" rel="noopener">LinkedIn</a>. I post when something ships.</p>
+    </section>
+
+</main>
+
+<footer class="page">
+    <div class="container">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/status/">Site status</a> · <a href="/consulting/">Consulting</a></p>
+    </div>
+</footer>
+
+</body>
+</html>

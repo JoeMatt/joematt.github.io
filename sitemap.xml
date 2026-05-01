@@ -13,9 +13,27 @@
         <priority>0.9</priority>
     </url>
     <url>
+        <loc>https://joemattiello.dev/ai/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
         <loc>https://joemattiello.dev/status/</loc>
         <lastmod>2026-04-30</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://joemattiello.dev/blog/</loc>
+        <lastmod>2026-05-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://joemattiello.dev/blog/multi-agent-ci-pipeline/</loc>
+        <lastmod>2026-05-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
     </url>
 </urlset>

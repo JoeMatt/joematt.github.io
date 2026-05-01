@@ -179,6 +179,46 @@
                     "@type": "Answer",
                     "text": "Joseph built a production multi-agent CI orchestration system across the Provenance organization that routes work between Claude (Sonnet and Opus, auto-selected by static diff analysis), Cursor Agent, and Kimi Code. The pipeline includes diff-aware Claude Haiku localization, scheduled Copilot review polling that bypasses GitHub's bot-actor approval gate, auto-fix CI on the wiki repo, and a repo-health monitor. At Wayfair he builds custom MCP servers and AI-driven workflows for the App Infrastructure team."
                 }
+            },
+            {
+                "@type": "Question",
+                "name": "How does Joseph use AI in production engineering?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "He orchestrates Claude (Sonnet and Opus, auto-routed by static diff analysis), Cursor Agent, and Kimi Code as routable workers across the Provenance org's CI. He also builds custom MCP servers, Claude skills and plugins, and n8n workflows for the App Infrastructure team at Wayfair. The multi-agent CI architecture is documented in the impact case studies on joemattiello.dev."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How long has Joseph been working on iOS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Since before Apple released the SDK in 2008. Joseph started by writing apps using reverse-engineered SDK headers on jailbroken hardware, including a tool called iPhreak hosted on Google Code. That was his portfolio when he applied to Sense Networks in 2008. Provenance, his most-known iOS project, has been running since 2013 — almost 13 years."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What makes the Mobile AI Launch Readiness Audit different from a generic mobile audit?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most mobile audits stop at performance and crash analysis. This one covers three intersecting risk surfaces: native iOS performance under MLX and Core ML inference, App Store review policies on AI content (sections 4.7, 5.1.5, 5.5), and the architectural debt that surfaces when teams bolt agents onto an app that wasn't built for them. The deliverable is a written report plus a prioritized fix list, sized so an internal team can act on it."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How can I see what Joseph has actually shipped?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Three places: github.com/JoeMatt for code, the Provenance App Store listing (apps.apple.com/us/app/provenance-app/id1596862805) for production work, and joemattiello.dev/#impact for narrative case studies with metrics."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What's the best way to start a conversation about a role or engagement?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For full-time roles, send a LinkedIn DM. For consulting engagements, the /consulting/ page on joemattiello.dev has a fixed-fee offer with a direct inquiry path. For everything else, email mail@joemattiello.com — replies usually within 48 hours."
+                }
             }
         ]
     }
@@ -807,6 +847,82 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             margin-top: 0.25rem;
+        }
+
+        /* ===== FAQ ===== */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.3s var(--ease-out-expo), background 0.3s var(--ease-out-expo);
+            scroll-margin-top: 6rem;
+        }
+        .faq-item:hover {
+            border-color: var(--border-glow);
+        }
+        .faq-item[open] {
+            background: var(--bg-deep);
+            border-color: var(--border-glow);
+        }
+        .faq-item summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            list-style: none;
+            user-select: none;
+            transition: color 0.2s var(--ease-out-expo);
+        }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::marker { display: none; }
+        .faq-item summary:hover .faq-q { color: var(--accent-green); }
+        .faq-q {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.4;
+            transition: color 0.2s var(--ease-out-expo);
+        }
+        .faq-toggle {
+            font-family: var(--font-mono);
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--accent-green);
+            line-height: 1;
+            flex-shrink: 0;
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+        .faq-item[open] .faq-toggle {
+            transform: rotate(45deg);
+        }
+        .faq-a {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.7;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 1.25rem;
+        }
+        .faq-a p + p {
+            margin-top: 0.75rem;
+        }
+        .faq-a a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 194, 255, 0.3);
+            transition: border-color 0.2s var(--ease-out-expo);
+        }
+        .faq-a a:hover {
+            border-bottom-color: var(--accent-cyan);
         }
 
         /* ===== CASE STUDIES ===== */
@@ -2103,6 +2219,7 @@
         <li><a href="#projects">Projects</a></li>
         <li><a href="#impact">Impact</a></li>
         <li><a href="/consulting/">Hire</a></li>
+        <li><a href="/ai/">AI</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#opensource">Open Source</a></li>
@@ -2194,11 +2311,31 @@
                 <strong>Joseph Mattiello</strong> is a New York-based engineering leader and mobile architect with 17+ years of iOS experience, currently on Wayfair's App Infrastructure team. He created <strong>Provenance EMU</strong> — the most popular open-source multi-system emulator for iOS (6.3k stars, 388k+ downloads, App Store) — holds <strong>3 US patents</strong> from Sense Networks, and architects production AI tooling using Claude, Cursor, and custom MCP servers.
             </p>
             <p>
-                I started writing iOS apps <strong>before Apple released the SDK</strong>, hacking together Objective-C on jailbroken hardware. Since then I've led platform teams at <strong>Wayfair</strong>, <strong>NewsCorp</strong> (Director, iOS Platform — 8 regions), <strong>Cameo</strong>, and <strong>Hearst</strong>, working at every layer from kernel drivers to SwiftUI.
+                I started writing iOS apps in <strong>2007</strong>, before Apple released the official SDK. Back then "iOS dev" meant hacking Objective-C against <strong>reverse-engineered SDK headers</strong> on jailbroken hardware and praying your build didn't brick the device. I published an open-source toolkit called <strong>iPhreak</strong> on Google Code — the GitHub of its day — that demonstrated working with the unofficial SDK.
             </p>
             <br>
             <p>
-                Outside of work, I maintain several high-profile open source projects (29k+ combined GitHub stars), build emulators that run on Apple Silicon without JIT, and write hardware drivers that ship in <strong>RetroArch</strong>'s mainline iOS/macOS builds. I use <strong>AI tooling heavily</strong> — see the <a href="#impact" style="color:var(--accent-green)">case study</a> on the 3-agent CI orchestration I built across the Provenance org.
+                That toolkit was my portfolio piece when I applied to <a href="#experience" style="color:var(--accent-green)"><strong>Sense Networks</strong></a> in <strong>2008</strong>. I got hired and started by building a <strong>GLES (OpenGL ES)</strong> demo app to visualize their location-analytics pipeline. While at Sense Networks I became a named inventor on <strong>3 US patents</strong> — <a href="https://patents.google.com/patent/US8224766B2" target="_blank" rel="noopener" style="color:var(--accent-green)"><strong>US 8,224,766</strong></a> (spatial-temporal trails), <a href="https://patents.google.com/patent/US8620624B2" target="_blank" rel="noopener" style="color:var(--accent-green)"><strong>US 8,620,624</strong></a> (event identification in sensor analytics), and <a href="https://patents.google.com/patent/US9571962B2" target="_blank" rel="noopener" style="color:var(--accent-green)"><strong>US 9,571,962</strong></a> (location analytics). The company landed the <strong>Newsweek cover</strong> in <strong>2009</strong> ("The Next Google") and one of Bloomberg Businessweek's "25 Most Intriguing Startups." The patent portfolio was acquired twice — by YP/YellowPages in 2014, then by Verve in 2017.
+            </p>
+            <br>
+            <p>
+                After Sense I spent <strong>2010–2012</strong> at <a href="#experience" style="color:var(--accent-green)"><strong>Roonlabs / Sooloos</strong></a> writing high-end audio-streaming software — hardware drivers, low-level audio, the kind of work where you live in Core Audio callbacks. Then from <strong>2012–2018</strong> I was <strong>Lead Mobile Architect</strong> at <a href="#experience" style="color:var(--accent-green)"><strong>Hearst Digital News</strong></a>, setting iOS architectural direction across multiple Hearst brands.
+            </p>
+            <br>
+            <p>
+                <a href="https://provenance-emu.com" target="_blank" rel="noopener" style="color:var(--accent-green)"><strong>Provenance</strong></a> started in <strong>2013</strong> as a personal project. It became the most popular open-source multi-system emulator for iOS, tvOS, and macOS, was the <strong>first emulator on Apple TV (2015)</strong>, and finally launched on the <strong>Apple App Store in January 2025</strong>. Almost 13 years in: <strong>6,300+ stars</strong>, <strong>79 contributors</strong>, <strong>9,373 Discord members</strong>, <strong>388,000+ GitHub release downloads</strong>, with roughly <strong>85% of all commits</strong> authored personally.
+            </p>
+            <br>
+            <p>
+                In <strong>2019</strong> I joined <a href="#experience" style="color:var(--accent-green)"><strong>NewsCorp</strong></a> as <strong>Director of iOS Platform</strong>, running an 8-region global team across NYC, London, Argentina, Ukraine, Russia, Hong Kong, Sydney, and Bangalore — supporting the Wall Street Journal, NY Post, Times UK, and Knewz (which I shipped from scratch). I took iOS from trailing Android on stability, ratings, and performance to surpassing it on every metric. Then <strong>2020–2021</strong> at <a href="#experience" style="color:var(--accent-green)"><strong>Cameo</strong></a> as <strong>Principal iOS Engineer</strong> — first native iOS dev on a React Native team. I rebuilt the slow, flaky build pipeline and shipped HD video as a native module via AVFoundation.
+            </p>
+            <br>
+            <p>
+                Today I'm an <strong>L4 Mobile Engineer on <a href="#experience" style="color:var(--accent-green)">Wayfair</a>'s App Infrastructure team (2025–present)</strong>, supporting 60+ mobile engineers. Highlights so far: <strong>$300k+/year in bandwidth savings</strong> via MP4 compression and a caching strategy (<a href="#impact" style="color:var(--accent-green)">case study</a>), Datadog RUM instrumentation for bootup performance, and an internal AI tooling buildout — custom MCP servers, Claude skills, and plugins used across the platform team.
+            </p>
+            <br>
+            <p>
+                I split my time between Wayfair, Provenance, and a small set of consulting engagements. I use <strong>AI tooling heavily</strong> in everything I ship — see the <a href="#impact" style="color:var(--accent-green)">case study</a> on the 3-agent CI orchestration I built across the Provenance org, and the hardware drivers that ship in <strong>RetroArch</strong>'s mainline iOS/macOS builds.
             </p>
         </div>
         <div class="about-stats reveal">
@@ -2537,6 +2674,69 @@
                         <span class="cs-chip">GitHub Actions</span>
                         <span class="cs-chip">workflow_dispatch</span>
                         <span class="cs-chip">MCP</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Case Study 5: 240p Test Suite — AI on Bare-Metal Jaguar -->
+        <article class="case-study reveal" style="--cs-accent: var(--accent-amber);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>Atari Jaguar 240p Test Suite</strong> · Maintainer · 2026 (April)</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">AI-Assisted Dev</span>
+                    <span class="cs-tag">Bare-Metal</span>
+                    <span class="cs-tag">Adversarial Review</span>
+                    <span class="cs-tag">Open Source</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">Built a homebrew test ROM for 30-year-old hardware with AI as primary author — on a platform LLMs have effectively zero training data for.</h3>
+            <p class="cs-subhead">Port of Artemio Urbina's 240p Test Suite to Atari Jaguar. m68k + Tom/Jerry RISC, cross-compiler that hasn't been touched in two decades, no Stack Overflow answers, no GitHub Copilot context to pattern-match against. Used Claude Code as primary author paired with GitHub Copilot and Qodo as adversarial reviewers — every PR ran a ship → AI review → address feedback loop, captured in the commit log itself.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">36</div>
+                    <div class="cs-metric-label">PRs merged in 10 days</div>
+                    <div class="cs-metric-sub">~84% with explicit AI authorship trailers. From empty repo to v1.3.1 in less than two weeks.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>Bare-metal Atari Jaguar is the kind of hardware LLMs <em>don't</em> know — released 1993, niche m68k+RISC architecture, ~half a dozen active homebrew developers worldwide, a cross-compiler that hasn't seen a release in 20 years. Conventional wisdom says "AI can't help here." This case study disproves that.</p>
+
+                    <h5>What I built</h5>
+                    <ul>
+                        <li><strong>Three-agent ship→review→address-feedback loop captured in the commit log.</strong> Examples: <code>cd97ceb</code> "review: address Copilot/Qodo feedback on PR #5"; PR #25 entirely dedicated to addressing Copilot review on merged PR #24. The iteration is in the git history, not just the chat transcripts.</li>
+                        <li><strong>Cross-cutting hardware-aware change.</strong> PR #27 (PAL pass) — region-override toggle in Options menu, region-aware geometry replacing hardcoded <code>H=240</code> with <code>PALNTSC ? 240 : 288</code> across 10 procedural pattern functions, 50 Hz timing for AudioSync + MDFourier, plus VDP register diagnostics. Exactly the type of cross-cutting refactor LLMs typically struggle on bare-metal.</li>
+                        <li><strong>7 hardware probe features shipped.</strong> 93C46 EEPROM read/write, Jaguar CD/Butch probe, JagLink serial test, Memory Track EEPROM, Sprite Stress / OP saturation, Pro Controller + Rotary controller, Video Mode TOM register probe.</li>
+                        <li><strong>Custom Jaguar SDK in a Docker image, published to GHCR.</strong> The <code>.github/workflows/sdk-image.yml</code> builds <code>ghcr.io/joematt/jaguar-sdk</code> (m68k-atari-mint-gcc, mac, aln, jlibc/rmvlib) so build/release can pull it instead of recreating the toolchain. Solves the "exotic cross-compile toolchain" problem by containerizing it.</li>
+                        <li><strong>Image-diff-style smoke-test CI.</strong> <code>.github/workflows/build.yml</code>'s <code>smoke-test</code> job checks out <code>libretro/virtualjaguar-libretro</code> upstream, caches the built core keyed on resolved upstream SHA, boots the freshly built ROM via a Python <code>libretro.py</code> harness for 60 frames, dumps the framebuffer as a PNG artifact, and verifies fastboot signature byte-identical to upstream. Real visual regression testing for a ROM project.</li>
+                        <li><strong>Visual regression harness.</strong> PR #35 / commit <code>0fc3eb3</code> expands a scripted screenshot tour from 19 → 47 navigable test screens, captured automatically via <code>scripts/screenshot-tour.py</code>. Closest thing the bare-metal codebase has to visual diffing.</li>
+                        <li><strong>Disciplined release engineering.</strong> 12 tagged releases (v0.6.4 → v1.3.1) in 10 days. Each feature PR followed by a dedicated <code>release: bump version to X.Y.Z</code> PR.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>Goes against the prevailing narrative that AI-assisted development only works on well-trodden stacks. Bare-metal Jaguar is the test case where it absolutely shouldn't work — and the git history shows it does. The pattern is the durable insight: AI as primary author + adversarial reviewers + iteration captured in commit history.</p>
+
+                    <h5>Proof — read the code</h5>
+                    <ul>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">PR #27</a> — PAL pass, region-aware geometry across 10 pattern functions</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/25" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">PR #25</a> — entirely addresses Copilot review of merged PR #24</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/35" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">PR #35</a> — Screenshot tour expanded to 47 screens</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">build.yml</a> — smoke-test CI booting every PR ROM</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/sdk-image.yml" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">sdk-image.yml</a> — Custom Jaguar SDK Docker image</li>
+                        <li><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/releases" target="_blank" rel="noopener" style="color:var(--accent-amber);text-decoration:none;border-bottom:1px dotted var(--accent-amber)">Releases</a> — 12 releases in 10 days</li>
+                    </ul>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Claude Code</span>
+                        <span class="cs-chip">GitHub Copilot</span>
+                        <span class="cs-chip">Qodo</span>
+                        <span class="cs-chip">m68k</span>
+                        <span class="cs-chip">Atari Jaguar</span>
+                        <span class="cs-chip">libretro</span>
+                        <span class="cs-chip">Docker</span>
+                        <span class="cs-chip">GitHub Actions</span>
+                        <span class="cs-chip">Python harness</span>
                     </div>
                 </div>
             </div>
@@ -2982,6 +3182,127 @@
 
 <div class="section-divider"><hr></div>
 
+<!-- FAQ -->
+<section id="faq">
+    <div class="reveal">
+        <div class="section-label">Common questions</div>
+        <h2 class="section-title">Answers to the things people ask</h2>
+        <p class="section-desc">Direct answers — engineering, consulting, hiring, and history. Each question has a permalink anchor.</p>
+    </div>
+    <div class="faq-list">
+        <details class="faq-item reveal" id="faq-who-is-joseph">
+            <summary>
+                <span class="faq-q">Who is Joseph Mattiello?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph Mattiello is a New York-based engineering leader and mobile architect with 17+ years of iOS experience. He is the creator of Provenance EMU — the most popular open-source multi-system emulator for iOS, tvOS, and macOS — and currently works on Wayfair's App Infrastructure team. He holds 3 US patents and builds production AI tooling using Claude, Cursor, and custom MCP servers.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-what-is-provenance">
+            <summary>
+                <span class="faq-q">What is Provenance EMU?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Provenance is the most popular open-source multi-system retro game emulator for iOS, tvOS, and macOS. Created by Joseph Mattiello in 2013, it has 6,304 GitHub stars, 79 contributors, 9,373 Discord members, and 388,000+ GitHub release downloads. Provenance launched on the Apple App Store in January 2025 and supports 50+ console systems through 60+ emulation cores.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-hire-consulting">
+            <summary>
+                <span class="faq-q">Can I hire Joseph Mattiello for AI or iOS consulting?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Yes. Joseph offers a Mobile AI Launch Readiness audit — a 3-week fixed-fee engagement ($25,000–$35,000) covering iOS performance, AI integration architecture, App Store review readiness, and on-device LLM/MLX/Core ML pipelines. He is currently considering 1-2 engagements for Q3 2026. See <a href="/consulting/">joemattiello.dev/consulting/</a> for details or email <a href="mailto:mail@joemattiello.com">mail@joemattiello.com</a>.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-patents">
+            <summary>
+                <span class="faq-q">What patents does Joseph Mattiello hold?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph Mattiello is a named inventor on three US patents from his time at Sense Networks: US8224766B2 (Comparing spatial-temporal trails in location analytics), US8620624B2 (Event identification in sensor analytics), and US9571962B2 (System and method of performing location analytics). The patent portfolio was acquired twice — first by YP/YellowPages in 2014, then by Verve in 2017.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-location">
+            <summary>
+                <span class="faq-q">Where is Joseph Mattiello based?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>New York City. Available for hybrid roles in NYC and remote engagements globally.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-roles">
+            <summary>
+                <span class="faq-q">What types of roles is Joseph Mattiello considering?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph is selectively considering Head of AI Platform, Head of AI Infrastructure, VP Engineering, Director of Mobile, and CTO roles. He also takes on a small number of fractional and advisory engagements per year.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-ai-tooling">
+            <summary>
+                <span class="faq-q">What AI tooling has Joseph Mattiello built?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Joseph built a production multi-agent CI orchestration system across the Provenance organization that routes work between Claude (Sonnet and Opus, auto-selected by static diff analysis), Cursor Agent, and Kimi Code. The pipeline includes diff-aware Claude Haiku localization, scheduled Copilot review polling that bypasses GitHub's bot-actor approval gate, auto-fix CI on the wiki repo, and a repo-health monitor. At Wayfair he builds custom MCP servers and AI-driven workflows for the App Infrastructure team.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-ai-production">
+            <summary>
+                <span class="faq-q">How does Joseph use AI in production engineering?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>He orchestrates Claude (Sonnet and Opus, auto-routed by static diff analysis), Cursor Agent, and Kimi Code as routable workers across the Provenance org's CI. He also builds custom MCP servers, Claude skills/plugins, and n8n workflows for the App Infrastructure team at Wayfair. See the <a href="#impact">case study on the multi-agent CI</a> for architecture details.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-ios-history">
+            <summary>
+                <span class="faq-q">How long has Joseph been working on iOS?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Since before Apple released the SDK in 2008. He started by writing apps using reverse-engineered SDK headers on jailbroken hardware, including a tool called iPhreak hosted on Google Code. That was his portfolio when he applied to Sense Networks in 2008. Provenance, his most-known iOS project, has been running since 2013 — almost 13 years.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-audit-difference">
+            <summary>
+                <span class="faq-q">What makes the Mobile AI Launch Readiness Audit different from a generic mobile audit?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Most mobile audits stop at performance and crash analysis. This one goes through three intersecting risk surfaces: native iOS performance under MLX/Core ML inference, App Store review policies on AI content (sections 4.7, 5.1.5, 5.5), and the architectural debt that surfaces when teams bolt agents onto an app that wasn't built for them. The deliverable is a written report plus prioritized fix list, sized so an internal team can act on it.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-shipped-work">
+            <summary>
+                <span class="faq-q">How can I see what Joseph has actually shipped?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>Three places: (1) <a href="https://github.com/JoeMatt" target="_blank" rel="noopener">github.com/JoeMatt</a> for code, (2) <a href="https://apps.apple.com/us/app/provenance-app/id1596862805" target="_blank" rel="noopener">the Provenance App Store listing</a> for production work, (3) <a href="#impact">joemattiello.dev/#impact</a> for narrative case studies with metrics.</p>
+            </div>
+        </details>
+        <details class="faq-item reveal" id="faq-start-conversation">
+            <summary>
+                <span class="faq-q">What's the best way to start a conversation about a role or engagement?</span>
+                <span class="faq-toggle">+</span>
+            </summary>
+            <div class="faq-a">
+                <p>For full-time roles: LinkedIn DM. For consulting engagements: the <a href="/consulting/">/consulting/</a> page has a fixed-fee offer with a direct inquiry path. For everything else: <a href="mailto:mail@joemattiello.com">mail@joemattiello.com</a> — replies usually within 48 hours.</p>
+            </div>
+        </details>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
 <!-- TUI Demo -->
 <section id="demo">
     <div class="reveal">
@@ -3065,6 +3386,7 @@
                 <a href="https://github.com/JoeMatt/joseph.mattiello.resume" target="_blank" rel="noopener">Swift TUI Resume</a>
                 <a href="https://github.com/JoeMatt/joseph.mattiello.resume/releases" target="_blank" rel="noopener">Download PDF</a>
                 <a href="/status/">Site status →</a>
+                <a href="/blog/">Writing</a>
             </div>
         </div>
     </div>
@@ -3244,7 +3566,9 @@ const searchIndex = [
     { title: 'Featured Projects', desc: 'Provenance, Virtual Jaguar, iCube, iFly', section: 'projects', icon: '🚀', category: 'Sections' },
     { title: 'Case Studies / Impact', desc: 'Wayfair $300k savings, NewsCorp leadership, Cameo, AI multi-agent CI', section: 'impact', icon: '📈', category: 'Sections' },
     { title: 'Consulting / Hire Me', desc: 'Mobile AI Launch Readiness Audit — 3 weeks, $25–35K fixed-fee', section: 'consulting', icon: '💼', category: 'Sections', url: '/consulting/' },
+    { title: 'AI Engineering Hub', desc: 'Multi-agent CI · MCP servers · 240p AI-built · How I use AI in production', section: 'ai', icon: '🤖', category: 'Sections', url: '/ai/' },
     { title: 'Site Status', desc: 'Live operational dashboard — Lighthouse, security, OSS impact', section: 'status', icon: '📊', category: 'Sections', url: '/status/' },
+    { title: 'Multi-Agent CI Pipeline (blog)', desc: 'Long-form: 3 agents, 9 workflow files, model auto-selection by static diff analysis', section: 'blog', icon: '✍️', category: 'Writing', url: '/blog/multi-agent-ci-pipeline/' },
     { title: 'Wayfair — $300k/year saved', desc: 'MP4 compression + caching, SwiftUI perf, Datadog bootup tracking', section: 'impact', icon: '💰', category: 'Case Studies' },
     { title: 'NewsCorp — iOS past Android', desc: '8-region team, shared platform SDK, Knewz launch from scratch', section: 'impact', icon: '🌍', category: 'Case Studies' },
     { title: 'Cameo — RN build + HD video', desc: 'Rebuilt React Native CI, shipped native HD video module', section: 'impact', icon: '🎥', category: 'Case Studies' },

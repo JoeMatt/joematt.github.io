@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>AI Engineering — Joseph Mattiello | Multi-agent CI, MCP servers, production AI tooling</title>
+<meta name="description" content="A consolidated index of how Joseph Mattiello uses, builds, and ships AI tooling — multi-agent CI orchestration, custom MCP servers, bare-metal AI development. Actual code, actual workflows, actual outcomes.">
+<link rel="canonical" href="https://joemattiello.dev/ai/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Engineering — Joseph Mattiello">
+<meta property="og:description" content="Multi-agent CI orchestration. Custom MCP servers. 240p Test Suite built end-to-end with Claude Code on bare-metal Atari Jaguar. AI in production, not in slideware.">
+<meta property="og:url" content="https://joemattiello.dev/ai/">
+<meta property="og:image" content="https://joemattiello.dev/img/profile3.jpeg">
+
+<link rel="icon" href="/favicon.ico">
+<style>
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+}
+
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --accent-red: #ff4d6d;
+    --text-primary: #e4e6ea;
+    --text-secondary: #8c919a;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-cyan); }
+code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: rgba(255,255,255,0.04);
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+    color: var(--accent-cyan);
+}
+
+/* Background grain */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); letter-spacing: 0.02em; }
+.nav-brand a { color: var(--text-primary); }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Hero */
+header.hero {
+    padding: 5rem 0 3rem;
+}
+.hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    background: rgba(0,229,153,0.06);
+    border: 1px solid rgba(0,229,153,0.2);
+    border-radius: 99px;
+}
+.pulse {
+    width: 7px; height: 7px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
+h1.title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    max-width: 900px;
+}
+h1.title .accent { color: var(--accent-green); }
+.lede {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 720px;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* Section blocks */
+section.block { margin-bottom: 4rem; }
+.section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.85rem;
+}
+h2.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+.section-title .accent { color: var(--accent-green); }
+p.section-lede {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 760px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Headline-number lockup (used in section 1 + 2) */
+.headline-num {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 2.25rem 2rem;
+    margin-bottom: 1.75rem;
+    display: grid;
+    grid-template-columns: minmax(140px, max-content) 1fr;
+    gap: 2rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+.headline-num::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.headline-num-value {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--accent-green);
+    letter-spacing: -0.03em;
+}
+.headline-num-value.cyan { color: var(--accent-cyan); }
+.headline-num-value.pink { color: var(--accent-pink); }
+.headline-num-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+.headline-num-text {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+.headline-num-text strong { color: var(--text-primary); font-weight: 600; }
+@media (max-width: 640px) {
+    .headline-num { grid-template-columns: 1fr; gap: 0.85rem; padding: 1.75rem 1.5rem; }
+}
+
+/* Workflow / proof link list (lifted from status) */
+.wf-list {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 0.5rem 0;
+}
+.wf-item {
+    padding: 0.95rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background 0.2s;
+}
+.wf-item:last-child { border-bottom: none; }
+.wf-item:hover { background: rgba(255,255,255,0.02); }
+.wf-name {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+.wf-name a { color: var(--text-primary); }
+.wf-name a:hover { color: var(--accent-pink); }
+.wf-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    flex: 1;
+    margin-left: 1rem;
+    text-align: right;
+}
+@media (max-width: 640px) {
+    .wf-item { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+    .wf-desc { text-align: left; margin-left: 0; }
+}
+
+/* Bullet card list (Section 3 + 4) */
+.bullet-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+}
+.bullet-card ul { list-style: none; padding: 0; margin: 0; }
+.bullet-card li {
+    position: relative;
+    padding: 0.85rem 0 0.85rem 1.85rem;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    line-height: 1.65;
+    font-size: 0.95rem;
+}
+.bullet-card li:last-child { border-bottom: none; }
+.bullet-card li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-green);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    top: 0.95rem;
+}
+.bullet-card li strong { color: var(--text-primary); font-weight: 600; }
+.bullet-card li code { font-size: 0.82em; }
+.bullet-card .note {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* Stack grid (Section 5) */
+.stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.stack-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.5rem 1.25rem;
+    transition: all 0.3s var(--ease-out-expo);
+}
+.stack-card:hover { border-color: var(--border-glow); transform: translateY(-2px); }
+.stack-card-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+    font-weight: 700;
+}
+.stack-card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.stack-card-list li {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    padding: 0.3rem 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.04);
+}
+.stack-card-list li:last-child { border-bottom: none; }
+
+/* Philosophy block (Section 6) */
+.philo {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 2rem 2.25rem;
+    border-left: 3px solid var(--accent-cyan);
+}
+.philo p {
+    color: var(--text-secondary);
+    line-height: 1.75;
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+}
+.philo p:last-child { margin-bottom: 0; }
+.philo p strong { color: var(--text-primary); font-weight: 600; }
+.philo p em { color: var(--accent-green); font-style: normal; font-weight: 600; }
+@media (max-width: 640px) {
+    .philo { padding: 1.5rem 1.5rem; }
+}
+
+/* Bottom CTA */
+.bottom-cta {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+.bottom-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.bottom-cta h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+.bottom-cta p {
+    color: var(--text-secondary);
+    margin-bottom: 1.75rem;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.cta-row {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    justify-content: center;
+    align-items: center;
+}
+.cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.6rem;
+    background: var(--accent-green);
+    color: var(--bg-deep);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.3s var(--ease-out-expo);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.cta-primary:hover {
+    background: #33edb3;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(0,229,153,0.25);
+    color: var(--bg-deep);
+}
+.cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.5rem;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.cta-secondary:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); }
+footer.page a:hover { color: var(--accent-green); }
+
+@media (max-width: 700px) {
+    h1.title { font-size: 1.95rem; }
+    .bottom-cta { padding: 2rem 1.5rem; }
+}
+</style>
+
+<!-- Analytics scaffolding — uncomment + fill in IDs after signup
+<script defer data-domain="joemattiello.dev" src="https://plausible.io/js/script.js"></script>
+-->
+</head>
+<body>
+
+<nav class="top">
+    <div class="container nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <span class="here">ai</span>
+        </div>
+        <a href="/" class="nav-back">← Back to site</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container">
+        <div class="hero-tag"><span class="pulse"></span> AI Engineering Practice</div>
+        <h1 class="title">AI in production, <span class="accent">not in slideware.</span></h1>
+        <p class="lede">A consolidated index of how Joseph Mattiello uses, builds, and ships AI tooling — with links to actual code, actual workflows, and actual outcomes. Updated as new work ships.</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- Section 1 — Multi-Agent CI Orchestration -->
+    <section class="block">
+        <div class="section-label">01 · Production multi-agent CI</div>
+        <h2 class="section-title">Multi-agent CI orchestration <span class="accent">across the Provenance org</span></h2>
+        <div class="headline-num">
+            <div class="headline-num-value">3</div>
+            <div>
+                <div class="headline-num-label">Autonomous agents in production</div>
+                <div class="headline-num-text"><strong>Claude</strong> (Sonnet + Opus, auto-routed by static diff analysis), <strong>Cursor Agent</strong>, and <strong>Kimi Code</strong> — three heterogeneous agents sharing one dispatch vocabulary, routed by branch, label, and PR signal across the Provenance organization.</div>
+            </div>
+        </div>
+        <p class="section-lede">Each PR fans out to the right model for the change: thread-safety patterns route to Opus, everything else stays on Sonnet. Cursor and Kimi listen on the same dispatch surface, so swapping the underlying model is a one-line change. The case study has the architecture; the workflow files have the proof.</p>
+        <div class="wf-list">
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/ai-review.yml" target="_blank" rel="noopener">ai-review.yml</a></div>
+                <div class="wf-desc">Sonnet vs Opus auto-selection by static diff analysis</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/cursor-agent.yml" target="_blank" rel="noopener">cursor-agent.yml</a></div>
+                <div class="wf-desc">Cursor Agent on the shared dispatch vocabulary</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/kimi-agent.yml" target="_blank" rel="noopener">kimi-agent.yml</a></div>
+                <div class="wf-desc">Kimi Code as Anthropic-API-compatible fallback</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/copilot-review-poller.yml" target="_blank" rel="noopener">copilot-review-poller.yml</a></div>
+                <div class="wf-desc">Scheduled poller that bypasses GitHub's bot-actor approval gate</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/Provenance/blob/develop/.github/workflows/auto-translate.yml" target="_blank" rel="noopener">auto-translate.yml</a></div>
+                <div class="wf-desc">Diff-aware Claude Haiku localization (11 languages)</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/Provenance-Emu/wiki/blob/master/.github/workflows/auto-fix-ci.yml" target="_blank" rel="noopener">wiki / auto-fix-ci.yml</a></div>
+                <div class="wf-desc">Claude self-heals spell-check &amp; link-check failures</div>
+            </div>
+        </div>
+        <p style="margin-top:1.25rem;font-size:0.95rem"><a href="/#impact">→ Read the full case study on the main site</a></p>
+    </section>
+
+    <!-- Section 2 — 240p Test Suite -->
+    <section class="block">
+        <div class="section-label">02 · Bare-metal AI development</div>
+        <h2 class="section-title">240p Test Suite — <span class="accent">AI as primary author</span> on a platform with no training data</h2>
+        <div class="headline-num">
+            <div class="headline-num-value pink">36 / 10</div>
+            <div>
+                <div class="headline-num-label">PRs in days · ~84% AI co-authored</div>
+                <div class="headline-num-text">Port of Artemio Urbina's 240p Test Suite to <strong>Atari Jaguar</strong> — bare-metal m68k + RISC, a platform with effectively zero LLM training data. Built end-to-end with <strong>Claude Code</strong> as primary author and <strong>Copilot + Qodo</strong> as adversarial reviewers. 12 tagged releases including PAL/NTSC region switching and 7 hardware probes (93C46 EEPROM, Jaguar CD/Butch, JagLink, TOM registers).</div>
+            </div>
+        </div>
+        <p class="section-lede">If the agent pattern only worked on well-trodden stacks, this project would have failed. Instead it shipped — proof that orchestrated AI development generalizes when you put the right scaffolding around it (a libretro smoke-test CI, a Docker SDK image, and adversarial review).</p>
+        <div class="wf-list">
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite" target="_blank" rel="noopener">atari_jaguar_240p_test_suite</a></div>
+                <div class="wf-desc">Repository — 12 releases, v0.6.4 → v1.3.1</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27" target="_blank" rel="noopener">PR #27 — PAL pass</a></div>
+                <div class="wf-desc">Full PAL/NTSC region-switching support</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml" target="_blank" rel="noopener">build.yml</a></div>
+                <div class="wf-desc">libretro-based smoke-test CI — boots every PR's ROM, uploads framebuffer artifact</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-name"><a href="https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/sdk-image.yml" target="_blank" rel="noopener">sdk-image.yml</a></div>
+                <div class="wf-desc">Reproducible Jaguar SDK Docker image build</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3 — Wayfair -->
+    <section class="block">
+        <div class="section-label">03 · Applied at scale internally</div>
+        <h2 class="section-title">AI tooling at <span class="accent">Wayfair</span></h2>
+        <p class="section-lede">App Infrastructure is the platform team that the rest of mobile builds on top of. AI tooling here means leverage for 60+ engineers, not novelty for one.</p>
+        <div class="bullet-card">
+            <ul>
+                <li><strong>Custom MCP servers</strong> wrapping internal tooling — auth-aware, audit-logged, rate-limited.</li>
+                <li><strong>Claude skills + plugins</strong> automating engineering workflows for the platform team (code review, scaffolding, refactor recipes).</li>
+                <li><strong>n8n workflows</strong> integrating Jira + GitHub for cross-team automation — issue triage, PR routing, release coordination.</li>
+                <li><strong>Datadog RUM instrumentation</strong> for performance work — bootup tracing, SwiftUI hot-path identification, MP4 caching strategy that shipped ~$300k/year in bandwidth savings.</li>
+                <li><strong>Supports 60+ mobile engineers</strong> on the App Infrastructure team — the audience is the rest of mobile, not just one product.</li>
+            </ul>
+            <p class="note">Enterprise work, no public links — referenced here as applied-at-scale-internally proof. Specifics under NDA.</p>
+        </div>
+    </section>
+
+    <!-- Section 4 — Architecture patterns -->
+    <section class="block">
+        <div class="section-label">04 · Patterns I keep using</div>
+        <h2 class="section-title">The architecture <span class="accent">I keep reaching for</span></h2>
+        <p class="section-lede">Patterns that have survived contact with production, across multiple projects and agent stacks. Each one is in shipping code somewhere above.</p>
+        <div class="bullet-card">
+            <ul>
+                <li><strong>Reviewer-model auto-selection by static diff analysis.</strong> <code>grep</code> for thread-safety / concurrency patterns in the diff to route between Sonnet (default) and Opus (deep-reasoning). Cheap, deterministic, observable.</li>
+                <li><strong>Shared dispatch vocabulary across heterogeneous agents.</strong> One set of action verbs — <code>implement_issue</code>, <code>fix_ai_review</code>, <code>fix_rebase_conflict</code>, <code>ai_approved</code> — that Claude, Cursor, and Kimi all speak. Swap the model, keep the orchestration.</li>
+                <li><strong>Anthropic-API-compatible model fallback.</strong> Kimi Code via <code>ANTHROPIC_BASE_URL</code> override — the same agent runtime, a different upstream. Useful for cost ceilings, regional availability, and red-team comparisons.</li>
+                <li><strong>Scheduled poller bypass for GitHub bot-actor approval gates.</strong> GitHub won't let bot reviews count toward branch protection; a cron-driven poller re-projects bot signal as a status check the gate respects.</li>
+                <li><strong>Bounded review-cycle limits.</strong> Max 3 AI ↔ AI review cycles before a human is paged. Prevents runaway loops; makes "the agents are arguing" a measurable event.</li>
+                <li><strong>Diff-aware partial work.</strong> Translate only the strings that changed in this PR, not the whole localization file. Same for refactors, doc updates, test scaffolding — operate on the diff, not the universe.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Section 5 — Stack -->
+    <section class="block">
+        <div class="section-label">05 · Stack overview</div>
+        <h2 class="section-title">What's <span class="accent">in the toolbox</span></h2>
+        <p class="section-lede">Compact map of what's in production right now. Replaceable parts where it matters; opinionated where it should be.</p>
+        <div class="stack-grid">
+            <div class="stack-card">
+                <div class="stack-card-title">Models</div>
+                <ul class="stack-card-list">
+                    <li>Claude Sonnet 4.6</li>
+                    <li>Claude Opus 4.6</li>
+                    <li>Claude Haiku</li>
+                    <li>Cursor</li>
+                    <li>Kimi Code</li>
+                </ul>
+            </div>
+            <div class="stack-card">
+                <div class="stack-card-title">Agents</div>
+                <ul class="stack-card-list">
+                    <li>Claude Code</li>
+                    <li>Cursor Agent</li>
+                    <li>Kimi Agent</li>
+                </ul>
+            </div>
+            <div class="stack-card">
+                <div class="stack-card-title">Infrastructure</div>
+                <ul class="stack-card-list">
+                    <li>GitHub Actions</li>
+                    <li>workflow_dispatch</li>
+                    <li>Anthropic API</li>
+                    <li>MCP</li>
+                    <li>n8n</li>
+                </ul>
+            </div>
+            <div class="stack-card">
+                <div class="stack-card-title">Observability</div>
+                <ul class="stack-card-list">
+                    <li>Datadog RUM</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6 — Philosophy -->
+    <section class="block">
+        <div class="section-label">06 · How I think about it</div>
+        <h2 class="section-title">How I think about <span class="accent">AI engineering leadership</span></h2>
+        <div class="philo">
+            <p><strong>Production engineering experience matters more than ML research credentials for shipping AI systems in 2026.</strong> The hardest part of an LLM system in production isn't the model — it's making it reliable. Retries, idempotency, audit logs, rate limits, cost ceilings, graceful degradation, eval CI, observability that lets you reproduce a regression a week later. Those are SRE problems wearing an LLM hat. The teams that nail them ship; the teams that don't write blog posts about why their PoC was great in October.</p>
+            <p><strong>AI agents are workers, not magic.</strong> The orchestration matters more than which agent. A mediocre model on a great pipeline beats a great model on a mediocre one — every single time. Build the pipeline first: the dispatch vocabulary, the bounded review cycles, the human-escalation hooks, the diff-aware scope. Then plug in whichever model has the best price/quality this quarter, and keep the swap easy.</p>
+            <p><strong>The right metric for AI tooling is "how much time does it save the engineer who'd otherwise do this manually."</strong> Not benchmarks, not leaderboards, not vibes. If a workflow saves 15 minutes per PR across 60 engineers, that's the ROI conversation. If it saves 30 seconds and adds a flaky failure mode, kill it. Measure the human cycle, not the model output.</p>
+            <p><strong>Treat eval like CI.</strong> If you can't reproduce a regression on demand, <em>you don't have evals — you have demos.</em> Eval datasets get versioned, regressions block merges, and "the model felt worse this week" becomes a deterministic line on a graph instead of a Slack thread. This is the part most teams skip and the part that decides whether the system survives its first model upgrade.</p>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+        <h3>Want to talk about shipping AI in production?</h3>
+        <p>Whether it's a fixed-fee audit, an AI-platform leadership conversation, or just a senior outside read on a thorny architecture call — reach out.</p>
+        <div class="cta-row">
+            <a href="/consulting/" class="cta-primary">Mobile AI Launch Readiness Audit →</a>
+            <a href="https://www.linkedin.com/in/joemattiello/" target="_blank" rel="noopener" class="cta-secondary">LinkedIn for hiring</a>
+        </div>
+    </section>
+
+</main>
+
+<footer class="page">
+    <div class="container">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/#impact">Case studies</a> · <a href="/status/">Site status</a> · <a href="/consulting/">Consulting</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
