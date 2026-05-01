@@ -60,6 +60,11 @@ Three US patents from Sense Networks (acquired twice — by YP/YellowPages in 20
 
 BS Computer Science, University at Buffalo (2004–2008)
 
+## Writing
+
+Long-form writing at https://joemattiello.dev/blog/. Recent:
+- 2026-05-01 — [The Multi-Agent CI Pipeline I Built So I Could Ship Open Source Like a Team of One](https://joemattiello.dev/blog/multi-agent-ci-pipeline/) — Production multi-agent CI across the Provenance organization. Three agents (Claude, Cursor, Kimi), one dispatch vocabulary, reviewer-model auto-selection by static diff analysis, scheduled poller workaround for GitHub bot-actor gates.
+
 ## Press
 
 - **April 2026 — [MobileGamer.biz](https://mobilegamer.biz/emulation-arrived-on-the-app-store-two-years-ago-60m-downloads-later-whats-changed/)** — Joseph is the featured developer interview in the 2-year App Store emulator retrospective. Quoted directly on App Store policy ("I've been pretty conservative about staying inside the lines from day one"), Provenance Plus IAP economics, and emulation rules.
