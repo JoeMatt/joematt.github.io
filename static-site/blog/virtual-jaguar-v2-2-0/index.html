@@ -469,48 +469,64 @@ footer.page a:hover { color: var(--accent-green); }
 
 <h2>What&rsquo;s in this release</h2>
 
-<p>v2.2.0 closes a bunch of long-standing libretro tracker issues (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/27" target="_blank" rel="noopener">#27</a>, <a href="https://github.com/libretro/virtualjaguar-libretro/issues/85" target="_blank" rel="noopener">#85</a>, sub-issues of <a href="https://github.com/libretro/virtualjaguar-libretro/issues/38" target="_blank" rel="noopener">#38</a>) and adds modern emulator features the core didn&rsquo;t have.</p>
+<p>Release page with binaries for all 14 platforms: <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.2.0" target="_blank" rel="noopener"><strong>libretro/virtualjaguar-libretro v2.2.0</strong></a>. Closes long-standing libretro tracker issues <a href="https://github.com/libretro/virtualjaguar-libretro/issues/27" target="_blank" rel="noopener">#27</a>, <a href="https://github.com/libretro/virtualjaguar-libretro/issues/85" target="_blank" rel="noopener">#85</a>, and most of the sub-bugs in <a href="https://github.com/libretro/virtualjaguar-libretro/issues/38" target="_blank" rel="noopener">#38</a>.</p>
 
-<p>The notable bits: HLE BIOS compat improvements, 22 previously-broken games fixed, save states/rewind/RetroAchievements, SRAM/EEPROM persistence, cheat support, an audio pipeline rewrite, ~2x on the hot paths via a SIMD blitter, per-button remapping for the 21-key controller, pre-built cores for 14 platforms.</p>
+<p>The notable bits: HLE BIOS compat improvements, ~22 previously-broken games fixed (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/119" target="_blank" rel="noopener">PR #119</a>), save states / rewind / RetroAchievements (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/104" target="_blank" rel="noopener">#104</a>, <a href="https://github.com/libretro/virtualjaguar-libretro/pull/117" target="_blank" rel="noopener">#117</a>), SRAM/EEPROM persistence, cheat support (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/113" target="_blank" rel="noopener">#113</a>), an audio pipeline reorder, ~2x on the hot paths via a SIMD blitter (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/101" target="_blank" rel="noopener">#101</a>), DSP MAC40 fixed to true 40-bit semantics (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/118" target="_blank" rel="noopener">#118</a>), per-button remapping for the 21-key controller, a `make test` harness covering all of the above.</p>
 
-<p>Nothing world-changing. Just a release that gets the core where users actually want it to be.</p>
+<p>Nothing world-changing. Just a release that gets the core where users want it to be.</p>
 
 <h2>HLE BIOS: what changed</h2>
 
-<p>Virtual Jaguar has had an HLE BIOS path for a while; it&rsquo;s the default for most users. What didn&rsquo;t work cleanly before this release: a chunk of homebrew getting rejected by the cart-auth check, several games that probed DSP state at startup and got the wrong values, and a handful that depended on specific Tom/Jerry register init values the HLE wasn&rsquo;t setting.</p>
+<p>Virtual Jaguar has had an HLE BIOS path for a while. It&rsquo;s the default for most users. v2.2.0 closes a few specific gaps.</p>
 
-<p>Quick legal note since people ask: the HLE path is not a reverse-engineered copy of the real BIOS. No disassembled BIOS code, no boot logo, no Atari-copyrighted asset. It re-implements the spec the BIOS implements so the hardware ends up in the same observable state by the time the game gets control. Same legal basis Saturn and PSP HLE BIOSes have used for years.</p>
+<p>Quick legal note since people ask: the HLE path is not a reverse-engineered copy of the real BIOS. No disassembled BIOS code, no boot logo, no Atari-copyrighted asset. It re-implements the spec so the hardware ends up in the same observable state by the time the game gets control.</p>
 
 <p>The fixes in v2.2.0:</p>
 
 <ul>
-    <li><strong>Cart auth on homebrew.</strong> The Jaguar BIOS verifies a small signature region in the cart header. Not a cryptographic hash, just a sequence of expected bytes, but the BIOS will refuse to boot if it doesn&rsquo;t see them. Licensed games all have valid signatures; homebrew sometimes doesn&rsquo;t. The HLE replacement validates the same region but is more permissive on the homebrew path so legitimately-built indie ROMs (the <a href="/#projects">240p Test Suite port</a>, for example) boot without rejection.</li>
-    <li><strong>OS init coverage.</strong> Tom and Jerry have dozens of memory-mapped registers the BIOS pre-configures: clock dividers, DRAM refresh timing, the OP&rsquo;s linked-list base pointer, the DSP&rsquo;s default sample rate. The HLE was missing several. Games that assumed those values at entry would behave erratically. The HLE init now writes the same defaults in the same order as the real BIOS.</li>
-    <li><strong>Audio init bit-exact.</strong> This one ate two days. The DSP has to land in an exact idle state (specific PC, specific register file, specific RAM contents at a couple of fixed addresses), or games that probe the DSP at startup fail their detection check and refuse to use audio. Got it bit-exact by diffing the post-boot DSP RAM dump from a real machine against the HLE-initialized version, byte by byte. The diff was non-zero in three places. Each one was a separate regression to track down.</li>
+    <li><strong>Raw cartridge ROM acceptance.</strong> Many homebrews ship as plain <code>.bin</code> / <code>.j64</code> / <code>.rom</code> dumps without an Alpine/header wrapper. The loader now accepts them at common Jaguar startup bases (<code>$4000</code>, <code>$20000</code>, <code>$802000</code>) with conservative validation, so unknown content fails fast instead of running into garbage memory. Legitimately-built indie ROMs (the <a href="/#projects">240p Test Suite port</a>, for example) now boot without manual wrapping.</li>
+    <li><strong>JERRY init values matched to post-engine BIOS state.</strong> <code>JaguarReset</code> now writes <code>SCLK=0x13</code>, <code>SMODE=0x15</code> (the values the real BIOS leaves behind after the engine runs), instead of the previous pre-engine defaults <code>0x08</code> / <code>0x01</code>. Games that probed JERRY state at startup were getting the pre-engine values and failing their detection. Atari Karts is the negative-control regression test for this.</li>
+    <li><strong>HLE coverage extended into resolution / scan-out.</strong> The real BIOS also seeds Tom&rsquo;s display registers (<code>HDB1</code>, <code>HDE</code>, <code>VDB</code>, <code>VDE</code>) so games can rely on a known starting display geometry. The HLE init now mirrors that, which fixed the cluster of &ldquo;left half of the screen&rdquo; resolution bugs covered in the next section.</li>
 </ul>
 
-<p>Net: more games boot cleanly through HLE.</p>
+<p>Net: more games boot cleanly through HLE. The remaining HLE gaps (Skyhammer, Iron Soldier 2 audio after character select, Wolf3D under HLE) are tracked in <code>docs/emulation-bug-hunt-todos.md</code> and queued for v2.3.</p>
 
-<h2>22 games that didn&rsquo;t work before</h2>
+<h2>~22 games fixed</h2>
 
-<p>Even the games that &ldquo;worked&rdquo; in older builds often had specific glitches: missing audio, broken sprite layers, hangs on level transitions. v2.2.0 fixes 22 titles that previously didn&rsquo;t boot or didn&rsquo;t run far enough to be playable. Four worth walking through:</p>
+<p>Most of these were tracked in <a href="https://github.com/libretro/virtualjaguar-libretro/issues/38" target="_blank" rel="noopener">issue #38</a> for years. The cluster of &ldquo;weird bar down half the screen&rdquo; bugs (Doom, Atari Karts, Iron Soldier 2 title) all turned out to be the same underlying issue. The fix landed in <a href="https://github.com/libretro/virtualjaguar-libretro/pull/119" target="_blank" rel="noopener">PR #119</a> / commit <a href="https://github.com/libretro/virtualjaguar-libretro/commit/4fcf958" target="_blank" rel="noopener"><code>4fcf958</code></a>. Four worth walking through:</p>
 
 <ul>
-    <li><strong>Doom.</strong> The white whale. Doom on Jaguar is a tightly-tuned port that pushes the blitter harder than almost any other commercial game and is extremely sensitive to blitter-pipeline timing. The previous core had a one-cycle race in the blitter&rsquo;s outer-loop dispatch that Doom would trip about 30 frames into the title screen; the symptom was a freeze with garbled VRAM. The fix was reordering two blitter-state transitions so the cycle accounting matches what the real chip does. Doom now boots and runs at full speed.</li>
-    <li><strong>Syndicate.</strong> Polls the DSP&rsquo;s status register every audio frame to decide whether to push a new sample buffer. The old core handled that poll lazily and would occasionally return a stale value when the DSP was mid-transition; Syndicate would mistake that for a hang and crash itself out of the audio thread. Tightening the DSP status-register read to be cycle-accurate fixed it.</li>
-    <li><strong>Atari Karts.</strong> The Object Processor builds the Jaguar&rsquo;s sprite layers from a linked list of OP descriptors. Atari Karts uses a non-standard descriptor ordering for the road-and-kart layers. The old OP walked the list in the wrong direction, drawing karts <em>under</em> the track surface. Re-read the OP datasheet, fixed the traversal.</li>
-    <li><strong>Iron Soldier 2.</strong> Hung on the mission-select screen because of a missed interrupt during cart-bank switching. The bank-switch path now flushes pending interrupts before swapping, which matches real-hardware behavior.</li>
+    <li><strong>Doom.</strong> Long-time symptom: gameplay video rendered to the left half of the screen, with a ghost of the previous frame buffer on the right half. There was a legacy core option called <code>virtualjaguar_doom_res_hack</code> that double-pixeled the line buffer when <code>pwidth==8</code> as a workaround. The real fix was making the TOM resolution pipeline read its dimensions from the actual hardware registers (<code>HDB1</code>, <code>HDE</code>, <code>VDB</code>, <code>VDE</code>) and apply proper PWIDTH-driven pixel replication (<code>pwidth_scale = (pwidth &gt;= 8) ? (pwidth/4) : 1</code>) instead of using hardcoded screen dimensions. The <code>doom_res_hack</code> core option was deleted in the same PR; it&rsquo;s no longer needed.</li>
+    <li><strong>Atari Karts.</strong> Same vertical-bar artifact as Doom, same root cause, fixed by the same PWIDTH replication work. Also acts as the negative-control regression test for the JERRY <code>SCLK</code> / <code>SMODE</code> init values mentioned above.</li>
+    <li><strong>Iron Soldier 2.</strong> Title screen used to render shifted to the left side of the screen, then black-screen after the title (with music still playing). The title-screen layout is fixed by PR #119&rsquo;s resolution work. <strong>Honest disclosure:</strong> the post-character-select black screen and the audio clipping during the title music are still open. <code>test_audio_clipping.c</code> watches IS2 specifically as an <code>--expect-clipping</code> regression. Tracked for v2.3.</li>
+    <li><strong>Syndicate.</strong> &ldquo;Pink patches in the writing&rdquo; (corrupted text rendering in dialog boxes). Fixed by the accurate-blitter path. The fast blitter still has the bug, so if you&rsquo;re running Syndicate you want the accurate blitter selected in core options. The accurate blitter is somewhat slower; that tradeoff is in the next section.</li>
 </ul>
 
-<p>The other 18 are a mix of audio fixes, OP fixes, m68k addressing-mode corner cases, and DSP timing improvements. Per-game status is in <code>docs/emulation-bug-hunt-todos.md</code>. If a title was broken for you before, try v2.2.0.</p>
+<p>The other ~18 are a mix of audio dropouts, sprite-layer fixes, m68k addressing-mode corner cases, and DSP timing improvements that piggy-backed on the larger accuracy pass. Per-game status with the most current notes is in <code>docs/emulation-bug-hunt-todos.md</code>. If a title was broken for you before, try v2.2.0.</p>
 
-<h2>Audio: a 12-year-old bug, finally found</h2>
+<h2>Hardware-accuracy work</h2>
 
-<p>The frame-edge dropout bug has been in the core since at least 2014. Symptom: every few seconds, a brief click or half-sample of silence right at the audio-frame boundary. Not catastrophic but enough to make extended sessions unpleasant.</p>
+<p>The accuracy fixes that didn&rsquo;t land in the resolution-pipeline cluster but matter:</p>
 
-<p>The diagnostic took longer than the fix. Built a bit-exactness test harness: capture the DSP&rsquo;s sample output from a real Jaguar across a known scene from a known game, capture the same output from the emulator, diff sample-by-sample. The diff was almost always zero. The two waveforms were sample-identical. <em>Except</em> at frame boundaries, where the emulator was occasionally emitting a sample that had been written half a cycle late. The DSP scheduler was draining its sample buffer just before the audio mixer pulled, instead of just after.</p>
+<ul>
+    <li><strong>DSP MAC40 to true 40-bit accumulator semantics</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/118" target="_blank" rel="noopener">PR #118</a>). The Jaguar DSP&rsquo;s multiply-accumulate is 32×32 → 40-bit, and the old implementation was effectively 32-bit, silently losing the top 8 bits on overflow. Math-heavy games (audio synthesis, 3D transforms) were getting wrong output. Now matches the chip.</li>
+    <li><strong>68020+ instructions via IllegalOpcode trap</strong> (PR #119). The Jaguar&rsquo;s m68k is a 68000, but a few licensed games happen to use 68020 <code>MULL</code> / <code>DIVL</code>. Real hardware throws an illegal-opcode exception; the BIOS has a handler that emulates them. The HLE path now does the same.</li>
+    <li><strong>BSR.L absolute-address fix for Atari&rsquo;s <code>aln</code> linker</strong> (PR #119). The aln linker emits BSR with a fixed 32-bit absolute target in some configurations; the old m68k decoder was sign-extending it as a relative branch and jumping into garbage. Caught by a homebrew that uses aln.</li>
+    <li><strong>JERRY PIT2 prescaler</strong> (PR #119). PIT2 was incorrectly sharing PIT1&rsquo;s prescaler, which made any game using PIT2 timer interrupts run at the wrong rate. Fixed.</li>
+    <li><strong>Event-system uninitialized slot[0]</strong> (PR #119). The event scheduler&rsquo;s slot 0 was being read before being written on the first frame after reset, returning whatever stack garbage was there. Caused periodic stuttering in some games during the first second of play. Initialized.</li>
+</ul>
 
-<p>The fix was a one-line ordering change in the per-frame schedule. <code>retro_run()</code> now does <code>update_input -&gt; DACPrepareFrame -&gt; JaguarExecuteNew -&gt; cheat_apply_all -&gt; SoundCallback -&gt; video_cb</code>, so the audio callback sees the same JERRY state the frame was rendered against and doesn&rsquo;t drift. Validation took a week: ran the harness across 31 games, each across a 60-second scene, zero mismatches anywhere. The harness is now part of CI; a regression in the audio path can&rsquo;t merge silently.</p>
+<h2>Audio pipeline reorder</h2>
+
+<p>Long-standing dropout: every few seconds, a brief click or half-sample of silence right at the audio-frame boundary. Caused by the JERRY audio subsystem and the libretro frame loop running on slightly mismatched schedules, so the audio callback could see JERRY state that didn&rsquo;t correspond to the frame being rendered.</p>
+
+<p>The fix is an ordering change in <code>retro_run()</code>. The new order:</p>
+
+<pre><code>update_input -&gt; DACPrepareFrame -&gt; JaguarExecuteNew -&gt; cheat_apply_all -&gt; SoundCallback -&gt; video_cb</code></pre>
+
+<p>JERRY now interleaves with the main execution loop instead of running as a separate per-sample event queue, so by the time <code>SoundCallback</code> fires, JERRY state matches the frame just rendered. Validation is in <code>test/test_audio_clipping.c</code>, which checks saturation density / longest-run / RMS across a watch-list of titles (Iron Soldier 2 is in the watch-list as <code>--expect-clipping</code> until its remaining HLE audio bug is fixed).</p>
+
+<p>One dependency that came along for the ride: <strong>libretro <code>SET_GEOMETRY</code> is now applied at the start of <code>retro_run</code> instead of after <code>video_cb</code></strong>. That fixes the Wolf3D black-screen on iOS Metal RetroArch — frontends that re-allocate the texture on geometry change were dropping the frame submitted right after the change. Specifically helpful for Provenance users on iOS.</p>
 
 <h2>Save states, rewind, RA</h2>
 
@@ -518,9 +534,9 @@ footer.page a:hover { color: var(--accent-green); }
 
 <p><strong>Save states.</strong> Conceptually simple: serialize the entire machine state to a blob, deserialize later. The Jaguar is unusually heterogeneous though. Six chips hold state: the m68k CPU, the GPU (RISC core), the DSP (another RISC core, different ISA), the Object Processor, the Blitter, and the audio subsystem. Each had its own ad-hoc representation of state, and several held pointers into shared memory that didn&rsquo;t serialize cleanly. The work was making each chip&rsquo;s state deterministically serializable: stable byte layout, no embedded pointers, no undefined fields. With that done, saving and loading is the obvious thing. Run-ahead works for free.</p>
 
-<p><strong>Rewind</strong> rides on save states with a circular buffer. Every 4 frames the emulator captures a state, ring-buffers it, and on rewind walks the ring backwards. Buffer is sized for ~30 seconds of rewind by default. Cost is mostly memory; CPU overhead is negligible because the per-frame capture is well under a millisecond on a modern machine.</p>
+<p><strong>Rewind</strong> rides on save states. Once serialization is deterministic, the libretro frontend can ring-buffer and walk backwards on its own. The amount of rewind buffer the user gets is set by the frontend, not the core.</p>
 
-<p><strong>RetroAchievements.</strong> Jaguar has been one of the few major retro consoles with no achievement support. Users in the RA community had no Jaguar sets to work on, no way to track progress, and the platform was effectively invisible to that whole sub-community. v2.2.0 wires up the standard RA hooks (<code>RC_CONSOLE_ATARI_JAGUAR</code>, memory-map exposure, frame-tick callbacks, hardcore-mode enforcement). ~20 fresh achievement sets are being authored on RA&rsquo;s side as I write this.</p>
+<p><strong>RetroAchievements.</strong> Jaguar had no RA support before. v2.2.0 wires the standard hooks: <code>RC_CONSOLE_ATARI_JAGUAR</code>, memory-map exposure, frame-tick callbacks, hardcore-mode enforcement (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/117" target="_blank" rel="noopener">PR #117</a>). The RA community is now able to author Jaguar achievement sets.</p>
 
 <p>SRAM and EEPROM persistence got fixed in the same release. Save data now survives soft resets, which it didn&rsquo;t before for cartridges that used the on-cart EEPROM (a small but loud subset of the library, mostly the racing titles).</p>
 
@@ -534,13 +550,21 @@ footer.page a:hover { color: var(--accent-green); }
 
 <h2>~2x on hot paths</h2>
 
-<p>I wasn&rsquo;t chasing performance in this release. I was chasing correctness. Several of the correctness fixes turned out to also be much faster than what they replaced. The headline is roughly 2x on the hot paths, profile-driven and measured against v2.1 on the same hardware running the same scenes.</p>
+<p>The headline number from the release notes is ~2x speedup on DSP / GPU / memory hot paths, profile-driven against v2.1 on the same hardware running the same scenes. Most of the wins came along with correctness fixes.</p>
 
-<p>The biggest win was the blitter. The old implementation was a giant interpreter loop that re-decoded the blitter&rsquo;s mode register on every operation. The rewrite hoists the mode decoding out of the inner loop, pre-computes a small dispatch table, and uses SIMD for the actual pixel-fill stages where the blitter is moving large rectangular spans. SSE2 on x86, NEON on ARM, scalar fallback otherwise. The bit-exactness harness covers the blitter rewrite too: pixel-perfect output across a battery of test scenes, divergence between SIMD and scalar paths fails CI immediately.</p>
+<p>The biggest single win is the SIMD blitter (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/101" target="_blank" rel="noopener">PR #101</a>). The accurate blitter is structured around per-pixel CRY/RGB color conversion, which is exactly the shape SIMD does well on. Three implementations live in <code>src/tom/blitter_simd_{sse2,neon,scalar}.c</code>; the build picks one based on target arch. Bit-exactness between the three is enforced by <code>test/test_blitter_simd.c</code>, which fails CI on any divergence between SSE2, NEON, and the scalar reference.</p>
 
-<p>Other wins, less dramatic: tightened the m68k decoder&rsquo;s common-case dispatch, replaced a few <code>memcpy</code> calls with structured assignment in the OP&rsquo;s descriptor walk, inlined a couple of accessor functions the compiler wasn&rsquo;t consistently inlining. Plain C where it helps; SIMD where it really helps.</p>
+<p>The fast blitter is still meaningfully faster than the accurate blitter, and the choice between them is exposed as a core option. Tempest 2000 may run below full speed on the accurate blitter on lower-end hardware. Syndicate (the pink-patches fix) requires the accurate blitter. Pick per game.</p>
 
-<p>The bit-exactness harness made all of this safe. Without it, a SIMD blitter rewrite is the kind of change you&rsquo;re scared to merge because regressions are subtle and only visible in specific games on specific scenes. With pixel-perfect comparison against a known-good baseline, the regression surface collapses to &ldquo;does the harness still pass?&rdquo;</p>
+<p>Smaller wins: tightened the m68k decoder&rsquo;s common-case dispatch, replaced a few <code>memcpy</code> calls with structured assignment in the OP&rsquo;s descriptor walk, inlined a couple of accessor functions the compiler wasn&rsquo;t inlining on its own.</p>
+
+<h2>The make test harness</h2>
+
+<p>One of the biggest pieces of behind-the-scenes work in v2.2.0 doesn&rsquo;t show up in any user-visible feature: <code>make test</code> now runs a real harness covering HLE BIOS state, the event queue, blitter SIMD bit-exactness (SSE2 vs NEON vs scalar), DSP MAC40 against a fixed-point reference, the cheat decoder, the RetroAchievements memory-map wiring, save-state round-trip plus rewind, and a screenshot regression test against JagNICCC2000 and YARC test ROMs.</p>
+
+<p>It also runs <code>test_audio_clipping</code>, which is the watch-list for audio regressions — IS2 and the games still in flight under HLE are tracked there as <code>--expect-clipping</code> until they&rsquo;re actually fixed, so the harness fails when a previously-known-broken game starts passing without the watch-list being updated. Honest CI for emulation accuracy.</p>
+
+<p>And there&rsquo;s a new lightweight logging framework in <code>src/log.h</code> with <code>LOG_DBG</code> / <code>LOG_INF</code> / <code>LOG_WRN</code> / <code>LOG_ERR</code>, plus a source-tree reorg into <code>src/{core,tom,jerry,cd,bios,m68000}</code>. Mostly developer-facing, but it makes the codebase substantially easier to grep through if you&rsquo;re trying to track down a specific chip&rsquo;s behavior.</p>
 
 <h2>What&rsquo;s next</h2>
 
