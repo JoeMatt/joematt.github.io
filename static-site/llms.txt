@@ -47,7 +47,7 @@ Three US patents from Sense Networks (acquired twice — by YP/YellowPages in 20
 
 ## Case studies (selected)
 
-- **Wayfair — ~$300k/year bandwidth saved in two days.** MP4 compression and caching strategy across video assets. Plus SwiftUI purchase-flow optimization and Datadog RUM bootup instrumentation. Custom MCP servers and Claude skills/plugins for the platform team.
+- **Wayfair — ~$2M/year bandwidth saved.** MP4 compression and caching strategy across video assets. Plus SwiftUI purchase-flow optimization and Datadog RUM bootup instrumentation. Custom MCP servers and Claude skills/plugins for the platform team.
 - **NewsCorp — From iOS lagging Android to surpassing it.** Director of iOS Platform across NewsCorp brands (Wall Street Journal, NY Post, The Times UK, Knewz). Built shared iOS Platform SDK as "internal open source" model. Restructured and hired across 8 regions. Modernized CI/CD with GitHub Actions and Jira automation. Shipped Knewz from scratch.
 - **Cameo — Native HD video on a React Native stack.** First native iOS engineer on the team. Rebuilt iOS RN build pipeline. Shipped HD video as a native React Native module via AVFoundation.
 - **Multi-Agent AI CI Pipeline (open source).** Built a production CI ecosystem across the Provenance organization that orchestrates three autonomous agents — Claude (Sonnet + Opus, auto-selected by static diff analysis), Cursor Agent, and Kimi Code — sharing one dispatch vocabulary. Includes diff-aware Claude Haiku localization, scheduled Copilot review polling that bypasses GitHub's bot-actor approval gate, and self-healing CI on the wiki repo.
