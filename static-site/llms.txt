@@ -60,6 +60,13 @@ Three US patents from Sense Networks (acquired twice — by YP/YellowPages in 20
 
 BS Computer Science, University at Buffalo (2004–2008)
 
+## Press
+
+- **April 2026 — [MobileGamer.biz](https://mobilegamer.biz/emulation-arrived-on-the-app-store-two-years-ago-60m-downloads-later-whats-changed/)** — Joseph is the featured developer interview in the 2-year App Store emulator retrospective. Quoted directly on App Store policy ("I've been pretty conservative about staying inside the lines from day one"), Provenance Plus IAP economics, and emulation rules.
+- 9to5Mac, iMore (exclusive), Time Extension, Android Authority, AppleInsider, Pocket Gamer (dedicated hub), MacRumors emulator guide.
+- YouTube coverage: TWiT (2.3M subs), ETA PRIME (2.2M), Spawn Wave, Retro Game Corps.
+- Earlier (Sense Networks era, 2008-2010): Newsweek cover ("The Next Google"), Bloomberg Businessweek "25 Most Intriguing Startups", New York Times "Predicting Where You'll Go and What You'll Like", CNN Money.
+
 ## Profiles
 
 - GitHub: https://github.com/JoeMatt
