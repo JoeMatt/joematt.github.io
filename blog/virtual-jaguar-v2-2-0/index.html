@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<title>Virtual Jaguar v2.2.0 — HLE BIOS, save states, 22 games fixed — Joseph Mattiello</title>
+<title>Virtual Jaguar v2.2.0: HLE BIOS, save states, 22 games fixed · Joseph Mattiello</title>
 <meta name="description" content="76 commits, single author. HLE BIOS that actually boots most commercial titles without a real BIOS image. Save states, rewind, RetroAchievements, ~2x speedup on hot paths. Closes libretro/virtualjaguar-libretro#27, #85, and many sub-issues of #38.">
 <link rel="canonical" href="https://joemattiello.dev/blog/virtual-jaguar-v2-2-0/">
 
@@ -467,38 +467,36 @@ footer.page a:hover { color: var(--accent-green); }
 <article class="body">
 <div class="container">
 
-<h2>Why this matters</h2>
+<h2>What&rsquo;s in this release</h2>
 
-<p>The Atari Jaguar shipped in 1993, sold ~250k units, and ended Atari&rsquo;s run as a hardware maker. Most modern users have never legally booted one. The real BIOS image isn&rsquo;t on Archive.org, isn&rsquo;t in any of the big ROM sets, and Atari&rsquo;s successor companies have never released it. So Jaguar emulation has historically meant one of two compromises: dump the BIOS yourself off a real machine (assuming you own one and the cart port still works), or hard-patch the game ROM at load time to skip boot, which subtly breaks anything that depends on BIOS-initialized state.</p>
+<p>v2.2.0 closes a bunch of long-standing libretro tracker issues (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/27" target="_blank" rel="noopener">#27</a>, <a href="https://github.com/libretro/virtualjaguar-libretro/issues/85" target="_blank" rel="noopener">#85</a>, sub-issues of <a href="https://github.com/libretro/virtualjaguar-libretro/issues/38" target="_blank" rel="noopener">#38</a>) and adds modern emulator features the core didn&rsquo;t have.</p>
 
-<p>v2.2.0 takes a third path. It re-implements the BIOS at the function level. Any cart ROM boots, the emulator runs the same init steps the real BIOS would have run, hardware lands in the same state, control passes to the game. No copyrighted file ever touches the user&rsquo;s machine. Closes <a href="https://github.com/libretro/virtualjaguar-libretro/issues/27" target="_blank" rel="noopener">libretro/virtualjaguar-libretro#27</a> and <a href="https://github.com/libretro/virtualjaguar-libretro/issues/85" target="_blank" rel="noopener">#85</a>.</p>
+<p>The notable bits: HLE BIOS compat improvements, 22 previously-broken games fixed, save states/rewind/RetroAchievements, SRAM/EEPROM persistence, cheat support, an audio pipeline rewrite, ~2x on the hot paths via a SIMD blitter, per-button remapping for the 21-key controller, pre-built cores for 14 platforms.</p>
 
-<p>The other 75 commits: 22 broken games now run (Doom, Syndicate, Atari Karts, Iron Soldier 2, more). Save states, rewind, RetroAchievements memory map. SRAM/EEPROM persistence across soft resets. Cheat code support. Audio rewrite, no more frame-edge dropouts. ~2x on the hot paths via a SIMD blitter (SSE2/NEON/scalar) with bit-exactness CI. Pre-built libretro cores for 14 platforms.</p>
+<p>Nothing world-changing. Just a release that gets the core where users actually want it to be.</p>
 
-<p>Single-author push to master. That&rsquo;s how a small project moves when there&rsquo;s nobody to wait on.</p>
+<h2>HLE BIOS: what changed</h2>
 
-<h2>HLE BIOS</h2>
+<p>Virtual Jaguar has had an HLE BIOS path for a while; it&rsquo;s the default for most users. What didn&rsquo;t work cleanly before this release: a chunk of homebrew getting rejected by the cart-auth check, several games that probed DSP state at startup and got the wrong values, and a handful that depended on specific Tom/Jerry register init values the HLE wasn&rsquo;t setting.</p>
 
-<p>The Jaguar boots in a specific order. Power on, the m68k starts at <code>$E00000</code>. The BIOS does cart auth (signature check on the cart header), memory clear, hardware init (Tom and Jerry register banks, Object Processor setup, DSP into idle), boot logo animation, then jumps to the cart&rsquo;s entry point. Each step leaves hardware in a state games legitimately depend on.</p>
+<p>Quick legal note since people ask: the HLE path is not a reverse-engineered copy of the real BIOS. No disassembled BIOS code, no boot logo, no Atari-copyrighted asset. It re-implements the spec the BIOS implements so the hardware ends up in the same observable state by the time the game gets control. Same legal basis Saturn and PSP HLE BIOSes have used for years.</p>
 
-<p>The HLE BIOS is not a reverse-engineered copy. No disassembled BIOS code, no boot logo, no Atari-copyrighted asset. It re-implements the spec the BIOS implements: same observable hardware state by the time the game gets control. Same legal basis Saturn and PSP HLE BIOSes have used for years.</p>
-
-<p>The hard parts:</p>
+<p>The fixes in v2.2.0:</p>
 
 <ul>
-    <li><strong>Cart auth.</strong> The Jaguar BIOS verifies a small signature region in the cart header. Not a cryptographic hash, just a sequence of expected bytes, but the BIOS will refuse to boot if it doesn&rsquo;t see them. Licensed games all have valid signatures; homebrew sometimes doesn&rsquo;t. The HLE replacement validates the same region but is more permissive on the homebrew path, so legitimately-built indie ROMs (like the <a href="/#projects">240p Test Suite port</a>) boot without rejection.</li>
-    <li><strong>OS init.</strong> Tom and Jerry have dozens of memory-mapped registers the BIOS pre-configures: clock dividers, DRAM refresh timing, the OP&rsquo;s linked-list base pointer, the DSP&rsquo;s default sample rate. Games assume those values at entry. The HLE init writes the same defaults in the same order.</li>
-    <li><strong>Audio init.</strong> This one ate two days. The DSP has to land in an exact idle state (specific PC, specific register file, specific RAM contents at a couple of fixed addresses), or games that probe the DSP at startup will fail their detection check and refuse to use audio. Got it bit-exact by diffing the post-boot DSP RAM dump from a real machine against the HLE-initialized version, byte by byte, until they matched. The diff was non-zero in three places. Each one was a separate regression to track down.</li>
+    <li><strong>Cart auth on homebrew.</strong> The Jaguar BIOS verifies a small signature region in the cart header. Not a cryptographic hash, just a sequence of expected bytes, but the BIOS will refuse to boot if it doesn&rsquo;t see them. Licensed games all have valid signatures; homebrew sometimes doesn&rsquo;t. The HLE replacement validates the same region but is more permissive on the homebrew path so legitimately-built indie ROMs (the <a href="/#projects">240p Test Suite port</a>, for example) boot without rejection.</li>
+    <li><strong>OS init coverage.</strong> Tom and Jerry have dozens of memory-mapped registers the BIOS pre-configures: clock dividers, DRAM refresh timing, the OP&rsquo;s linked-list base pointer, the DSP&rsquo;s default sample rate. The HLE was missing several. Games that assumed those values at entry would behave erratically. The HLE init now writes the same defaults in the same order as the real BIOS.</li>
+    <li><strong>Audio init bit-exact.</strong> This one ate two days. The DSP has to land in an exact idle state (specific PC, specific register file, specific RAM contents at a couple of fixed addresses), or games that probe the DSP at startup fail their detection check and refuse to use audio. Got it bit-exact by diffing the post-boot DSP RAM dump from a real machine against the HLE-initialized version, byte by byte. The diff was non-zero in three places. Each one was a separate regression to track down.</li>
 </ul>
 
-<p>HLE-first is the right move for any console where BIOS dumps are scarce, hostile to redistribution, or fragmented across regional revisions.</p>
+<p>Net: more games boot cleanly through HLE.</p>
 
 <h2>22 games that didn&rsquo;t work before</h2>
 
 <p>Even the games that &ldquo;worked&rdquo; in older builds often had specific glitches: missing audio, broken sprite layers, hangs on level transitions. v2.2.0 fixes 22 titles that previously didn&rsquo;t boot or didn&rsquo;t run far enough to be playable. Four worth walking through:</p>
 
 <ul>
-    <li><strong>Doom.</strong> The white whale. Doom on Jaguar is a tightly-tuned port that pushes the blitter harder than almost any other commercial game and is extremely sensitive to blitter-pipeline timing. The previous core had a one-cycle race in the blitter&rsquo;s outer-loop dispatch that Doom would trip about 30 frames into the title screen; the symptom was a freeze with garbled VRAM. The fix was reordering two blitter-state transitions so the cycle accounting matches what the real chip does. Doom now boots, plays, and runs at full speed.</li>
+    <li><strong>Doom.</strong> The white whale. Doom on Jaguar is a tightly-tuned port that pushes the blitter harder than almost any other commercial game and is extremely sensitive to blitter-pipeline timing. The previous core had a one-cycle race in the blitter&rsquo;s outer-loop dispatch that Doom would trip about 30 frames into the title screen; the symptom was a freeze with garbled VRAM. The fix was reordering two blitter-state transitions so the cycle accounting matches what the real chip does. Doom now boots and runs at full speed.</li>
     <li><strong>Syndicate.</strong> Polls the DSP&rsquo;s status register every audio frame to decide whether to push a new sample buffer. The old core handled that poll lazily and would occasionally return a stale value when the DSP was mid-transition; Syndicate would mistake that for a hang and crash itself out of the audio thread. Tightening the DSP status-register read to be cycle-accurate fixed it.</li>
     <li><strong>Atari Karts.</strong> The Object Processor builds the Jaguar&rsquo;s sprite layers from a linked list of OP descriptors. Atari Karts uses a non-standard descriptor ordering for the road-and-kart layers. The old OP walked the list in the wrong direction, drawing karts <em>under</em> the track surface. Re-read the OP datasheet, fixed the traversal.</li>
     <li><strong>Iron Soldier 2.</strong> Hung on the mission-select screen because of a missed interrupt during cart-bank switching. The bank-switch path now flushes pending interrupts before swapping, which matches real-hardware behavior.</li>
