@@ -1128,6 +1128,107 @@
             .cs-metric-value { font-size: 2rem; }
         }
 
+        /* ===== TESTIMONIALS ===== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .testimonial-card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo);
+        }
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-glow);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+        }
+        .testimonial-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.55rem;
+            border-radius: 99px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(0,0,0,0.25);
+        }
+        .testimonial-badge.press {
+            color: var(--accent-amber);
+            border-color: rgba(255, 184, 0, 0.25);
+        }
+        .testimonial-badge.linkedin {
+            color: var(--accent-cyan);
+            border-color: rgba(0, 194, 255, 0.25);
+        }
+        .testimonial-quote {
+            position: relative;
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0 0 1.25rem;
+            padding-left: 1.5rem;
+        }
+        .testimonial-quote::before {
+            content: '\201C';
+            position: absolute;
+            left: -0.1rem;
+            top: -0.6rem;
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--accent-green);
+            font-family: var(--font-display);
+        }
+        .testimonial-quote.placeholder {
+            font-style: italic;
+            color: var(--text-muted);
+        }
+        .testimonial-attribution {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        .testimonial-role {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin: 0.2rem 0 0;
+            letter-spacing: 0.02em;
+        }
+        .testimonial-source-link {
+            display: inline-block;
+            margin-top: 0.85rem;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+        .testimonial-source-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 960px) {
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .testimonials-grid { grid-template-columns: 1fr; }
+        }
+
         /* ===== PROJECTS ===== */
         .projects-grid {
             display: grid;
@@ -2331,7 +2432,7 @@
             </p>
             <br>
             <p>
-                Today I'm an <strong>L4 Mobile Engineer on <a href="#experience" style="color:var(--accent-green)">Wayfair</a>'s App Infrastructure team (2025–present)</strong>, supporting 60+ mobile engineers. Highlights so far: <strong>$300k+/year in bandwidth savings</strong> via MP4 compression and a caching strategy (<a href="#impact" style="color:var(--accent-green)">case study</a>), Datadog RUM instrumentation for bootup performance, and an internal AI tooling buildout — custom MCP servers, Claude skills, and plugins used across the platform team.
+                Today I'm an <strong>L4 Mobile Engineer on <a href="#experience" style="color:var(--accent-green)">Wayfair</a>'s App Infrastructure team (2025–present)</strong>, supporting 60+ mobile engineers. Highlights so far: <strong>~$2M/year in bandwidth savings</strong> via MP4 compression and a caching strategy (<a href="#impact" style="color:var(--accent-green)">case study</a>), Datadog RUM instrumentation for bootup performance, and an internal AI tooling buildout — custom MCP servers, Claude skills, and plugins used across the platform team.
             </p>
             <br>
             <p>
@@ -2485,13 +2586,13 @@
                     <span class="cs-tag">Observability</span>
                 </div>
             </div>
-            <h3 class="cs-headline">~$300k/year in bandwidth savings from two days of work.</h3>
-            <p class="cs-subhead">Joined the App Infrastructure team supporting 60+ mobile engineers. Within the first months: shipped a video compression and caching strategy that pays for the team several times over, plus SwiftUI hot-path optimization and Datadog-instrumented bootup tracking.</p>
+            <h3 class="cs-headline">~$2M/year in bandwidth savings from a focused engagement.</h3>
+            <p class="cs-subhead">Joined the App Infrastructure team supporting 60+ mobile engineers. Within the first months: shipped a video compression and caching strategy that pays for the team many times over, plus SwiftUI hot-path optimization and Datadog-instrumented bootup tracking.</p>
             <div class="cs-body">
                 <aside class="cs-metric">
-                    <div class="cs-metric-value">$300k+</div>
+                    <div class="cs-metric-value">~$2M</div>
                     <div class="cs-metric-label">Annual bandwidth saved</div>
-                    <div class="cs-metric-sub">From a focused MP4 compression + caching pass — couple-day project, recurring savings.</div>
+                    <div class="cs-metric-sub">From a focused MP4 compression + caching engagement. Recurring savings, year over year.</div>
                 </aside>
                 <div class="cs-content">
                     <h5>The challenge</h5>
@@ -2506,7 +2607,7 @@
                     </ul>
 
                     <h5>Outcome</h5>
-                    <p>Roughly $300k/year in recurring bandwidth savings from the video work, real bootup metrics now feeding a structured optimization roadmap, and a growing internal AI tooling surface used across teams.</p>
+                    <p>Roughly $2M/year in recurring bandwidth savings from the video work, real bootup metrics now feeding a structured optimization roadmap, and a growing internal AI tooling surface used across teams.</p>
 
                     <div class="cs-stack">
                         <span class="cs-stack-label">Stack</span>
@@ -3135,6 +3236,82 @@
 
 <div class="section-divider"><hr></div>
 
+<!-- Testimonials -->
+<section id="testimonials">
+    <div class="reveal">
+        <div class="section-label">Testimonials</div>
+        <h2 class="section-title">What people say</h2>
+        <p class="section-desc">A mix of press quotes about my work and LinkedIn recommendations from colleagues and collaborators.</p>
+    </div>
+
+    <div class="testimonials-grid">
+        <!-- Card 1: Real press quote — MobileGamer.biz -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge press">Press</span>
+            <p class="testimonial-quote">Mattiello's emulator Provenance&hellip; grew well past that original enthusiast crowd.</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">Daryl Baxter</p>
+                <p class="testimonial-role">MobileGamer.biz &middot; April 2026</p>
+                <a class="testimonial-source-link" href="https://mobilegamer.biz/emulation-arrived-on-the-app-store-two-years-ago-60m-downloads-later-whats-changed/" target="_blank" rel="noopener">&rarr; source</a>
+            </div>
+        </div>
+
+        <!-- Card 2: Real press quote — Pocket Gamer -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge press">Press</span>
+            <p class="testimonial-quote">Developer Joseph Mattiello has launched a new emulator on mobile.</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">Pocket Gamer</p>
+                <p class="testimonial-role">Dedicated Provenance hub</p>
+                <a class="testimonial-source-link" href="https://www.pocketgamer.com/provenance/" target="_blank" rel="noopener">&rarr; source</a>
+            </div>
+        </div>
+
+        <!-- Card 3: Real press quote — iMore -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge press">Press</span>
+            <p class="testimonial-quote">All the nostalgic arcade goodness you want on mobile.</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">iMore</p>
+                <p class="testimonial-role">Exclusive coverage</p>
+                <a class="testimonial-source-link" href="https://www.imore.com/gaming/the-provenance-playstation-nintendo-and-atari-game-emulator-is-now-available-for-beta-download-on-iphone-and-ipad-and-an-apple-tv-version-is-next" target="_blank" rel="noopener">&rarr; source</a>
+            </div>
+        </div>
+
+        <!-- TODO: Replace with real LinkedIn recommendation. Fields below are placeholder. -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge linkedin">LinkedIn</span>
+            <p class="testimonial-quote placeholder">[Placeholder &mdash; LinkedIn recommendation will go here]</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">[Name]</p>
+                <p class="testimonial-role">[Role at Company]</p>
+            </div>
+        </div>
+
+        <!-- TODO: Replace with real LinkedIn recommendation. Fields below are placeholder. -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge linkedin">LinkedIn</span>
+            <p class="testimonial-quote placeholder">[Placeholder &mdash; LinkedIn recommendation will go here]</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">[Name]</p>
+                <p class="testimonial-role">[Role at Company]</p>
+            </div>
+        </div>
+
+        <!-- TODO: Replace with real LinkedIn recommendation. Fields below are placeholder. -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge linkedin">LinkedIn</span>
+            <p class="testimonial-quote placeholder">[Placeholder &mdash; LinkedIn recommendation will go here]</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">[Name]</p>
+                <p class="testimonial-role">[Role at Company]</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
 <!-- Education -->
 <section id="education">
     <div class="reveal">
@@ -3564,12 +3741,13 @@ const searchIndex = [
     // Sections
     { title: 'About', desc: '17+ years, engineering leader, mobile architect', section: 'about', icon: '👤', category: 'Sections' },
     { title: 'Featured Projects', desc: 'Provenance, Virtual Jaguar, iCube, iFly', section: 'projects', icon: '🚀', category: 'Sections' },
-    { title: 'Case Studies / Impact', desc: 'Wayfair $300k savings, NewsCorp leadership, Cameo, AI multi-agent CI', section: 'impact', icon: '📈', category: 'Sections' },
+    { title: 'Case Studies / Impact', desc: 'Wayfair $2M savings, NewsCorp leadership, Cameo, AI multi-agent CI', section: 'impact', icon: '📈', category: 'Sections' },
     { title: 'Consulting / Hire Me', desc: 'Mobile AI Launch Readiness Audit — 3 weeks, $25–35K fixed-fee', section: 'consulting', icon: '💼', category: 'Sections', url: '/consulting/' },
+    { title: 'What I\'m looking for', desc: 'Open to roles, consulting types, hard constraints, comp bands — direct read for recruiters', section: 'looking-for', icon: '🎯', category: 'Sections', url: '/looking-for/' },
     { title: 'AI Engineering Hub', desc: 'Multi-agent CI · MCP servers · 240p AI-built · How I use AI in production', section: 'ai', icon: '🤖', category: 'Sections', url: '/ai/' },
     { title: 'Site Status', desc: 'Live operational dashboard — Lighthouse, security, OSS impact', section: 'status', icon: '📊', category: 'Sections', url: '/status/' },
     { title: 'Multi-Agent CI Pipeline (blog)', desc: 'Long-form: 3 agents, 9 workflow files, model auto-selection by static diff analysis', section: 'blog', icon: '✍️', category: 'Writing', url: '/blog/multi-agent-ci-pipeline/' },
-    { title: 'Wayfair — $300k/year saved', desc: 'MP4 compression + caching, SwiftUI perf, Datadog bootup tracking', section: 'impact', icon: '💰', category: 'Case Studies' },
+    { title: 'Wayfair — ~$2M/year saved', desc: 'MP4 compression + caching, SwiftUI perf, Datadog bootup tracking', section: 'impact', icon: '💰', category: 'Case Studies' },
     { title: 'NewsCorp — iOS past Android', desc: '8-region team, shared platform SDK, Knewz launch from scratch', section: 'impact', icon: '🌍', category: 'Case Studies' },
     { title: 'Cameo — RN build + HD video', desc: 'Rebuilt React Native CI, shipped native HD video module', section: 'impact', icon: '🎥', category: 'Case Studies' },
     { title: 'AI Multi-Agent CI Pipeline', desc: 'Claude + Cursor + Kimi orchestration across Provenance, wiki, libretro', section: 'impact', icon: '🤖', category: 'Case Studies' },

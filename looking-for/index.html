@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>What I'm looking for — Joseph Mattiello</title>
+<meta name="description" content="A direct read on full-time and consulting engagements I'm interested in: Head of AI Platform, VP Eng, Director Mobile, fractional CTO. Comp bands, hard constraints, and how to start the conversation.">
+<link rel="canonical" href="https://joemattiello.dev/looking-for/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="What I'm looking for — Joseph Mattiello">
+<meta property="og:description" content="Recruiter / founder reference. Full-time and consulting engagements I'm open to, hard constraints, comp bands, and how to start the conversation.">
+<meta property="og:url" content="https://joemattiello.dev/looking-for/">
+<meta property="og:image" content="https://joemattiello.dev/img/profile3.jpeg">
+
+<link rel="icon" href="/favicon.ico">
+<style>
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+}
+
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --text-primary: #e4e6ea;
+    --text-secondary: #8c919a;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-cyan); }
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.nav-brand a { color: var(--text-primary); }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Hero */
+header.hero {
+    padding: 5rem 0 3rem;
+}
+.hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--accent-green);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    background: rgba(0,229,153,0.06);
+    border: 1px solid rgba(0,229,153,0.2);
+    border-radius: 99px;
+}
+.pulse {
+    width: 7px; height: 7px;
+    background: var(--accent-green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
+h1.title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    max-width: 900px;
+}
+h1.title .accent { color: var(--accent-green); }
+.lede {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 760px;
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+}
+.last-updated {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+}
+
+/* Status callout */
+.status-callout {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    margin: 2.5rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+}
+.status-callout::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.status-callout-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+}
+.status-callout ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.status-callout li {
+    padding: 0.55rem 0 0.55rem 1.6rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    position: relative;
+    font-size: 1rem;
+}
+.status-callout li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent-green);
+    font-family: var(--font-mono);
+    font-weight: 700;
+}
+
+/* Section blocks */
+section.block {
+    margin-bottom: 4rem;
+}
+.section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.85rem;
+}
+h2.section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+p.section-lede {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 760px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Roles grid */
+.roles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+}
+.role-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem;
+    transition: all 0.3s var(--ease-out-expo);
+    display: flex;
+    flex-direction: column;
+}
+.role-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-3px);
+}
+.role-meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.75rem;
+    color: var(--accent-green);
+}
+.role-meta.consulting { color: var(--accent-cyan); }
+.role-meta.advisory { color: var(--accent-amber); }
+.role-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.role-card p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+
+/* Yes/No grid */
+.fit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+.fit-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.75rem;
+}
+.fit-card.yes { border-left: 3px solid var(--accent-green); }
+.fit-card.no { border-left: 3px solid var(--accent-pink); }
+.fit-card h4 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+.fit-card.yes h4 { color: var(--accent-green); }
+.fit-card.no h4 { color: var(--accent-pink); }
+.fit-card ul { list-style: none; padding: 0; margin: 0; }
+.fit-card li {
+    color: var(--text-secondary);
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    line-height: 1.55;
+    font-size: 0.94rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.fit-card li:last-child { border-bottom: none; }
+.fit-card.yes li::before { content: '+'; position: absolute; left: 0; color: var(--accent-green); font-weight: 700; }
+.fit-card.no li::before { content: '−'; position: absolute; left: 0; color: var(--accent-pink); font-weight: 700; }
+@media (max-width: 700px) { .fit-grid { grid-template-columns: 1fr; } }
+
+/* Bring list */
+.bring {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 2rem;
+}
+.bring ul { list-style: none; padding: 0; margin: 0; }
+.bring li {
+    padding: 1rem 0 1rem 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    position: relative;
+    color: var(--text-secondary);
+    line-height: 1.65;
+}
+.bring li:last-child { border-bottom: none; }
+.bring li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 1rem;
+    color: var(--accent-green);
+    font-family: var(--font-mono);
+    font-weight: 700;
+}
+.bring li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+
+/* Comp band block */
+.comp {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 2rem;
+}
+.comp ul { list-style: none; padding: 0; margin: 0; }
+.comp li {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: baseline;
+}
+.comp li:last-child { border-bottom: none; }
+.comp .comp-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-green);
+    flex: 0 0 auto;
+    min-width: 220px;
+}
+.comp .comp-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+.comp .comp-note {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    padding-top: 0.5rem;
+}
+@media (max-width: 600px) {
+    .comp .comp-label { min-width: 0; flex: 1 1 100%; }
+}
+
+/* Contact path table */
+.paths {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    overflow: hidden;
+}
+.path-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.path-row:last-child { border-bottom: none; }
+.path-row .path-label {
+    padding: 1rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--accent-green);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+}
+.path-row .path-action {
+    padding: 1rem 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+}
+@media (max-width: 600px) {
+    .path-row { grid-template-columns: 1fr; }
+    .path-row .path-label { border-right: none; border-bottom: 1px solid var(--border-subtle); }
+}
+
+/* Reassurance bullets */
+.reassure {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 2rem;
+}
+.reassure ul { list-style: none; padding: 0; margin: 0; }
+.reassure li {
+    padding: 0.75rem 0 0.75rem 2rem;
+    position: relative;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.reassure li:last-child { border-bottom: none; }
+.reassure li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    top: 0.75rem;
+    color: var(--accent-cyan);
+    font-family: var(--font-mono);
+    font-weight: 700;
+}
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); }
+
+@media (max-width: 700px) {
+    h1.title { font-size: 1.8rem; }
+    .status-callout { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+    <div class="container nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <span class="here">looking-for</span>
+        </div>
+        <a href="/" class="nav-back">← Back to site</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="container">
+        <div class="hero-tag"><span class="pulse"></span> Recruiter / Founder Reference</div>
+        <h1 class="title">What I'm looking for — and what I'll <span class="accent">pass on</span>.</h1>
+        <p class="lede">A direct, opinionated read on the kinds of full-time and consulting engagements I'm interested in right now. Sharable URL — feel free to forward this page to a hiring manager who's wondering if I'd be a fit.</p>
+        <p class="last-updated">Last updated: 2026-05-01</p>
+
+        <!-- Status -->
+        <div class="status-callout">
+            <div class="status-callout-label">Current status</div>
+            <ul>
+                <li>Currently considering 1–2 consulting engagements for Q3 2026.</li>
+                <li>Selectively open to full-time conversations for Director / VP Eng / Head of AI Platform / CTO.</li>
+                <li>Located in NYC. Open to hybrid (NYC) and fully remote.</li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- Roles -->
+    <section class="block">
+        <div class="section-label">Roles I want to talk about</div>
+        <h2 class="section-title">Where the conversation is interesting</h2>
+        <p class="section-lede">Six shapes of engagement. If your role looks roughly like one of these, the call will be productive — for both of us.</p>
+        <div class="roles">
+            <div class="role-card">
+                <div class="role-meta">Full-time</div>
+                <h3>Head of AI Platform / Head of AI Infrastructure</h3>
+                <p>Building the engineering layer between AI capability and product. MCP servers, agent orchestration, eval harnesses, developer tooling. Series B+ companies with real product traction and ~50–500 engineers.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-meta">Full-time</div>
+                <h3>VP Engineering (Mobile-led product)</h3>
+                <p>Where mobile is the product or a strategic surface. Series B/C/D scale. Have at least one mobile team to lead. AI integration on the roadmap.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-meta">Full-time</div>
+                <h3>Director, Mobile Platform</h3>
+                <p>Multi-region mobile org. Cross-app SDK strategy. Performance, observability, release engineering. The NewsCorp role I held in 2019, scaled up.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-meta consulting">Consulting</div>
+                <h3>Fractional / advisory CTO or VP Eng</h3>
+                <p>5–15 hours/month retainer. Architecture sounding board, hiring panels, technical due-diligence, escalation contact. Founders with technical CEOs but no senior IC depth in mobile or AI.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-meta consulting">Consulting</div>
+                <h3>Mobile AI Launch Readiness Audit</h3>
+                <p>The productized 3-week engagement on <a href="/consulting/">/consulting/</a>. iOS team about to ship AI features and wants an honest pre-launch read.</p>
+            </div>
+            <div class="role-card">
+                <div class="role-meta consulting">Consulting</div>
+                <h3>Strategy days / single-day engagements</h3>
+                <p>Architecture review, hiring panel, due-diligence read, conference talk prep. $1,500–4,500/day. Best for &ldquo;we need an outside read in the next two weeks&rdquo; situations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hard constraints -->
+    <section class="block">
+        <div class="section-label">Hard constraints</div>
+        <h2 class="section-title">Yes / no, no ambiguity</h2>
+        <p class="section-lede">If your role doesn't match these, save us both the round-trip. If it does, we should talk.</p>
+        <div class="fit-grid">
+            <div class="fit-card yes">
+                <h4>Yes</h4>
+                <ul>
+                    <li>Series B+ companies with real product-market fit</li>
+                    <li>Teams of at least 5 mobile engineers OR a meaningful AI infrastructure mandate</li>
+                    <li>A clear technical leader I'd report to (CTO / VP / SVP Eng) for FT roles</li>
+                    <li>Compensation in market range for the role (typical NYC Director AI/VP Eng band: $300K–600K+ total comp)</li>
+                    <li>Equity that's not obviously underwater</li>
+                    <li>Timezones overlapping at least 4 hours with US Eastern</li>
+                </ul>
+            </div>
+            <div class="fit-card no">
+                <h4>No</h4>
+                <ul>
+                    <li>Pre-PMF / pre-seed startups looking for a CTO co-founder</li>
+                    <li>Greenfield rewrites with no engineers to lead</li>
+                    <li>Fully-React-Native shops with no native mobile path</li>
+                    <li>&ldquo;We need someone to manage the offshore team&rdquo; without scope or autonomy</li>
+                    <li>Crypto / NFT / gambling / surveillance-adjacent products</li>
+                    <li>IC-only roles below Staff level</li>
+                    <li>Non-disclosed comp bands (&ldquo;competitive&rdquo; without a number)</li>
+                    <li>Unpaid trial projects masquerading as interview rounds</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- What I bring -->
+    <section class="block">
+        <div class="section-label">What I bring</div>
+        <h2 class="section-title">The track record behind the criteria</h2>
+        <p class="section-lede">Not a brag wall. The shape of the work I'd do for you, mapped to the work I've already shipped.</p>
+        <div class="bring">
+            <ul>
+                <li><strong>17+ years iOS, native-first.</strong> I started before the SDK existed; I know what every layer of the Apple platform actually does.</li>
+                <li><strong>Three production AI agents in CI right now.</strong> Multi-agent orchestration with Claude/Cursor/Kimi across the Provenance org — pattern-tested, not slideware. (See <a href="/#impact">/#impact</a> case study and <a href="/ai/">/ai/</a>.)</li>
+                <li><strong>Director-level scale management.</strong> Led 8-region team at NewsCorp. Hired in Barcelona, Bangalore, Buenos Aires. Know what global mobile orgs actually need.</li>
+                <li><strong>3 US patents, 2 acquisitions.</strong> Sense Networks portfolio acquired by YP then Verve. I think about IP and durable value, not just code.</li>
+                <li><strong>Open source maintainership.</strong> 13 years on Provenance, App Store launch Jan 2025, 388K+ downloads. I ship for users, not for the demo.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Compensation -->
+    <section class="block">
+        <div class="section-label">Compensation</div>
+        <h2 class="section-title">The number, named</h2>
+        <p class="section-lede">Direct, not coy. If you can't post a band, you can't recruit me — but specific role determines specific number.</p>
+        <div class="comp">
+            <ul>
+                <li><span class="comp-label">FT base salary</span><span class="comp-value">USD 280K–400K depending on role tier and equity</span></li>
+                <li><span class="comp-label">FT total comp (NYC market)</span><span class="comp-value">USD 400K–800K+ depending on role tier and stage of company</span></li>
+                <li><span class="comp-label">Consulting day rate</span><span class="comp-value">USD 1,500–4,500/day depending on engagement scope</span></li>
+                <li><span class="comp-note">Open to discussing — don't write me off because I named a number. Specific role determines specific number.</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- How to start the conversation -->
+    <section class="block">
+        <div class="section-label">How to start the conversation</div>
+        <h2 class="section-title">The right path, by intent</h2>
+        <p class="section-lede">Match your reason to the channel; you'll get a faster, better reply.</p>
+        <div class="paths">
+            <div class="path-row">
+                <div class="path-label">Hiring</div>
+                <div class="path-action"><a href="https://www.linkedin.com/in/joemattiello/">LinkedIn DM</a> — include role title, comp band, and stage of company.</div>
+            </div>
+            <div class="path-row">
+                <div class="path-label">Consulting</div>
+                <div class="path-action"><a href="/consulting/">/consulting/</a> inquiry path — has the email template and engagement options.</div>
+            </div>
+            <div class="path-row">
+                <div class="path-label">Curious</div>
+                <div class="path-action"><a href="/#impact">/#impact</a> — case studies. Read those first.</div>
+            </div>
+            <div class="path-row">
+                <div class="path-label">Press / podcasting</div>
+                <div class="path-action"><a href="https://www.linkedin.com/in/joemattiello/">LinkedIn</a> — fastest reply path for media.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 30-min reassurance -->
+    <section class="block">
+        <div class="section-label">What you'll get from a 30-minute call</div>
+        <h2 class="section-title">Your time is worth a real answer</h2>
+        <div class="reassure">
+            <ul>
+                <li>A direct answer on whether the role/scope is interesting.</li>
+                <li>Specific reasons for yes or no, not vague platitudes.</li>
+                <li>If it's a no, a recommendation of someone else who'd be a better fit (when I can).</li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<footer class="page">
+    <div class="container">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/consulting/">Consulting</a> · <a href="/#impact">Case studies</a> · <a href="/status/">Site status</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
