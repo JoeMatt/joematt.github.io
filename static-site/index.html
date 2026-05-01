@@ -1128,6 +1128,107 @@
             .cs-metric-value { font-size: 2rem; }
         }
 
+        /* ===== TESTIMONIALS ===== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .testimonial-card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s var(--ease-out-expo), border-color 0.3s var(--ease-out-expo), box-shadow 0.3s var(--ease-out-expo);
+        }
+        .testimonial-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-glow);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+        }
+        .testimonial-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.55rem;
+            border-radius: 99px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(0,0,0,0.25);
+        }
+        .testimonial-badge.press {
+            color: var(--accent-amber);
+            border-color: rgba(255, 184, 0, 0.25);
+        }
+        .testimonial-badge.linkedin {
+            color: var(--accent-cyan);
+            border-color: rgba(0, 194, 255, 0.25);
+        }
+        .testimonial-quote {
+            position: relative;
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0 0 1.25rem;
+            padding-left: 1.5rem;
+        }
+        .testimonial-quote::before {
+            content: '\201C';
+            position: absolute;
+            left: -0.1rem;
+            top: -0.6rem;
+            font-size: 2rem;
+            line-height: 1;
+            color: var(--accent-green);
+            font-family: var(--font-display);
+        }
+        .testimonial-quote.placeholder {
+            font-style: italic;
+            color: var(--text-muted);
+        }
+        .testimonial-attribution {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        .testimonial-role {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin: 0.2rem 0 0;
+            letter-spacing: 0.02em;
+        }
+        .testimonial-source-link {
+            display: inline-block;
+            margin-top: 0.85rem;
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+        .testimonial-source-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 960px) {
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .testimonials-grid { grid-template-columns: 1fr; }
+        }
+
         /* ===== PROJECTS ===== */
         .projects-grid {
             display: grid;
@@ -3128,6 +3229,82 @@
                     <h4>GNUstep Official Developer</h4>
                     <p>Accepted as an official GNU/FSF project developer through major PBXBuild contributions</p>
                 </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
+<!-- Testimonials -->
+<section id="testimonials">
+    <div class="reveal">
+        <div class="section-label">Testimonials</div>
+        <h2 class="section-title">What people say</h2>
+        <p class="section-desc">A mix of press quotes about my work and LinkedIn recommendations from colleagues and collaborators.</p>
+    </div>
+
+    <div class="testimonials-grid">
+        <!-- Card 1: Real press quote — MobileGamer.biz -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge press">Press</span>
+            <p class="testimonial-quote">Mattiello's emulator Provenance&hellip; grew well past that original enthusiast crowd.</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">Daryl Baxter</p>
+                <p class="testimonial-role">MobileGamer.biz &middot; April 2026</p>
+                <a class="testimonial-source-link" href="https://mobilegamer.biz/emulation-arrived-on-the-app-store-two-years-ago-60m-downloads-later-whats-changed/" target="_blank" rel="noopener">&rarr; source</a>
+            </div>
+        </div>
+
+        <!-- Card 2: Real press quote — Pocket Gamer -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge press">Press</span>
+            <p class="testimonial-quote">Developer Joseph Mattiello has launched a new emulator on mobile.</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">Pocket Gamer</p>
+                <p class="testimonial-role">Dedicated Provenance hub</p>
+                <a class="testimonial-source-link" href="https://www.pocketgamer.com/provenance/" target="_blank" rel="noopener">&rarr; source</a>
+            </div>
+        </div>
+
+        <!-- Card 3: Real press quote — iMore -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge press">Press</span>
+            <p class="testimonial-quote">All the nostalgic arcade goodness you want on mobile.</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">iMore</p>
+                <p class="testimonial-role">Exclusive coverage</p>
+                <a class="testimonial-source-link" href="https://www.imore.com/gaming/the-provenance-playstation-nintendo-and-atari-game-emulator-is-now-available-for-beta-download-on-iphone-and-ipad-and-an-apple-tv-version-is-next" target="_blank" rel="noopener">&rarr; source</a>
+            </div>
+        </div>
+
+        <!-- TODO: Replace with real LinkedIn recommendation. Fields below are placeholder. -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge linkedin">LinkedIn</span>
+            <p class="testimonial-quote placeholder">[Placeholder &mdash; LinkedIn recommendation will go here]</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">[Name]</p>
+                <p class="testimonial-role">[Role at Company]</p>
+            </div>
+        </div>
+
+        <!-- TODO: Replace with real LinkedIn recommendation. Fields below are placeholder. -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge linkedin">LinkedIn</span>
+            <p class="testimonial-quote placeholder">[Placeholder &mdash; LinkedIn recommendation will go here]</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">[Name]</p>
+                <p class="testimonial-role">[Role at Company]</p>
+            </div>
+        </div>
+
+        <!-- TODO: Replace with real LinkedIn recommendation. Fields below are placeholder. -->
+        <div class="testimonial-card reveal">
+            <span class="testimonial-badge linkedin">LinkedIn</span>
+            <p class="testimonial-quote placeholder">[Placeholder &mdash; LinkedIn recommendation will go here]</p>
+            <div class="testimonial-attribution">
+                <p class="testimonial-author">[Name]</p>
+                <p class="testimonial-role">[Role at Company]</p>
             </div>
         </div>
     </div>
