@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>142 acid tests for a 30-year-old emulator, in one PR · Joseph Mattiello</title>
+<meta name="description" content="Strict hardware-conformance tests written in 68K assembly that run inside the Virtual Jaguar core and write a pass/fail signature to a known RAM address. 122/142 pass; the 19 failures are real bugs, each one now a checked-in regression gate. PR #130.">
+<link rel="canonical" href="https://joemattiello.dev/blog/acid-tests-for-virtual-jaguar/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="142 acid tests for a 30-year-old emulator, in one PR">
+<meta property="og:description" content="68K-assembly acid tests for Virtual Jaguar. 122/142 pass. The 19 failures are real bugs, each one a checked-in regression gate. Probable Doom 1.5x-too-fast root cause inside.">
+<meta property="og:url" content="https://joemattiello.dev/blog/acid-tests-for-virtual-jaguar/">
+<meta property="og:image" content="https://joemattiello.dev/img/og-card.png">
+<meta property="article:published_time" content="2026-05-02">
+<meta property="article:author" content="Joseph Mattiello">
+<meta property="article:tag" content="Open Source">
+<meta property="article:tag" content="Emulation">
+<meta property="article:tag" content="Atari Jaguar">
+<meta property="article:tag" content="Testing">
+<meta property="article:tag" content="AI engineering">
+
+<!-- JSON-LD: Article -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "142 acid tests for a 30-year-old emulator, in one PR",
+    "datePublished": "2026-05-02",
+    "author": { "@id": "https://joemattiello.dev/#person" },
+    "publisher": { "@id": "https://joemattiello.dev/#person" },
+    "url": "https://joemattiello.dev/blog/acid-tests-for-virtual-jaguar/"
+}
+</script>
+
+<link rel="icon" href="/favicon.ico">
+<style>
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+}
+
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --text-primary: #e4e6ea;
+    --text-secondary: #b3b6bc;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    font-size: 17px;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; border-bottom: 1px solid rgba(0,229,153,0.25); }
+a:hover { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); }
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+.container-wide { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.nav-brand a { color: var(--text-primary); border-bottom: none; }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back { border-bottom: 1px solid var(--border-subtle); }
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Article header */
+header.article-head {
+    padding: 4rem 0 2rem;
+}
+.byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.byline .author { color: var(--accent-green); }
+.byline .author a { color: var(--accent-green); border-bottom: none; }
+.byline .divider { color: var(--text-muted); }
+h1.headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+.dek {
+    font-size: 1.18rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+.tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1.5rem;
+}
+.tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    background: var(--bg-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.head-rule {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 1rem 0 0;
+}
+
+/* Article body */
+article.body {
+    padding: 2rem 0 3rem;
+}
+article.body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 3rem 0 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+article.body h2 .num {
+    color: var(--accent-green);
+    font-size: 0.8em;
+    margin-right: 0.5rem;
+    font-weight: 400;
+}
+article.body h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin: 2rem 0 0.85rem;
+    color: var(--text-primary);
+}
+article.body p {
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+article.body p code, article.body li code, article.body td code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    color: var(--accent-green);
+}
+article.body ul, article.body ol {
+    margin: 0 0 1.5rem 1.5rem;
+    color: var(--text-primary);
+}
+article.body li { margin-bottom: 0.5rem; }
+article.body strong { color: var(--text-primary); font-weight: 600; }
+article.body em { color: var(--text-primary); font-style: italic; }
+article.body blockquote {
+    border-left: 3px solid var(--accent-green);
+    padding: 0.5rem 0 0.5rem 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+article.body pre {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+article.body pre code {
+    font-family: var(--font-mono);
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+article.body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    overflow: hidden;
+}
+article.body th, article.body td {
+    padding: 0.55rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+article.body th {
+    background: var(--bg-card);
+    color: var(--accent-green);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+}
+article.body td.num, article.body th.num { text-align: right; font-variant-numeric: tabular-nums; }
+article.body tr.total td { background: var(--bg-card); color: var(--text-primary); font-weight: 700; border-top: 1px solid var(--border-glow); }
+.callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    margin: 1.75rem 0;
+    font-size: 0.96rem;
+    color: var(--text-secondary);
+}
+.callout strong { color: var(--accent-cyan); }
+.section-rule {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 3rem 0 0;
+}
+
+/* About author */
+.about-author {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 2.25rem 2.5rem;
+    margin: 3rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.about-author::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.about-author h3 {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent-green);
+    margin-bottom: 0.85rem;
+}
+.about-author .author-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+.about-author p {
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+.about-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+.about-cta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.about-cta:hover { border-color: var(--border-glow); color: var(--accent-green); }
+.about-cta.primary {
+    background: var(--accent-green);
+    color: var(--bg-deep);
+    border-color: var(--accent-green);
+    font-weight: 700;
+}
+.about-cta.primary:hover { background: #33edb3; color: var(--bg-deep); }
+
+/* Article footer nav */
+.article-foot-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+}
+.article-foot-nav a { color: var(--text-secondary); border-bottom: none; }
+.article-foot-nav a:hover { color: var(--accent-green); }
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); border-bottom: none; }
+footer.page a:hover { color: var(--accent-green); }
+
+@media (max-width: 700px) {
+    body { font-size: 16px; }
+    h1.headline { font-size: 1.7rem; }
+    .about-author { padding: 1.75rem 1.5rem; }
+    article.body pre { font-size: 0.78rem; padding: 1rem; }
+    article.body table { font-size: 0.78rem; }
+    article.body th, article.body td { padding: 0.45rem 0.55rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+    <div class="container-wide nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <a href="/blog/" style="color:var(--text-secondary);border-bottom:none">blog</a>
+            <span class="crumb">/</span>
+            <span class="here">acid-tests-for-virtual-jaguar</span>
+        </div>
+        <a href="/blog/" class="nav-back">← All posts</a>
+    </div>
+</nav>
+
+<header class="article-head">
+    <div class="container">
+        <div class="byline">
+            <span class="author">By <a href="/">Joseph Mattiello</a></span>
+            <span class="divider">·</span>
+            <span>2026-05-02</span>
+            <span class="divider">·</span>
+            <span>7 min read</span>
+        </div>
+        <h1 class="headline">142 acid tests for a 30-year-old emulator, in one PR</h1>
+        <p class="dek">Strict hardware-conformance tests written in 68K assembly that run inside the emulator and write a pass/fail signature to a known RAM address. 122/142 pass; the 19 failures are real bugs in the core, each one now a checked-in regression gate. <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> against <code>libretro/virtualjaguar-libretro</code>.</p>
+        <div class="tags-row">
+            <span class="tag">Open Source</span>
+            <span class="tag">Emulation</span>
+            <span class="tag">Atari Jaguar</span>
+            <span class="tag">Testing</span>
+            <span class="tag">AI engineering</span>
+        </div>
+        <div class="head-rule"></div>
+    </div>
+</header>
+
+<main>
+<article class="body">
+<div class="container">
+
+<h2>What landed</h2>
+
+<p><a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> against <code>libretro/virtualjaguar-libretro</code>: 142 strict hardware-conformance tests across 13 categories, all written in 68K assembly that runs inside the emulator. Each test writes a pass/fail signature to a known RAM address. A host-side runner reads the signature back. 122/142 pass on <code>develop</code> today.</p>
+
+<p>The 19 failures are real emulator bugs (or unmodelled hardware behavior). Each FAILing test is a checked-in regression gate. When somebody fixes the underlying bug, the test goes GREEN automatically.</p>
+
+<p>Suite runtime: 12 seconds. Was 30+ minutes before a one-line fix in <code>run.c</code>. The branch is <code>feature/acid-test-roms</code>. The architecture doc is <code>test/acid/README.md</code>.</p>
+
+<h2>Acid tests fail until the emulator is correct</h2>
+
+<p>Most regression tests are written to pass on the current implementation, so they only catch regressions from current behavior, not deviations from correct behavior. Acid tests invert that. Each test makes a strict claim about what real Jaguar hardware does, with exact expected bytes. If the emulator diverges, the test FAILs. The checked-in test is a description of the bug.</p>
+
+<p>That framing matters because the Jaguar core is deliberately not cycle-accurate. The OP&rsquo;s timing budget is loose. Bus contention isn&rsquo;t modelled. HLE BIOS doesn&rsquo;t match real BIOS in many places. We expect failures. Each FAIL is more useful than prose in a TODO doc.</p>
+
+<p>The working motto came out of an early design conversation:</p>
+
+<blockquote>
+we&rsquo;re not trying to write tests that work with our emulator, we&rsquo;re trying to write accurate tests that will fail unless our emulator is correct
+</blockquote>
+
+<h2>I had every blitter command bit wrong</h2>
+
+<p>The first batch of blitter tests all FAILed identically. The README I wrote at the time confidently documented a &ldquo;blitter source-data routing bug.&rdquo; Then GitHub Copilot&rsquo;s PR review pointed out that the entire <code>B_COMMAND</code> encoding I was using was bogus. I had <code>$0001C000</code> thinking that was &ldquo;LFU=copy source&rdquo;; bits 14-15 are unused and the LFU function actually lives in bits 21-24. I&rsquo;d also confused <code>DSTEN</code> (bit 3, <code>$08</code>) with <code>DSTWRZ</code> (bit 5, <code>$20</code>).</p>
+
+<p>13 of the 14 SRC-reading blitter tests recovered from FAIL to PASS in one round of fixes. The &ldquo;blitter bug&rdquo; I had documented didn&rsquo;t exist. It was my wrong test code all along.</p>
+
+<p>This is the single most important lesson from the work. An acid test is only as good as its encoding correctness. Tests are software too, and they have bugs. Volume of tests doesn&rsquo;t matter if the encodings are wrong; you&rsquo;d just be measuring a fixed point between two different bugs.</p>
+
+<h2>Generating the constants from the source</h2>
+
+<p>Two pieces of infrastructure landed to make that class of mistake mechanically impossible.</p>
+
+<p><strong>The constants oracle.</strong> A Python script (<code>test/acid/scripts/gen-jaguar-regs.py</code>) parses the actual emulator C headers (<code>src/tom/blitter.c</code>, <code>tom.h</code>, <code>gpu.h</code>, <code>jerry.h</code>, <code>dsp.h</code>) and emits a single vasm-friendly equates file at <code>test/acid/include/jaguar_regs.s</code>. Tests reference fields by name (<code>BCOMPEN</code>, <code>IRQ2_TIMER1</code>, <code>B_COMMAND</code>) and get the right bit, mechanically. Single source of truth. If the C source changes a bit position, the oracle picks it up the next time you run <code>make</code>.</p>
+
+<p><strong>The lint pass.</strong> <code>test/acid/scripts/lint-acid.py</code> walks every test&rsquo;s <code>B_COMMAND</code> literals and warns if any unknown bits are set beyond <code>BLIT_CMD_VALID_BITS = OR of all defined fields</code>. It also checks LFU operand consistency (an <code>LFU=$E (S|D)</code> op without <code>DSTEN</code> set means D reads as zero, so the test silently FAILs for the wrong reason). And it flags hard-coded <code>$F02238</code>-style MMIO literals where a symbolic name exists.</p>
+
+<p>Run via <code>make -C test/acid lint</code>. Currently clean across the suite.</p>
+
+<h2>Four sub-agents, one plan</h2>
+
+<p>With the oracle and linter as safety rails, I wrote a 600-line <code>COVERAGE_PLAN.md</code> partitioned into 11 chunks small enough for one sub-agent each. Then I dispatched four LLM agents in parallel via Claude Code&rsquo;s Task tool:</p>
+
+<ul>
+    <li>Agent A: blitter chunks 1+2+3 (tighten existing + pixsize matrix + LFU completion). 28 tests touched.</li>
+    <li>Agent B: GPU + DSP opcodes, chunks 5+6. 35 tests.</li>
+    <li>Agent C: OP scenarios + bus tests, chunks 7+9. 10 tests.</li>
+    <li>Agent D: strict timing + 68K coverage, chunks 10+11. 8 tests.</li>
+</ul>
+
+<p>Each agent got the COVERAGE_PLAN.md and the oracle as context. Each was instructed to run <code>make -C test/acid lint</code> before claiming done. Each was told that failures are valuable data, not a bad outcome. Each reported back which files passed, which failed, and what the diagnostic codes meant.</p>
+
+<p>~70 new tests in the time it took the slowest agent to finish (~25 minutes wall time). The agents also surfaced corrections to the prompt: one flagged that I&rsquo;d written the STORE-opcode encoding wrong (<code>rm</code> in bits 9..5, not <code>rn</code>); another discovered that the OP modifies the BITMAP <code>p0</code> phrase in place every halfline. Those corrections went back into the plan.</p>
+
+<p>The guard rails are doing the work. The agents weren&rsquo;t writing assembly from scratch with hardware docs open in another tab. They were filling slots in a constrained problem with a checker that ran before they declared done. That distinction is the whole point. Without the linter, I&rsquo;d have ~70 confidently-broken tests checked in and the suite would be lying to me.</p>
+
+<h2>What the suite found</h2>
+
+<p>19 FAILing tests, each one a checked-in regression gate that flips GREEN when the underlying bug is fixed. Six findings worth calling out specifically.</p>
+
+<p><strong>Event-clock vs 68K-instruction-clock divergence.</strong> Three strict-timing tests fail with a consistent ~1.7-2.0x ratio. This is almost certainly the root cause of the long-standing Doom-plays-1.5x-too-fast bug (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/131" target="_blank" rel="noopener">#131</a>). If the event clock advances faster than 68K instructions execute, games that use VBlank or PIT IRQs as their tick source see &ldquo;more time&rdquo; passing per actual second of CPU work. Their internal <code>gametic</code> advances faster, enemies move faster, demos play faster. Audio (clocked off SCLK independently) stays correct. That matches every reported symptom. The pinned test is <code>test/acid/tests/timing/vblank_60hz_exact.s</code>.</p>
+
+<p><strong>GPU/DSP control-register read shadowing.</strong> <code>GPUReadLong</code> (<code>gpu.c:338-342</code>) intercepts long-aligned reads in the <code>$F02100..$F0211F</code> range as register-bank reads before checking the control-RAM range, so 68K reads of <code>G_PC</code>, <code>G_CTRL</code>, <code>G_FLAGS</code> via long return wrong data. Same shape on DSP. Caught by <code>gpu_basic_run.s</code> and <code>dsp_basic_run.s</code>.</p>
+
+<p><strong><code>BlitterMidsummer2</code> hangs forever on 1bpp / 2bpp blits.</strong> Replicates for inner counts 4, 16, 64, 256. <code>test/acid/tests/blitter/copy_pix2_phrase.s</code> and a sibling are checked in as deliberate FAIL placeholders that document the hang. Once the hang is fixed, they&rsquo;ll be replaced with real assertions.</p>
+
+<p><strong>DSP IRQ delivery to 68K is broken.</strong> The JERRY pending bit gets set when DSP raises a CPU IRQ. The 68K never enters its handler at autovector <code>$68</code>. Real path bug.</p>
+
+<p><strong><code>DIVL</code> zero-divide trap doesn&rsquo;t fire.</strong> The 68020 <code>MULL</code>/<code>DIVL</code> HLE path that landed in v2.2.0 handles the math correctly but doesn&rsquo;t trap on <code>divisor == 0</code>.</p>
+
+<p><strong>Narrow-pixel blitter copies pick the wrong byte per pixel</strong> at 1/2/4 bpp partial pixel-mode copies.</p>
+
+<p>Six real bugs surfaced by infrastructure that didn&rsquo;t exist a few weeks ago. None of them got &ldquo;fixed&rdquo; in this PR; that&rsquo;s not what the PR is for. The PR is the gate.</p>
+
+<h2>The numbers</h2>
+
+<table>
+    <thead>
+        <tr><th>Category</th><th class="num">Tests</th><th class="num">Pass</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>smoke</td><td class="num">1</td><td class="num">1</td></tr>
+        <tr><td>memory</td><td class="num">10</td><td class="num">10</td></tr>
+        <tr><td>timing</td><td class="num">13</td><td class="num">10</td></tr>
+        <tr><td>irq</td><td class="num">7</td><td class="num">6</td></tr>
+        <tr><td>blitter</td><td class="num">35</td><td class="num">27</td></tr>
+        <tr><td>gpu</td><td class="num">18</td><td class="num">17</td></tr>
+        <tr><td>dsp</td><td class="num">21</td><td class="num">20</td></tr>
+        <tr><td>op</td><td class="num">10</td><td class="num">9</td></tr>
+        <tr><td>bus</td><td class="num">5</td><td class="num">2</td></tr>
+        <tr><td>hle</td><td class="num">6</td><td class="num">6</td></tr>
+        <tr><td>quirks</td><td class="num">11</td><td class="num">10</td></tr>
+        <tr><td>stress</td><td class="num">3</td><td class="num">3</td></tr>
+        <tr><td>perf</td><td class="num">3</td><td class="num">3</td></tr>
+        <tr class="total"><td>Total</td><td class="num">142</td><td class="num">122</td></tr>
+    </tbody>
+</table>
+
+<p>~1.5K lines of test code, plus ~700 lines of harness, scripts, and docs. Suite runtime 12 seconds.</p>
+
+<p>The 30-minute-to-12-second drop is the fix in <code>run.c</code>: poll the <code>ACID_RESULT</code> word each frame, break out of the frame loop when it&rsquo;s no longer zero. Tests that used to consume the full 600-frame budget waiting for the runner to give up now exit on the frame they actually complete on. One-line patch, ~150x speedup on the suite. The slow path was correct; it was just doing 600 frames of work per test for no reason.</p>
+
+<h2>What&rsquo;s next</h2>
+
+<p>The Doom timing test points at the fix path. Whoever writes the patch (me, a contributor, somebody who shows up out of nowhere on the libretro discord) will know they got it right when <code>vblank_60hz_exact.s</code> and the two adjacent timing tests flip from FAIL to PASS without any test changes. That&rsquo;s the contract.</p>
+
+<p>Same shape for the other five findings. Each one has a test pinned to it. The PR description in <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">#130</a> has the full list.</p>
+
+<p>If you maintain an emulator and you don&rsquo;t have an acid suite yet, the cost is real but bounded. Two weeks of evening work got the first 50 tests written, plus the oracle and linter. Less per-test after that, because the patterns repeat. The marginal cost of test #143 is something like 20 minutes, most of which is reading the hardware doc to confirm what the expected bytes should be.</p>
+
+<p>If the LLM-agent angle is the part that interests you: the agents were genuinely useful, and the work would have taken substantially longer without them. They were also wrong about specific things, and would have written confidently broken tests at scale if the linter hadn&rsquo;t been there to reject the output. The shape of the win is &ldquo;fast labor for a constrained, mechanically-checkable task,&rdquo; not &ldquo;judgment about whether a test is worth writing.&rdquo;</p>
+
+<p>PR is at <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">github.com/libretro/virtualjaguar-libretro/pull/130</a>.</p>
+
+<div class="section-rule"></div>
+
+<aside class="about-author">
+    <h3>About the author</h3>
+    <div class="author-name">Joseph Mattiello</div>
+    <p>L4 Mobile Engineer on Wayfair&rsquo;s App Infrastructure team. Maintainer of <a href="https://github.com/libretro/virtualjaguar-libretro" target="_blank" rel="noopener">virtualjaguar-libretro</a> and creator of <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance EMU</a> &mdash; 6,300 stars, 79 contributors, on the App Store since January 2025. 17+ years iOS, three US patents (Sense Networks, acquired twice), former Director of iOS Platform at NewsCorp. Based in NYC. Currently considering 1&ndash;2 consulting engagements for Q3 2026.</p>
+    <div class="about-cta-row">
+        <a href="/consulting/" class="about-cta primary">Consulting →</a>
+        <a href="/" class="about-cta">About</a>
+        <a href="https://github.com/JoeMatt" target="_blank" rel="noopener" class="about-cta">GitHub</a>
+        <a href="https://www.linkedin.com/in/joemattiello/" target="_blank" rel="noopener" class="about-cta">LinkedIn</a>
+    </div>
+</aside>
+
+<nav class="article-foot-nav">
+    <a href="/blog/">← All posts</a>
+    <a href="/blog/virtual-jaguar-v2-2-0/">Previous: Virtual Jaguar v2.2.0 →</a>
+</nav>
+
+</div>
+</article>
+</main>
+
+<footer class="page">
+    <div class="container-wide">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/blog/">Blog index</a> · <a href="/status/">Site status</a> · <a href="/consulting/">Consulting</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
