@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <title>142 acid tests for a 30-year-old emulator, in one PR · Joseph Mattiello</title>
-<meta name="description" content="Strict hardware-conformance tests written in 68K assembly that run inside the Virtual Jaguar core and write a pass/fail signature to a known RAM address. 122/142 pass; the 19 failures are real bugs, each one now a checked-in regression gate. PR #130.">
+<meta name="description" content="Strict hardware-conformance tests written in 68K assembly that run inside the Virtual Jaguar core. PR #130 shipped 142 tests, 122 passing. Postscript (2026-05-03): 8 of the 19 failures turned out to be test bugs. The lesson on tests-as-software, deepened.">
 <link rel="canonical" href="https://joemattiello.dev/blog/acid-tests-for-virtual-jaguar/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="142 acid tests for a 30-year-old emulator, in one PR">
-<meta property="og:description" content="68K-assembly acid tests for Virtual Jaguar. 122/142 pass. The 19 failures are real bugs, each one a checked-in regression gate. Probable Doom 1.5x-too-fast root cause inside.">
+<meta property="og:description" content="68K-assembly acid tests for Virtual Jaguar. 142 tests, 122 passing at publish; postscript 24 hours later finds 8 of the 19 failures were test bugs, not emulator bugs. The lesson on tests-as-software, with receipts.">
 <meta property="og:url" content="https://joemattiello.dev/blog/acid-tests-for-virtual-jaguar/">
 <meta property="og:image" content="https://joemattiello.dev/img/og-card.png">
 <meta property="article:published_time" content="2026-05-02">
@@ -469,7 +469,7 @@ footer.page a:hover { color: var(--accent-green); }
             <span class="divider">·</span>
             <span>2026-05-02</span>
             <span class="divider">·</span>
-            <span>7 min read</span>
+            <span>11 min read</span>
         </div>
         <h1 class="headline">142 acid tests for a 30-year-old emulator, in one PR</h1>
         <p class="dek">Strict hardware-conformance tests written in 68K assembly that run inside the emulator and write a pass/fail signature to a known RAM address. 122/142 pass; the 19 failures are real bugs in the core, each one now a checked-in regression gate. <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> against <code>libretro/virtualjaguar-libretro</code>.</p>
@@ -547,6 +547,8 @@ we&rsquo;re not trying to write tests that work with our emulator, we&rsquo;re t
 
 <p>19 FAILing tests, each one a checked-in regression gate that flips GREEN when the underlying bug is fixed. Six findings worth calling out specifically.</p>
 
+<div class="callout"><strong>Postscript pointer (2026-05-03):</strong> see the postscript at the bottom of this post. 8 of these 19 failures turned out to be test bugs, not emulator bugs, and three of the six findings below got retracted within 24 hours of this post going live. The original section is left intact below as a snapshot of what I thought I knew when I hit publish.</div>
+
 <p><strong>Event-clock vs 68K-instruction-clock divergence.</strong> Three strict-timing tests fail with a consistent ~1.7-2.0x ratio. This is almost certainly the root cause of the long-standing Doom-plays-1.5x-too-fast bug (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/131" target="_blank" rel="noopener">#131</a>). If the event clock advances faster than 68K instructions execute, games that use VBlank or PIT IRQs as their tick source see &ldquo;more time&rdquo; passing per actual second of CPU work. Their internal <code>gametic</code> advances faster, enemies move faster, demos play faster. Audio (clocked off SCLK independently) stays correct. That matches every reported symptom. The pinned test is <code>test/acid/tests/timing/vblank_60hz_exact.s</code>.</p>
 
 <p><strong>GPU/DSP control-register read shadowing.</strong> <code>GPUReadLong</code> (<code>gpu.c:338-342</code>) intercepts long-aligned reads in the <code>$F02100..$F0211F</code> range as register-bank reads before checking the control-RAM range, so 68K reads of <code>G_PC</code>, <code>G_CTRL</code>, <code>G_FLAGS</code> via long return wrong data. Same shape on DSP. Caught by <code>gpu_basic_run.s</code> and <code>dsp_basic_run.s</code>.</p>
@@ -585,6 +587,8 @@ we&rsquo;re not trying to write tests that work with our emulator, we&rsquo;re t
     </tbody>
 </table>
 
+<div class="callout"><strong>Updated 2026-05-03:</strong> PRs <a href="https://github.com/libretro/virtualjaguar-libretro/pull/135" target="_blank" rel="noopener">#135</a> + <a href="https://github.com/libretro/virtualjaguar-libretro/pull/136" target="_blank" rel="noopener">#136</a> (merged) and <a href="https://github.com/libretro/virtualjaguar-libretro/pull/139" target="_blank" rel="noopener">#139</a> (open) recover 8 more tests via test-side fixes. Pending #139&rsquo;s merge, the rate is 130/142. See the postscript.</div>
+
 <p>~1.5K lines of test code, plus ~700 lines of harness, scripts, and docs. Suite runtime 12 seconds.</p>
 
 <p>The 30-minute-to-12-second drop is the fix in <code>run.c</code>: poll the <code>ACID_RESULT</code> word each frame, break out of the frame loop when it&rsquo;s no longer zero. Tests that used to consume the full 600-frame budget waiting for the runner to give up now exit on the frame they actually complete on. One-line patch, ~150x speedup on the suite. The slow path was correct; it was just doing 600 frames of work per test for no reason.</p>
@@ -600,6 +604,41 @@ we&rsquo;re not trying to write tests that work with our emulator, we&rsquo;re t
 <p>If the LLM-agent angle is the part that interests you: the agents were genuinely useful, and the work would have taken substantially longer without them. They were also wrong about specific things, and would have written confidently broken tests at scale if the linter hadn&rsquo;t been there to reject the output. The shape of the win is &ldquo;fast labor for a constrained, mechanically-checkable task,&rdquo; not &ldquo;judgment about whether a test is worth writing.&rdquo;</p>
 
 <p>PR is at <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">github.com/libretro/virtualjaguar-libretro/pull/130</a>.</p>
+
+<h2>Postscript (2026-05-03): 8 of the 19 failures were the tests, not the emulator</h2>
+
+<p>A day after this post went live, three follow-up PRs recovered 8 of the 19 originally-failing tests by fixing the test code. The emulator code paths in all three PRs were verified correct via tracing.</p>
+
+<ul>
+    <li><strong><a href="https://github.com/libretro/virtualjaguar-libretro/pull/135" target="_blank" rel="noopener"><code>#135</code></a> (timing, 3 tests).</strong> Busy-loop cycle counts were wrong. Each test had a hand-counted estimate of how many 68K cycles its counter loop took per iteration, and each estimate was off by enough that the loop measured the wrong wall-clock window. <code>vblank_60hz_exact</code> assumed 10 cycles for a <code>subq.l/bne.s</code> pair; it&rsquo;s 18. <code>halfline_period_us</code> undercounted by ~25% because UAE 68K&rsquo;s MMIO timing for <code>move.w abs.L,Dn</code> charges extra bus cycles per access. <code>pit_countdown_rate</code> had the same bug plus stale arithmetic from before PR #134 fixed the actual PIT clock rate.</li>
+    <li><strong><a href="https://github.com/libretro/virtualjaguar-libretro/pull/136" target="_blank" rel="noopener"><code>#136</code></a> (blitter + OP, 2 tests).</strong> <code>bcompen_basic</code> had a comment that ended in <code>?</code> because I wasn&rsquo;t sure whether <code>PATDSEL</code> should be set; the linter couldn&rsquo;t help, since <code>PATDSEL</code> is a valid bit and was just missing. Without it, BCOMPEN&rsquo;s mask gated which dest pixels got written but the data was the source byte itself, not the pattern. <code>op_gpu_int_object</code> was reading the GPU IRQ latch from the wrong register: <code>gpu_flags</code> (Z/N/C condition codes) instead of <code>gpu_control</code> (the IRQ latches live at offset <code>+$14</code>).</li>
+    <li><strong><a href="https://github.com/libretro/virtualjaguar-libretro/pull/139" target="_blank" rel="noopener"><code>#139</code></a> (gpu/dsp, 3 tests).</strong> <code>gpu_basic_run</code> and <code>dsp_basic_run</code> had a slab-overflow bug: the tests filled GPU/DSP local RAM with NOPs and spun the 68K for 500 iterations, but the GPU runs at ~2x the 68K rate plus higher IPC, so PC walked off the end of the slab into RAM initialized with <code>JaguarRand()</code>. Random opcodes decoded as JUMP/JR with bogus targets, landing PC at addresses like <code>0x9F0E</code>. Fix: bigger slabs (full 4KB / 8KB), shorter spin (20-50 iterations). <code>dsp_irq_to_68k</code> installed its handler at 68K-architectural autovector <code>$68</code>; on Jaguar, TOM/JERRY return user vector 64 (<code>$100</code>) on the data bus for all hardware IRQs, so the handler at <code>$68</code> was never reached. Plus the test asserted that the handler ran AND that the JERRY pending bit was still set, but the handler explicitly ack&rsquo;d the pending bit on entry, so the second assertion could never pass even with a correct IRQ chain.</li>
+</ul>
+
+<p>That&rsquo;s 8 of 19. Three retractions to the &ldquo;What the suite found&rdquo; list above:</p>
+
+<ul>
+    <li><strong>The GPU/DSP control-register read shadowing claim was wrong.</strong> Those two tests were failing on slab overflow, not on a read-shadowing bug. The emulator path was verified correct via tracing in <code>#139</code>.</li>
+    <li><strong>The &ldquo;DSP IRQ delivery to 68K is broken&rdquo; claim was wrong.</strong> The IRQ chain works correctly. <code>checkForIRQToHandle</code> is consumed at the very next instruction in the same <code>m68k_execute</code> slice. A prior agent&rsquo;s hypothesis about a deferred-IRQ-during-spin-loop bug was disproved by tracing.</li>
+    <li><strong>The Doom event-clock divergence framing was wrong.</strong> The 1.7-2.0x ratio I reported was the timing tests&rsquo; wrong busy-loop cycle estimate (10 vs the actual 18), not the event clock running fast. Whether the Doom-plays-1.5x-too-fast bug has a different root cause is now an open question; <code>vblank_60hz_exact.s</code> no longer points at it.</li>
+</ul>
+
+<p>What&rsquo;s left: the <code>DIVL</code> zero-divide trap, the narrow-pixel blitter copies, and the <code>BlitterMidsummer2</code> hang are still real emulator bugs. PR #134 (separate work, before this writeup landed) did fix a real PIT clock bug surfaced by <code>pit_countdown_rate</code>. So 4 of the 19 confirmed real, 8 confirmed test bugs, 7 still pending diagnosis.</p>
+
+<p>The original post made the right point about &ldquo;tests are software too&rdquo; but understated it. The full picture: <strong>the failure rate on this suite isn&rsquo;t 100% signal.</strong> As of today it&rsquo;s running about 1 in 3 real (~33% confirmed real, ~42% confirmed test bugs, the rest pending diagnosis). The oracle-and-linter rails catch one class of test bug &mdash; wrong bit positions, wrong MMIO addresses &mdash; but not these:</p>
+
+<ul>
+    <li><strong>Cycle-count math.</strong> Counting cycles from the M68K manual is approximate; UAE has its own quirks. The linter can&rsquo;t know what wall-clock window your busy loop actually produces.</li>
+    <li><strong>Wrong-register reads.</strong> Both <code>gpu_flags</code> and <code>gpu_control</code> are valid register names with valid offsets. The linter can&rsquo;t know which one your test intends to read.</li>
+    <li><strong>Slab sizing.</strong> Whether your NOP slab is big enough for your spin window is a runtime property of the target chip&rsquo;s execution rate, not a syntactic property of the test.</li>
+    <li><strong>Vector convention.</strong> Both <code>$68</code> (68K autovector) and <code>$100</code> (Jaguar HW IACK return) are valid 68K vectors. The linter can&rsquo;t know which the platform uses.</li>
+</ul>
+
+<p>GitHub Copilot&rsquo;s PR review caught real issues across all three follow-up PRs: comment vs. code mismatches, contradictory headers (file says &plusmn;5% tolerance, code enforces &plusmn;10%), command-bit breakdowns inconsistent with the actual literal value. Each got addressed in a follow-up commit. The original post implied the Copilot save was a one-time event; it isn&rsquo;t, it&rsquo;s structural. Layered review (linter, then Copilot, then a human PR pass) catches more than any single layer.</p>
+
+<p>None of this changes the architecture. It calibrates the expectation: when you&rsquo;re writing acid tests in assembly for a platform you don&rsquo;t have hardware for, the first ~40% of FAIL results in any new bucket should be treated as test bugs until proven otherwise. The path forward is the same as it was. Each FAIL is a checked-in claim, retract or fix in the PR review when the claim is wrong, fix the emulator when the claim is right.</p>
+
+<p>PRs: <a href="https://github.com/libretro/virtualjaguar-libretro/pull/135" target="_blank" rel="noopener">#135</a> (merged), <a href="https://github.com/libretro/virtualjaguar-libretro/pull/136" target="_blank" rel="noopener">#136</a> (merged), <a href="https://github.com/libretro/virtualjaguar-libretro/pull/139" target="_blank" rel="noopener">#139</a> (open).</p>
 
 <div class="section-rule"></div>
 
