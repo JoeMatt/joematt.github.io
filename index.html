@@ -1698,6 +1698,90 @@
             transform: translateY(-2px);
         }
 
+        /* ===== LIVE GITHUB STATS ===== */
+        .gh-stats {
+            margin-top: 4rem;
+            padding: 2.5rem 2rem;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+        .gh-stats::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+        }
+        .gh-stats-header { text-align: center; margin-bottom: 1.75rem; }
+        .gh-stats-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            color: var(--text-primary);
+        }
+        .gh-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .gh-stats-card {
+            display: block;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 0.5rem;
+            background: var(--bg-surface);
+            transition: all 0.3s var(--ease-out-expo);
+            text-decoration: none;
+        }
+        .gh-stats-card:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-2px);
+        }
+        .gh-stats-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .gh-stars-chart {
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 2rem;
+            text-align: center;
+        }
+        .gh-stars-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .gh-stars-chart a {
+            display: inline-block;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 0.75rem;
+            background: var(--bg-surface);
+            transition: all 0.3s var(--ease-out-expo);
+            max-width: 100%;
+        }
+        .gh-stars-chart a:hover {
+            border-color: var(--border-glow);
+        }
+        .gh-stars-chart img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+        @media (max-width: 700px) {
+            .gh-stats { padding: 1.5rem 1rem; }
+            .gh-stats-grid { grid-template-columns: 1fr; }
+        }
+
         /* ===== EDUCATION ===== */
         .education-card {
             background: var(--bg-card);
@@ -2352,7 +2436,7 @@
             </p>
             <div class="hero-cta-stack">
                 <a href="/consulting/" class="hero-cta-primary">
-                    <div class="cta-tag">Mobile AI Launch Readiness · 3 weeks · $25–35K fixed</div>
+                    <div class="cta-tag">Consulting · Strategy → Audit → Retainer → Fractional · from $1,800</div>
                     <div class="cta-headline">
                         <span>iOS engineering meets AI infrastructure.</span>
                         <span class="cta-arrow">→</span>
@@ -2574,7 +2658,7 @@
 <section id="impact">
     <div class="reveal">
         <div class="section-label">Case Studies</div>
-        <h2 class="section-title">Where I've moved the needle</h2>
+        <h2 class="section-title">Where the work shipped</h2>
         <p class="section-desc">Selected work where leadership decisions, technical depth, or both translated into measurable business outcomes. Numbers below are real or directly observable; story expanded on request.</p>
     </div>
     <div class="case-studies">
@@ -3112,6 +3196,29 @@
             <div class="link-preview"><img src="https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png" alt="Flycast" loading="lazy" width="300" height="200"><div class="link-preview-label">github.com/flyinghead/flycast</div></div>
         </a>
     </div>
+
+    <!-- Live GitHub stats block -->
+    <div class="gh-stats reveal">
+        <div class="gh-stats-header">
+            <div class="section-label" style="text-align:center;">Live · refreshed daily</div>
+            <h3 class="gh-stats-title">What GitHub looks like right now</h3>
+        </div>
+        <div class="gh-stats-grid">
+            <a href="https://github.com/JoeMatt" target="_blank" rel="noopener" class="gh-stats-card">
+                <img src="https://github-readme-stats.vercel.app/api?username=JoeMatt&amp;theme=dark&amp;hide_border=true&amp;include_all_commits=true&amp;count_private=false&amp;bg_color=11141a&amp;title_color=00e599&amp;text_color=e4e6ea&amp;icon_color=00e599&amp;ring_color=00c2ff" alt="JoeMatt GitHub stats" loading="lazy">
+            </a>
+            <a href="https://github.com/JoeMatt" target="_blank" rel="noopener" class="gh-stats-card">
+                <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=JoeMatt&amp;layout=compact&amp;theme=dark&amp;hide_border=true&amp;bg_color=11141a&amp;title_color=00e599&amp;text_color=e4e6ea&amp;langs_count=8" alt="JoeMatt top languages" loading="lazy">
+            </a>
+        </div>
+        <div class="gh-stars-chart">
+            <h4 class="gh-stars-title">Provenance EMU — 13 years of star history</h4>
+            <a href="https://star-history.com/#Provenance-Emu/Provenance&amp;Date" target="_blank" rel="noopener">
+                <img src="https://api.star-history.com/svg?repos=Provenance-Emu/Provenance&amp;type=Date&amp;theme=dark" alt="Provenance EMU star history chart" loading="lazy">
+            </a>
+        </div>
+    </div>
+
     <div class="oss-more reveal">
         <a href="https://github.com/JoeMatt" target="_blank" rel="noopener">View all on GitHub →</a>
     </div>

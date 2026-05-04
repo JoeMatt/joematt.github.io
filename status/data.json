@@ -1,16 +1,16 @@
 {
-  "last_updated": "2026-05-04T07:03:18Z",
-  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/runs/25305615795",
+  "last_updated": "2026-05-04T07:08:25Z",
+  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/runs/25305799486",
   "html_check": {
     "passed": false,
     "error_count": 1
   },
   "lighthouse": {
-    "performance": 89,
+    "performance": 97,
     "accessibility": 93,
     "best_practices": 100,
     "seo": 100,
-    "report_url": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1777878182112-72053.report.html"
+    "report_url": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1777878488657-14569.report.html"
   },
   "observatory": {
     "grade": "C",
