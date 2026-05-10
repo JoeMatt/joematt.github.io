@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<title>Virtual Jaguar libretro v2.3.0: 158 commits, no new features, the acid suite found real bugs · Joseph Mattiello</title>
+<meta name="description" content="Polish release for Virtual Jaguar libretro. 158 commits since v2.2.0, 263 files changed, +25,240 / -2,805. The DIVL zero-divide trap the acid-test postscript flagged got fixed (PR #162). Test suite grew from 142 to 56,500+ assertions. Doom still runs 2x too fast.">
+<link rel="canonical" href="https://joemattiello.dev/blog/virtual-jaguar-2-3-0/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Virtual Jaguar libretro v2.3.0 — the acid suite found real bugs">
+<meta property="og:description" content="158 commits, no new features. DIVL zero-divide trap the postscript flagged is fixed. Test suite grew from 142 to 56,500+ assertions. iOS / Provenance crash-on-relaunch fixed in time for the Provenance v3 App Store submission.">
+<meta property="og:url" content="https://joemattiello.dev/blog/virtual-jaguar-2-3-0/">
+<meta property="og:image" content="https://joemattiello.dev/img/og-card.png">
+<meta property="article:published_time" content="2026-05-06">
+<meta property="article:author" content="Joseph Mattiello">
+<meta property="article:tag" content="Open Source">
+<meta property="article:tag" content="Emulation">
+<meta property="article:tag" content="Atari Jaguar">
+<meta property="article:tag" content="libretro">
+<meta property="article:tag" content="Testing">
+
+<!-- JSON-LD: Article -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Virtual Jaguar libretro v2.3.0: 158 commits, no new features, the acid suite found real bugs",
+    "datePublished": "2026-05-06",
+    "author": { "@id": "https://joemattiello.dev/#person" },
+    "publisher": { "@id": "https://joemattiello.dev/#person" },
+    "url": "https://joemattiello.dev/blog/virtual-jaguar-2-3-0/"
+}
+</script>
+
+<link rel="icon" href="/favicon.ico">
+<style>
+/* Self-hosted fonts */
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/space-mono-v17-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-500.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/outfit-v15-latin-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/jetbrains-mono-v24-latin-500.woff2') format('woff2');
+}
+
+:root {
+    --bg-deep: #06070b;
+    --bg-base: #0b0d12;
+    --bg-surface: #11141a;
+    --bg-card: #171b23;
+    --bg-card-hover: #1c2029;
+    --border-subtle: rgba(255,255,255,0.06);
+    --border-glow: rgba(0,229,153,0.15);
+    --accent-green: #00e599;
+    --accent-green-dim: #00b377;
+    --accent-cyan: #00c2ff;
+    --accent-amber: #f0a030;
+    --accent-pink: #ff4088;
+    --text-primary: #e4e6ea;
+    --text-secondary: #b3b6bc;
+    --text-muted: #555960;
+    --font-display: 'Space Mono', monospace;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    font-size: 17px;
+}
+a { color: var(--accent-green); text-decoration: none; transition: color 0.2s; border-bottom: 1px solid rgba(0,229,153,0.25); }
+a:hover { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); }
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 5%, rgba(0,229,153,0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(0,194,255,0.04) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+.container-wide { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; position: relative; z-index: 1; }
+
+/* Nav */
+nav.top {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(6,7,11,0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.nav-brand { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.nav-brand a { color: var(--text-primary); border-bottom: none; }
+.nav-brand .at { color: var(--accent-green); }
+.nav-brand .crumb { color: var(--text-muted); margin: 0 0.4rem; }
+.nav-brand .here { color: var(--accent-green); }
+.nav-back {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+.nav-back { border-bottom: 1px solid var(--border-subtle); }
+.nav-back:hover { border-color: var(--border-glow); color: var(--accent-green); }
+
+/* Article header */
+header.article-head {
+    padding: 4rem 0 2rem;
+}
+.byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.byline .author { color: var(--accent-green); }
+.byline .author a { color: var(--accent-green); border-bottom: none; }
+.byline .divider { color: var(--text-muted); }
+h1.headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 4vw, 2.6rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+.dek {
+    font-size: 1.18rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+.tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1.5rem;
+}
+.tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    background: var(--bg-surface);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.head-rule {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 1rem 0 0;
+}
+
+/* Article body */
+article.body {
+    padding: 2rem 0 3rem;
+}
+article.body h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 3rem 0 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+article.body h2 .num {
+    color: var(--accent-green);
+    font-size: 0.8em;
+    margin-right: 0.5rem;
+    font-weight: 400;
+}
+article.body h3 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    margin: 2rem 0 0.85rem;
+    color: var(--text-primary);
+}
+article.body p {
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+article.body p code, article.body li code, article.body td code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    color: var(--accent-green);
+}
+article.body ul, article.body ol {
+    margin: 0 0 1.5rem 1.5rem;
+    color: var(--text-primary);
+}
+article.body li { margin-bottom: 0.5rem; }
+article.body strong { color: var(--text-primary); font-weight: 600; }
+article.body em { color: var(--text-primary); font-style: italic; }
+article.body blockquote {
+    border-left: 3px solid var(--accent-green);
+    padding: 0.5rem 0 0.5rem 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+article.body pre {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+article.body pre code {
+    font-family: var(--font-mono);
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+article.body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    overflow: hidden;
+}
+article.body th, article.body td {
+    padding: 0.55rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+article.body th {
+    background: var(--bg-card);
+    color: var(--accent-green);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+}
+article.body td.num, article.body th.num { text-align: right; font-variant-numeric: tabular-nums; }
+article.body tr.total td { background: var(--bg-card); color: var(--text-primary); font-weight: 700; border-top: 1px solid var(--border-glow); }
+.callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    margin: 1.75rem 0;
+    font-size: 0.96rem;
+    color: var(--text-secondary);
+}
+.callout strong { color: var(--accent-cyan); }
+.section-rule {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 3rem 0 0;
+}
+
+/* About author */
+.about-author {
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 2.25rem 2.5rem;
+    margin: 3rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.about-author::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+.about-author h3 {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent-green);
+    margin-bottom: 0.85rem;
+}
+.about-author .author-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+}
+.about-author p {
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+.about-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+.about-cta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.about-cta:hover { border-color: var(--border-glow); color: var(--accent-green); }
+.about-cta.primary {
+    background: var(--accent-green);
+    color: var(--bg-deep);
+    border-color: var(--accent-green);
+    font-weight: 700;
+}
+.about-cta.primary:hover { background: #33edb3; color: var(--bg-deep); }
+
+/* Article footer nav */
+.article-foot-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+}
+.article-foot-nav a { color: var(--text-secondary); border-bottom: none; }
+.article-foot-nav a:hover { color: var(--accent-green); }
+
+/* Footer */
+footer.page {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+}
+footer.page p { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); }
+footer.page a { color: var(--text-secondary); border-bottom: none; }
+footer.page a:hover { color: var(--accent-green); }
+
+@media (max-width: 700px) {
+    body { font-size: 16px; }
+    h1.headline { font-size: 1.7rem; }
+    .about-author { padding: 1.75rem 1.5rem; }
+    article.body pre { font-size: 0.78rem; padding: 1rem; }
+    article.body table { font-size: 0.78rem; }
+    article.body th, article.body td { padding: 0.45rem 0.55rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+    <div class="container-wide nav-row">
+        <div class="nav-brand">
+            <a href="/">joe<span class="at">@</span>mattiello</a>
+            <span class="crumb">/</span>
+            <a href="/blog/" style="color:var(--text-secondary);border-bottom:none">blog</a>
+            <span class="crumb">/</span>
+            <span class="here">virtual-jaguar-2-3-0</span>
+        </div>
+        <a href="/blog/" class="nav-back">← All posts</a>
+    </div>
+</nav>
+
+<header class="article-head">
+    <div class="container">
+        <div class="byline">
+            <span class="author">By <a href="/">Joseph Mattiello</a></span>
+            <span class="divider">·</span>
+            <span>2026-05-06</span>
+            <span class="divider">·</span>
+            <span>6 min read</span>
+        </div>
+        <h1 class="headline">Virtual Jaguar libretro v2.3.0: 158 commits, no new features, the acid suite found real bugs</h1>
+        <p class="dek">Polish release. 158 commits since v2.2.0, 263 files changed, +25,240 / -2,805. The acid-test suite from <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> (and the <a href="/blog/acid-tests-for-virtual-jaguar/">2026-05-03 postscript</a> that retracted three of its findings) called out the <code>DIVL</code> zero-divide trap as a real emulator bug; this release fixes it. The suite itself grew from 142 tests to 56,500+ assertions across 15 binaries. Doom still runs 2x too fast.</p>
+        <div class="tags-row">
+            <span class="tag">Open Source</span>
+            <span class="tag">Emulation</span>
+            <span class="tag">Atari Jaguar</span>
+            <span class="tag">libretro</span>
+            <span class="tag">Testing</span>
+        </div>
+        <div class="head-rule"></div>
+    </div>
+</header>
+
+<main>
+<article class="body">
+<div class="container">
+
+<h2>What landed</h2>
+
+<p><a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.3.0" target="_blank" rel="noopener">v2.3.0</a> shipped on 2026-05-06 with pre-built libretro cores for 16 platforms (Linux x86_64 / aarch64 / i686, macOS arm64 / x86_64, Windows x86_64 / i686, iOS arm64, tvOS arm64, Android arm64-v8a / armeabi-v7a / x86_64 / x86, Emscripten WASM, PS Vita, Nintendo Switch). 158 commits since v2.2.0.</p>
+
+<p><strong>No new features.</strong> This release is performance work, hardware-accuracy fixes, and iOS / Provenance stability. The user-visible feature set matches v2.2.0; the engine underneath is meaningfully closer to the chip.</p>
+
+<h2>What the acid suite predicted, what got fixed</h2>
+
+<p>The acid-test suite from <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> shipped 142 tests in May. The 2026-05-03 <a href="/blog/acid-tests-for-virtual-jaguar/">postscript</a> retracted three findings as test bugs (GPU/DSP read shadowing, DSP IRQ delivery to 68K, the Doom event-clock framing) and confirmed three as real emulator bugs (the <code>DIVL</code> zero-divide trap, narrow-pixel blitter copies, the <code>BlitterMidsummer2</code> hang on 1bpp / 2bpp).</p>
+
+<p>v2.3.0 hits one of those three directly:</p>
+
+<ul>
+    <li><strong><code>DIVL</code> zero-divide trap fixed</strong> in <a href="https://github.com/libretro/virtualjaguar-libretro/pull/162" target="_blank" rel="noopener">PR #162</a>. The release notes line is "DSP: correct ABS flags, DIV zero-guard, STORE alignment." The <code>DIVL</code> HLE path that landed in v2.2.0 handled the math correctly but didn&rsquo;t trap on <code>divisor == 0</code>; that&rsquo;s now closed. The acid test pinned to it (<code>tests/dsp/</code>-bucket, <code>divl_zero_divide.s</code>) flips FAIL to PASS automatically; that&rsquo;s the contract the suite was designed for.</li>
+</ul>
+
+<p>The narrow-pixel blitter copies and the <code>BlitterMidsummer2</code> hang aren&rsquo;t explicitly called out as fixed, but the release does include "Blitter: multiple correctness fixes in collapsed inner loop paths (daddmode, zmode, patfill eligibility guards)" plus "always read framebuffer in phrase mode for byte_merge." Whether those resolve the postscript&rsquo;s specific cases needs a fresh acid-suite run against <code>develop</code> to confirm. The suite will tell us; that&rsquo;s the point.</p>
+
+<h2>Performance wins</h2>
+
+<p>The headline perf work, in order of measurable impact:</p>
+
+<ul>
+    <li><strong>RISC computed-goto dispatch</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/146" target="_blank" rel="noopener">PR #146</a>) for GCC/Clang. Replaces the switch-statement opcode loop in the GPU and DSP cores with <code>goto *jump_table[opcode]</code>, which lets the branch predictor warm up the next instruction before the current one finishes decoding. Significant speedup on every modern host CPU.</li>
+    <li><strong>Inlined delay-slot execution</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/147" target="_blank" rel="noopener">PR #147</a>). The Jaguar&rsquo;s RISC cores have branch-delay slots; the previous path took a function call per slot. Inlined now.</li>
+    <li><strong>Predecode opcode cache</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/144" target="_blank" rel="noopener">PR #144</a>). Cache the decoded form of each opcode the first time the core sees it, so subsequent executions skip the decode work.</li>
+    <li><strong>Blitter SIMD ADDARRAY cascade</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/148" target="_blank" rel="noopener">PR #148</a>). Vectorizes the address-array generation inside the blitter inner loop.</li>
+    <li><strong>Blitter ADDRGEN caching</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/149" target="_blank" rel="noopener">PR #149</a>) hoists the <code>y * width</code> multiplication out of the inner loop where it&rsquo;s a loop invariant.</li>
+    <li><strong>Inlined ADDRGEN and helpers</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/152" target="_blank" rel="noopener">PR #152</a>).</li>
+    <li><strong>Fast-path RAM bypass</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/155" target="_blank" rel="noopener">PR #155</a>) for blitter reads/writes. When the address is known to be in main RAM, skip the full address-dispatch table.</li>
+    <li><strong>Collapsed inner loops for simple copy blits</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/157" target="_blank" rel="noopener">PR #157</a>) and <strong>pattern fill blits</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/156" target="_blank" rel="noopener">PR #156</a>). The blitter&rsquo;s general-purpose inner loop has a lot of conditional dispatch; for the common cases, a specialized loop is faster.</li>
+    <li><strong>Branchless <code>COMP_CTRL</code> dbinh + Kogge-Stone maskt prefix</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/158" target="_blank" rel="noopener">PR #158</a>).</li>
+</ul>
+
+<p>Net effect: the blitter and the GPU/DSP RISC interpreter (the two dominant cost centers in any Jaguar emulator on a modern host) are both meaningfully faster. The accurate blitter is still slower than the fast blitter; that gap is narrower now.</p>
+
+<h2>Hardware-accuracy fixes</h2>
+
+<p>Real chip behavior now matches in places it didn&rsquo;t:</p>
+
+<ul>
+    <li><strong>PIT timer corrected to full 26.59 MHz system clock</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/154" target="_blank" rel="noopener">PR #154</a>). Was previously running at half rate. Games that use PIT2 timer interrupts as their tick source were getting events at half the expected wall-clock rate. The acid suite flagged the PIT rate in <code>pit_countdown_rate.s</code>; that&rsquo;s resolved upstream of the test now.</li>
+    <li><strong>TOM visible window derived from hardware registers</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/164" target="_blank" rel="noopener">PR #164</a>). The display extents come from <code>VDB</code>, <code>VDE</code>, <code>HDB</code>, <code>HDE</code> instead of hardcoded dimensions. Proper overscan handling. This is the same shape of fix that closed the v2.2.0 "left half of screen" Doom rendering bug, extended into the visible-window code path.</li>
+    <li><strong>DAC resamples I2S output when SCLK changes at runtime</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/163" target="_blank" rel="noopener">PR #163</a>). Fixes audio pitch drift in games that reconfigure the I2S clock during play. Skyhammer is one of the games that does this; the audio improvement isn&rsquo;t the full HLE engine fix it needs, but it&rsquo;s directionally right.</li>
+    <li><strong>AvP alpha noise / red artifact fix</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/166" target="_blank" rel="noopener">PR #166</a>). The blitter now skips destination data read when <code>BKGWREN</code> is set. Eliminates the red visual noise on Alien vs Predator.</li>
+    <li><strong>TOM</strong>: restore fixed left-edge origin for scanline positioning.</li>
+    <li><strong>Blitter</strong>: restore 64-bit register longword swap in <code>BlitterWriteByte</code>; always read framebuffer in phrase mode for <code>byte_merge</code>.</li>
+</ul>
+
+<h2>iOS / Provenance stability</h2>
+
+<p>The single most user-impactful fix for anyone on iOS:</p>
+
+<ul>
+    <li><strong>Reset all static state on unload/deinit with <code>NULL</code> checks</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/160" target="_blank" rel="noopener">PR #160</a>). Fixes crashes on iOS / Provenance when relaunching the core (load a Jaguar ROM, exit, load another, crash). The libretro core had statics that were never zeroed across <code>retro_unload_game</code> / <code>retro_deinit</code> cycles; iOS re-uses the dylib in-process, so the leftover state corrupted the next run.</li>
+    <li><strong>Move externs into proper headers</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/161" target="_blank" rel="noopener">PR #161</a>).</li>
+</ul>
+
+<p>This lands the same week <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance v3</a> goes into App Store review (iOS + first-ever tvOS release). The Jaguar core has been one of the harder cores to keep stable across re-loads on iOS; v2.3.0 closes the most-reported crash path.</p>
+
+<h2>The test suite, an order of magnitude bigger</h2>
+
+<p>The acid suite shipped at 142 tests in May. v2.3.0 expands the test infrastructure substantially:</p>
+
+<ul>
+    <li><strong>56,500+ automated assertions</strong> across 15 test binaries.</li>
+    <li><strong>New harnesses:</strong> framebuffer integrity (alpha corruption + screen position), TOM visible window registers, EEPROM lifecycle (write / read / persist across reload), audio pipeline, PIT clock rate verification.</li>
+    <li><strong>Shared test harness library</strong> at <code>test/harness/</code> &mdash; common CLI, JSON output, audio / video stats, probe modules for DSP and timing.</li>
+    <li><strong>Per-frame timing diagnostic tool</strong> for detecting halfline / cycle anomalies. This is the tool needed to investigate the Doom-too-fast bug; the postscript walked back the original "event-clock divergence" framing as a measurement artifact, but the underlying timing-skew question is still open. The new diagnostic is how it gets answered.</li>
+    <li><strong>Visual regression tests:</strong> determinism, frameskip invariance, save-state round-trip, rewind simulation.</li>
+</ul>
+
+<p>Test code grew faster than emulator code this cycle. That&rsquo;s the right ratio for an accuracy-focused release.</p>
+
+<h2>What&rsquo;s still broken</h2>
+
+<p>Honest scope, direct from the v2.3.0 known-issues list:</p>
+
+<ul>
+    <li><strong>Doom</strong>: still runs at approximately 2x speed. Game music silent. The PIT clock-rate fix in this release moves the right direction for game-timing accuracy, but the GPU-rendered bus-contention modeling that Doom relies on isn&rsquo;t here yet. The new per-frame timing diagnostic is the right next investigation tool.</li>
+    <li><strong>Wolfenstein 3D</strong>: still no game music. The DSP audio engine state replication that v2.2.0&rsquo;s Known Issues called out hasn&rsquo;t landed yet.</li>
+    <li><strong>Skyhammer / Iron Soldier 2</strong>: saturated square-wave audio on HLE. The DAC SCLK resampling helps the pitch-drift cluster but not the engine-state cluster.</li>
+    <li><strong>Battle Sphere</strong>: menu navigation issues.</li>
+    <li><strong>Jaguar CD</strong>: in progress on a separate branch, not in this release.</li>
+    <li>The accurate blitter is still meaningfully slower than the fast blitter on lower-end hardware. Some games (Tempest 2000) may need the fast blitter to hit full speed.</li>
+</ul>
+
+<p>The <code>BlitterMidsummer2</code> hang on 1bpp / 2bpp blits and the narrow-pixel partial-pixel-mode copies from the postscript aren&rsquo;t explicitly listed; those need a fresh acid-suite run against <code>develop</code> to confirm whether the collapsed-inner-loop fixes resolved them.</p>
+
+<h2>What&rsquo;s next</h2>
+
+<p>v2.4.0 is unscoped at this writing. The visible queue from the v2.3.0 work:</p>
+
+<ul>
+    <li>The Doom timing investigation, now that there&rsquo;s a per-frame timing diagnostic.</li>
+    <li>Jaguar CD branch landing.</li>
+    <li>More HLE BIOS coverage for the still-broken cluster (Wolf3D / Skyhammer / Iron Soldier 2 audio engines).</li>
+    <li>Continued expansion of the acid suite &mdash; 56,500 assertions is a milestone, not a finish line.</li>
+</ul>
+
+<p>Release is at <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.3.0" target="_blank" rel="noopener">github.com/libretro/virtualjaguar-libretro/releases/tag/v2.3.0</a>. SHA256 checksums in <code>SHA256SUMS.txt</code>, verified via <a href="https://github.com/libretro/virtualjaguar-libretro/blob/master/SECURITY.md" target="_blank" rel="noopener">SECURITY.md</a>.</p>
+
+<div class="section-rule"></div>
+
+<aside class="about-author">
+    <h3>About the author</h3>
+    <div class="author-name">Joseph Mattiello</div>
+    <p>L4 Mobile Engineer on Wayfair&rsquo;s App Infrastructure team. Maintainer of <a href="https://github.com/libretro/virtualjaguar-libretro" target="_blank" rel="noopener">virtualjaguar-libretro</a> and creator of <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance EMU</a> &mdash; 6,300 stars, 79 contributors, on the App Store since January 2025. 17+ years iOS, three US patents (Sense Networks, acquired twice), former Director of iOS Platform at NewsCorp. Based in NYC. Currently considering 1&ndash;2 consulting engagements for Q3 2026.</p>
+    <div class="about-cta-row">
+        <a href="/consulting/" class="about-cta primary">Consulting →</a>
+        <a href="/" class="about-cta">About</a>
+        <a href="https://github.com/JoeMatt" target="_blank" rel="noopener" class="about-cta">GitHub</a>
+        <a href="https://www.linkedin.com/in/joemattiello/" target="_blank" rel="noopener" class="about-cta">LinkedIn</a>
+    </div>
+</aside>
+
+<nav class="article-foot-nav">
+    <a href="/blog/acid-tests-for-virtual-jaguar/">← Previous: 142 acid tests</a>
+    <a href="/blog/">All posts →</a>
+</nav>
+
+</div>
+</article>
+</main>
+
+<footer class="page">
+    <div class="container-wide">
+        <p>← <a href="/">Back to joemattiello.dev</a> · <a href="/blog/">Blog index</a> · <a href="/status/">Site status</a> · <a href="/consulting/">Consulting</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
