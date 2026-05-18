@@ -1,16 +1,16 @@
 {
-  "last_updated": "2026-05-11T08:20:47Z",
-  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/runs/25658335608",
+  "last_updated": "2026-05-18T08:32:35Z",
+  "run_url": "https://github.com/JoeMatt/joematt.github.io/actions/runs/26022050333",
   "html_check": {
     "passed": false,
     "error_count": 4
   },
   "lighthouse": {
-    "performance": 98,
+    "performance": 89,
     "accessibility": 93,
     "best_practices": 100,
     "seo": 100,
-    "report_url": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1778487177645-64542.report.html"
+    "report_url": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1779092693369-58416.report.html"
   },
   "observatory": {
     "grade": "C",
@@ -20,11 +20,11 @@
     "grade": "N/A"
   },
   "oss_impact": {
-    "total_stars": 28765,
+    "total_stars": 28771,
     "total_prs_merged": 0,
     "total_contributors": 79,
-    "provenance_stars": 6308,
-    "provenance_downloads": 389444,
+    "provenance_stars": 6311,
+    "provenance_downloads": 389886,
     "discord_members": 9373
   },
   "ai_pipeline": {
