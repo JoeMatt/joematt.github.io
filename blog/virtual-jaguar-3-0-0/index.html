@@ -4,22 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<title>Virtual Jaguar libretro v2.3.0: 158 commits, no new features, the acid suite found real bugs · Joseph Mattiello</title>
-<meta name="description" content="Polish release for Virtual Jaguar libretro. 158 commits since v2.2.0, 263 files changed, +25,240 / -2,805. The DIVL zero-divide trap the acid-test postscript flagged got fixed (PR #162). Test suite grew from 142 to 56,500+ assertions. Doom still runs 2x too fast.">
-<link rel="canonical" href="https://joemattiello.dev/blog/virtual-jaguar-2-3-0/">
+<title>Virtual Jaguar libretro v3.0.0: Jaguar CD, link-cable multiplayer, and CI gates that can fail · Joseph Mattiello</title>
+<meta name="description" content="307 commits since v2.3.2 (248 non-merge), 181 files, +40,392 / -841, shipped to 16 platforms. Jaguar CD boots the full local corpus in both boot modes, JagLink networking ships over TCP and RetroArch netplay, and the acid suite finally blocks on regressions.">
+<link rel="canonical" href="https://joemattiello.dev/blog/virtual-jaguar-3-0-0/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
-<meta property="og:title" content="Virtual Jaguar libretro v2.3.0 — the acid suite found real bugs">
-<meta property="og:description" content="158 commits, no new features. DIVL zero-divide trap the postscript flagged is fixed. Test suite grew from 142 to 56,500+ assertions. iOS / Provenance crash-on-relaunch fixed in time for the Provenance v3 App Store submission.">
-<meta property="og:url" content="https://joemattiello.dev/blog/virtual-jaguar-2-3-0/">
+<meta property="og:title" content="Virtual Jaguar libretro v3.0.0 — Jaguar CD, link-cable multiplayer, and CI gates that can fail">
+<meta property="og:description" content="307 commits since v2.3.2 (248 non-merge), 181 files, +40,392 / -841, shipped to 16 platforms. Jaguar CD boots the full local corpus in both boot modes, JagLink networking ships over TCP and RetroArch netplay, and the acid suite finally blocks on regressions.">
+<meta property="og:url" content="https://joemattiello.dev/blog/virtual-jaguar-3-0-0/">
 <meta property="og:image" content="https://joemattiello.dev/img/og-card.png">
-<meta property="article:published_time" content="2026-05-06">
+<meta property="article:published_time" content="2026-08-03">
 <meta property="article:author" content="Joseph Mattiello">
 <meta property="article:tag" content="Open Source">
 <meta property="article:tag" content="Emulation">
 <meta property="article:tag" content="Atari Jaguar">
 <meta property="article:tag" content="libretro">
+<meta property="article:tag" content="Networking">
 <meta property="article:tag" content="Testing">
 
 <!-- JSON-LD: Article -->
@@ -27,11 +28,11 @@
 {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Virtual Jaguar libretro v2.3.0: 158 commits, no new features, the acid suite found real bugs",
-    "datePublished": "2026-05-06",
+    "headline": "Virtual Jaguar libretro v3.0.0: Jaguar CD, link-cable multiplayer, and CI gates that can fail",
+    "datePublished": "2026-08-03",
     "author": { "@id": "https://joemattiello.dev/#person" },
     "publisher": { "@id": "https://joemattiello.dev/#person" },
-    "url": "https://joemattiello.dev/blog/virtual-jaguar-2-3-0/"
+    "url": "https://joemattiello.dev/blog/virtual-jaguar-3-0-0/"
 }
 </script>
 
@@ -456,7 +457,7 @@ footer.page a:hover { color: var(--accent-green); }
             <span class="crumb">/</span>
             <a href="/blog/" style="color:var(--text-secondary);border-bottom:none">blog</a>
             <span class="crumb">/</span>
-            <span class="here">virtual-jaguar-2-3-0</span>
+            <span class="here">virtual-jaguar-3-0-0</span>
         </div>
         <a href="/blog/" class="nav-back">← All posts</a>
     </div>
@@ -467,17 +468,18 @@ footer.page a:hover { color: var(--accent-green); }
         <div class="byline">
             <span class="author">By <a href="/">Joseph Mattiello</a></span>
             <span class="divider">·</span>
-            <span>2026-05-06</span>
+            <span>2026-08-03</span>
             <span class="divider">·</span>
             <span>6 min read</span>
         </div>
-        <h1 class="headline">Virtual Jaguar libretro v2.3.0: 158 commits, no new features, the acid suite found real bugs</h1>
-        <p class="dek">Polish release. 158 commits since v2.2.0, 263 files changed, +25,240 / -2,805. The acid-test suite from <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> (and the <a href="/blog/acid-tests-for-virtual-jaguar/">2026-05-03 postscript</a> that retracted three of its findings) called out the <code>DIVL</code> zero-divide trap as a real emulator bug; this release fixes it. The suite itself grew from 142 tests to 56,500+ assertions across 15 binaries. Doom still runs 2x too fast.</p>
+        <h1 class="headline">Virtual Jaguar libretro v3.0.0: Jaguar CD, link-cable multiplayer, and CI gates that can fail</h1>
+        <p class="dek">307 commits since v2.3.2 (248 non-merge), 181 files, +40,392 / -841, shipped to 16 platforms. Jaguar CD boots the full local corpus in both boot modes, JagLink networking ships over TCP and RetroArch netplay, and the acid suite finally blocks on regressions.</p>
         <div class="tags-row">
             <span class="tag">Open Source</span>
             <span class="tag">Emulation</span>
             <span class="tag">Atari Jaguar</span>
             <span class="tag">libretro</span>
+            <span class="tag">Networking</span>
             <span class="tag">Testing</span>
         </div>
         <div class="head-rule"></div>
@@ -488,107 +490,72 @@ footer.page a:hover { color: var(--accent-green); }
 <article class="body">
 <div class="container">
 
-<h2>What landed</h2>
-
-<p><a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.3.0" target="_blank" rel="noopener">v2.3.0</a> shipped on 2026-05-06 with pre-built libretro cores for 16 platforms (Linux x86_64 / aarch64 / i686, macOS arm64 / x86_64, Windows x86_64 / i686, iOS arm64, tvOS arm64, Android arm64-v8a / armeabi-v7a / x86_64 / x86, Emscripten WASM, PS Vita, Nintendo Switch). 158 commits since v2.2.0.</p>
-
-<p><strong>No new features.</strong> This release is performance work, hardware-accuracy fixes, and iOS / Provenance stability. The user-visible feature set matches v2.2.0; the engine underneath is meaningfully closer to the chip.</p>
-
-<h2>What the acid suite predicted, what got fixed</h2>
-
-<p>The acid-test suite from <a href="https://github.com/libretro/virtualjaguar-libretro/pull/130" target="_blank" rel="noopener">PR #130</a> shipped 142 tests in May. The 2026-05-03 <a href="/blog/acid-tests-for-virtual-jaguar/">postscript</a> retracted three findings as test bugs (GPU/DSP read shadowing, DSP IRQ delivery to 68K, the Doom event-clock framing) and confirmed three as real emulator bugs (the <code>DIVL</code> zero-divide trap, narrow-pixel blitter copies, the <code>BlitterMidsummer2</code> hang on 1bpp / 2bpp).</p>
-
-<p>v2.3.0 hits one of those three directly:</p>
+<p>v3.0.0 delivers:</p>
 
 <ul>
-    <li><strong><code>DIVL</code> zero-divide trap fixed</strong> in <a href="https://github.com/libretro/virtualjaguar-libretro/pull/162" target="_blank" rel="noopener">PR #162</a>. The release notes line is "DSP: correct ABS flags, DIV zero-guard, STORE alignment." The <code>DIVL</code> HLE path that landed in v2.2.0 handled the math correctly but didn&rsquo;t trap on <code>divisor == 0</code>; that&rsquo;s now closed. The acid test pinned to it (<code>tests/dsp/</code>-bucket, <code>divl_zero_divide.s</code>) flips FAIL to PASS automatically; that&rsquo;s the contract the suite was designed for.</li>
+    <li><strong>Jaguar CD support</strong>: all 10 locally-available titles boot to game code, in both HLE and real-BIOS mode</li>
+    <li><strong>Jaguar Link networking</strong>: real link-cable multiplayer over TCP and RetroArch netplay, up to multi-console hubs</li>
+    <li><strong>Memory Track saves</strong>: CD games save settings, progress, and high scores like real hardware</li>
+    <li><strong>100+ compatibility fixes</strong>: Wolfenstein 3D music, Pitfall, Tempest 2000, Alien vs Predator, Brutal Sports Football, and a full CD-title cluster</li>
+    <li><strong>Reorganized options menu</strong>: 9 categories, content-aware, translation pipeline wired</li>
+    <li><strong>A hardware-referenced test suite</strong>: acid conformance tests, screenshot regression baselines, and CI gates that actually block</li>
 </ul>
 
-<p>The narrow-pixel blitter copies and the <code>BlitterMidsummer2</code> hang aren&rsquo;t explicitly called out as fixed, but the release does include "Blitter: multiple correctness fixes in collapsed inner loop paths (daddmode, zmode, patfill eligibility guards)" plus "always read framebuffer in phrase mode for byte_merge." Whether those resolve the postscript&rsquo;s specific cases needs a fresh acid-suite run against <code>develop</code> to confirm. The suite will tell us; that&rsquo;s the point.</p>
+<p>Now the parts worth telling.</p>
 
-<h2>Performance wins</h2>
+<h2>Ten discs, two boot modes, one gate</h2>
 
-<p>The headline perf work, in order of measurable impact:</p>
+<p>The corpus is Baldies, Battle Morph, BrainDead 13, Dragon&rsquo;s Lair, Highlander, Hover Strike, Iron Soldier 2, Primal Rage, Space Ace and Myst, across 11 images. Every one reaches <code>GAME_CODE</code> under HLE and under a real BIOS, and <a href="https://github.com/libretro/virtualjaguar-libretro/blob/v3.0.0/docs/cd-boot-matrix.md" target="_blank" rel="noopener"><code>docs/cd-boot-matrix.md</code></a> gates it in CI so it stays that way.</p>
+
+<p>Getting there meant fixing bugs that only exist on a machine with a CD drive bolted to a 68000. Hover Strike locked up because <code>CD_read</code> completed instantly and overwrote the polling code still in flight waiting for it; reads stream at drive rate now. Battle Morph&rsquo;s HLE ISR leaked a stream status base across calls, so it&rsquo;s latched per <code>CD_read</code>. Iron Soldier 2 booted to black because an unaligned <code>CD_read</code> tail padded instead of carrying the next disc bytes. Primal Rage rendered a black bottom third during fights because GPU objects weren&rsquo;t halting the Object Processor until the GPU released OBF.</p>
+
+<p>Memory Track NVM is HLE&rsquo;d (<code>_NVM</code> at <code>$2400</code>, alongside the <code>$900000</code> flash window), so Vid Grid saves again (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/258" target="_blank" rel="noopener">#258</a>). <code>virtualjaguar_cd_read_speed</code> gives 1x/2x/4x/8x/instant on the HLE path, deliberately not on the real-BIOS path: scaling that FIFO/DSA cadence reopens the DSA-steal and FIFO-storm race classes those constants encode.</p>
+
+<p>One breaking change. <code>.iso</code> is refused now, because a bare 2048-byte-sector ISO cannot represent a Jaguar CD&rsquo;s multi-session layout, no retail disc boots from one, and BigPEmu doesn&rsquo;t accept them either. Failing at load with an explanation beats a BIOS screen that goes nowhere. Savestates move to v7; v2.x states still load.</p>
+
+<h2>The link cable</h2>
+
+<p>JERRY&rsquo;s asynchronous serial UART is emulated at the register level (<code>ASIDATA</code>/<code>ASICTRL</code>/<code>ASISTAT</code>/<code>ASICLK</code> at <code>$F10030</code>-<code>$F10035</code>), verified against the JTRM rather than against source comments. Three transports ride on it: a direct TCP link that works in frontends with no netplay support, the libretro netpacket interface for real RetroArch netplay, and a CatNet-style hub for more than two consoles.</p>
+
+<p>Doom deathmatch is playable over TCP, host and client. AirCars runs 2-player direct and across a 3-console hub. BattleSphere Gold is validated to networked-lobby entry, and I say that precisely because a sustained dogfight isn&rsquo;t verified yet. AirCars under netpacket is untested. The iOS path isn&rsquo;t device-tested.</p>
+
+<p>Wi-Fi netplay lag turned out to be netpacket TX batching, fixed in <a href="https://github.com/libretro/virtualjaguar-libretro/pull/248" target="_blank" rel="noopener">#248</a>. Hostnames resolve now (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/263" target="_blank" rel="noopener">#263</a>), not just dotted-quad addresses.</p>
+
+<h2>The gates that weren&rsquo;t gates</h2>
+
+<p>Best bug of the cycle wasn&rsquo;t in the emulator.</p>
+
+<p>Three acid tests were live regressions on <code>develop</code> while <code>test/acid/BASELINE.txt</code> recorded all three as <code>PASS</code>. The gate that should have caught them piped <code>check-baseline.py | tee acid-summary.txt</code> without <code>set -o pipefail</code>. Bash reports the last command in the pipe, <code>tee</code> exits 0 almost unconditionally, and the step could never fail. One completed CI run logged <code>FAIL: regressions or missing tests detected.</code> in its own output and reported <code>success</code>.</p>
+
+<p>All three turned out to be bugs in the tests, checked against the JTRM, not in the emulator. <code>pit_countdown_rate</code> acked TOM&rsquo;s INT1 copy but never cleared JERRY&rsquo;s own latch. <code>unaligned_word</code> skipped the <code>addq.l #8,sp</code> a group-0 frame needs before <code>rte</code>. <code>op_gpu_int_object</code> never started the GPU before checking its IRQ latch. A gate that can&rsquo;t fail hides which side is wrong.</p>
+
+<p>Same cycle, same class: the screenshot comparison had no committed baselines, so a fresh runner reported <code>NEW</code> for every ROM, printed a helpful <code>cp</code> command, and passed. Pixel-exact baselines for the two in-repo homebrew ROMs turned it into a zero-pixel gate. 10 passed, 0 failed, 0 new.</p>
+
+<p>Every gate needs a proof that it can fail. Break something on purpose, watch the job go red, revert. Cheap, once, per gate.</p>
+
+<h2>Known issues, stated plainly</h2>
 
 <ul>
-    <li><strong>RISC computed-goto dispatch</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/146" target="_blank" rel="noopener">PR #146</a>) for GCC/Clang. Replaces the switch-statement opcode loop in the GPU and DSP cores with <code>goto *jump_table[opcode]</code>, which lets the branch predictor warm up the next instruction before the current one finishes decoding. Significant speedup on every modern host CPU.</li>
-    <li><strong>Inlined delay-slot execution</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/147" target="_blank" rel="noopener">PR #147</a>). The Jaguar&rsquo;s RISC cores have branch-delay slots; the previous path took a function call per slot. Inlined now.</li>
-    <li><strong>Predecode opcode cache</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/144" target="_blank" rel="noopener">PR #144</a>). Cache the decoded form of each opcode the first time the core sees it, so subsequent executions skip the decode work.</li>
-    <li><strong>Blitter SIMD ADDARRAY cascade</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/148" target="_blank" rel="noopener">PR #148</a>). Vectorizes the address-array generation inside the blitter inner loop.</li>
-    <li><strong>Blitter ADDRGEN caching</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/149" target="_blank" rel="noopener">PR #149</a>) hoists the <code>y * width</code> multiplication out of the inner loop where it&rsquo;s a loop invariant.</li>
-    <li><strong>Inlined ADDRGEN and helpers</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/152" target="_blank" rel="noopener">PR #152</a>).</li>
-    <li><strong>Fast-path RAM bypass</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/155" target="_blank" rel="noopener">PR #155</a>) for blitter reads/writes. When the address is known to be in main RAM, skip the full address-dispatch table.</li>
-    <li><strong>Collapsed inner loops for simple copy blits</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/157" target="_blank" rel="noopener">PR #157</a>) and <strong>pattern fill blits</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/156" target="_blank" rel="noopener">PR #156</a>). The blitter&rsquo;s general-purpose inner loop has a lot of conditional dispatch; for the common cases, a specialized loop is faster.</li>
-    <li><strong>Branchless <code>COMP_CTRL</code> dbinh + Kogge-Stone maskt prefix</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/158" target="_blank" rel="noopener">PR #158</a>).</li>
+    <li><strong>Doom</strong> runs combat pacing ~1.5x fast, 2x in heavy scenes. This release measured the gap against real-hardware footage and identified GPU/DSP instruction timing as the fix path. <a href="https://github.com/libretro/virtualjaguar-libretro/blob/v3.0.0/docs/doom-pace-calibration.md" target="_blank" rel="noopener"><code>docs/doom-pace-calibration.md</code></a> has the full analysis, and the deep dive on measuring a 1993 console from YouTube captures is the next post. In-level music silence is authentic to original hardware.</li>
+    <li><strong>FMV scene-jump drift</strong> in Dragon&rsquo;s Lair, Space Ace and BrainDead 13 under HLE. Their delivery-clock counters drift against our transfer pacing. Reproducible, understood, real-BIOS mode unaffected.</li>
+    <li><strong>Battle Sphere Gold</strong> menu text renders too dark to read. The glyphs arrive already dark from the game&rsquo;s own pre-shading path, so the blitter is exonerated and the writer routine is next.</li>
+    <li><strong>Iron Soldier</strong> (cart) is still missing its wireframe tank under the fast blitter. The accurate blitter is unaffected.</li>
+    <li><strong>CDI images with a damaged boot header are refused</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/269" target="_blank" rel="noopener">#269</a>). 10 of 14 in the local CDI corpus pass.</li>
+    <li><strong>Alien vs Predator</strong> has a green-dot artifact (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/266" target="_blank" rel="noopener">#266</a>) and a red-background report (<a href="https://github.com/libretro/virtualjaguar-libretro/issues/267" target="_blank" rel="noopener">#267</a>) open, split out of the otherwise-resolved #178.</li>
+    <li><strong>Tempest 2000</strong> and the AvP fixes are not independently device-verified this cycle. Believed fixed.</li>
 </ul>
 
-<p>Net effect: the blitter and the GPU/DSP RISC interpreter (the two dominant cost centers in any Jaguar emulator on a modern host) are both meaningfully faster. The accurate blitter is still slower than the fast blitter; that gap is narrower now.</p>
+<h2>Why any of this</h2>
 
-<h2>Hardware-accuracy fixes</h2>
+<p>The core is GPLv3 and stays that way. Nothing here is for sale. A console that sold poorly in 1993 has a shrinking number of people who can still read its silicon, and every documented register behavior, every acid test, every hardware-referenced measurement outlives whoever wrote it down. 16 platforms this release, PS Vita and Switch included. Somebody will still run these discs after the drives are dead.</p>
 
-<p>Real chip behavior now matches in places it didn&rsquo;t:</p>
+<h2>One stopwatch closes the biggest open number</h2>
 
-<ul>
-    <li><strong>PIT timer corrected to full 26.59 MHz system clock</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/154" target="_blank" rel="noopener">PR #154</a>). Was previously running at half rate. Games that use PIT2 timer interrupts as their tick source were getting events at half the expected wall-clock rate. The acid suite flagged the PIT rate in <code>pit_countdown_rate.s</code>; that&rsquo;s resolved upstream of the test now.</li>
-    <li><strong>TOM visible window derived from hardware registers</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/164" target="_blank" rel="noopener">PR #164</a>). The display extents come from <code>VDB</code>, <code>VDE</code>, <code>HDB</code>, <code>HDE</code> instead of hardcoded dimensions. Proper overscan handling. This is the same shape of fix that closed the v2.2.0 "left half of screen" Doom rendering bug, extended into the visible-window code path.</li>
-    <li><strong>DAC resamples I2S output when SCLK changes at runtime</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/163" target="_blank" rel="noopener">PR #163</a>). Fixes audio pitch drift in games that reconfigure the I2S clock during play. Skyhammer is one of the games that does this; the audio improvement isn&rsquo;t the full HLE engine fix it needs, but it&rsquo;s directionally right.</li>
-    <li><strong>AvP alpha noise / red artifact fix</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/166" target="_blank" rel="noopener">PR #166</a>). The blitter now skips destination data read when <code>BKGWREN</code> is set. Eliminates the red visual noise on Alien vs Predator.</li>
-    <li><strong>TOM</strong>: restore fixed left-edge origin for scanline positioning.</li>
-    <li><strong>Blitter</strong>: restore 64-bit register longword swap in <code>BlitterWriteByte</code>; always read framebuffer in phrase mode for <code>byte_merge</code>.</li>
-</ul>
+<p>Neither real-hardware Doom capture used in the calibration contains the attract demo, so its wall-clock duration on silicon is the one number the footage couldn&rsquo;t give us. Our core measures the first demo at 27.6 s and the second at 35.0 s, timed from the first rendered demo frame to the cut back to the title.</p>
 
-<h2>iOS / Provenance stability</h2>
+<p>If you own a Jaguar and a copy of Doom: let it sit at the title until the attract demo starts, then time from the first frame of demo gameplay to the moment it cuts back. Both demos if you can. That number decides which timing model is right and reprioritizes the next round of work. Donated hardware works too.</p>
 
-<p>The single most user-impactful fix for anyone on iOS:</p>
-
-<ul>
-    <li><strong>Reset all static state on unload/deinit with <code>NULL</code> checks</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/160" target="_blank" rel="noopener">PR #160</a>). Fixes crashes on iOS / Provenance when relaunching the core (load a Jaguar ROM, exit, load another, crash). The libretro core had statics that were never zeroed across <code>retro_unload_game</code> / <code>retro_deinit</code> cycles; iOS re-uses the dylib in-process, so the leftover state corrupted the next run.</li>
-    <li><strong>Move externs into proper headers</strong> (<a href="https://github.com/libretro/virtualjaguar-libretro/pull/161" target="_blank" rel="noopener">PR #161</a>).</li>
-</ul>
-
-<p>This lands the same week <a href="https://provenance-emu.com" target="_blank" rel="noopener">Provenance v3</a> goes into App Store review (iOS + first-ever tvOS release). The Jaguar core has been one of the harder cores to keep stable across re-loads on iOS; v2.3.0 closes the most-reported crash path.</p>
-
-<h2>The test suite, an order of magnitude bigger</h2>
-
-<p>The acid suite shipped at 142 tests in May. v2.3.0 expands the test infrastructure substantially:</p>
-
-<ul>
-    <li><strong>56,500+ automated assertions</strong> across 15 test binaries.</li>
-    <li><strong>New harnesses:</strong> framebuffer integrity (alpha corruption + screen position), TOM visible window registers, EEPROM lifecycle (write / read / persist across reload), audio pipeline, PIT clock rate verification.</li>
-    <li><strong>Shared test harness library</strong> at <code>test/harness/</code> &mdash; common CLI, JSON output, audio / video stats, probe modules for DSP and timing.</li>
-    <li><strong>Per-frame timing diagnostic tool</strong> for detecting halfline / cycle anomalies. This is the tool needed to investigate the Doom-too-fast bug; the postscript walked back the original "event-clock divergence" framing as a measurement artifact, but the underlying timing-skew question is still open. The new diagnostic is how it gets answered.</li>
-    <li><strong>Visual regression tests:</strong> determinism, frameskip invariance, save-state round-trip, rewind simulation.</li>
-</ul>
-
-<p>Test code grew faster than emulator code this cycle. That&rsquo;s the right ratio for an accuracy-focused release.</p>
-
-<h2>What&rsquo;s still broken</h2>
-
-<p>Honest scope, direct from the v2.3.0 known-issues list:</p>
-
-<ul>
-    <li><strong>Doom</strong>: still runs at approximately 2x speed. Game music silent. The PIT clock-rate fix in this release moves the right direction for game-timing accuracy, but the GPU-rendered bus-contention modeling that Doom relies on isn&rsquo;t here yet. The new per-frame timing diagnostic is the right next investigation tool.</li>
-    <li><strong>Wolfenstein 3D</strong>: still no game music. The DSP audio engine state replication that v2.2.0&rsquo;s Known Issues called out hasn&rsquo;t landed yet.</li>
-    <li><strong>Skyhammer / Iron Soldier 2</strong>: saturated square-wave audio on HLE. The DAC SCLK resampling helps the pitch-drift cluster but not the engine-state cluster.</li>
-    <li><strong>Battle Sphere</strong>: menu navigation issues.</li>
-    <li><strong>Jaguar CD</strong>: in progress on a separate branch, not in this release.</li>
-    <li>The accurate blitter is still meaningfully slower than the fast blitter on lower-end hardware. Some games (Tempest 2000) may need the fast blitter to hit full speed.</li>
-</ul>
-
-<p>The <code>BlitterMidsummer2</code> hang on 1bpp / 2bpp blits and the narrow-pixel partial-pixel-mode copies from the postscript aren&rsquo;t explicitly listed; those need a fresh acid-suite run against <code>develop</code> to confirm whether the collapsed-inner-loop fixes resolved them.</p>
-
-<h2>What&rsquo;s next</h2>
-
-<p>v2.4.0 is unscoped at this writing. The visible queue from the v2.3.0 work:</p>
-
-<ul>
-    <li>The Doom timing investigation, now that there&rsquo;s a per-frame timing diagnostic.</li>
-    <li>Jaguar CD branch landing.</li>
-    <li>More HLE BIOS coverage for the still-broken cluster (Wolf3D / Skyhammer / Iron Soldier 2 audio engines).</li>
-    <li>Continued expansion of the acid suite &mdash; 56,500 assertions is a milestone, not a finish line.</li>
-</ul>
-
-<p>Release is at <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.3.0" target="_blank" rel="noopener">github.com/libretro/virtualjaguar-libretro/releases/tag/v2.3.0</a>. SHA256 checksums in <code>SHA256SUMS.txt</code>, verified via <a href="https://github.com/libretro/virtualjaguar-libretro/blob/master/SECURITY.md" target="_blank" rel="noopener">SECURITY.md</a>.</p>
+<p>Release: <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v3.0.0" target="_blank" rel="noopener">github.com/libretro/virtualjaguar-libretro/releases/tag/v3.0.0</a>. 16 platforms, each with a matching debug artifact, SHA256 checksums in <code>SHA256SUMS.txt</code>.</p>
 
 <div class="section-rule"></div>
 
@@ -605,8 +572,8 @@ footer.page a:hover { color: var(--accent-green); }
 </aside>
 
 <nav class="article-foot-nav">
-    <a href="/blog/acid-tests-for-virtual-jaguar/">← Previous: 142 acid tests</a>
-    <a href="/blog/virtual-jaguar-3-0-0/">Next: Virtual Jaguar v3.0.0 →</a>
+    <a href="/blog/virtual-jaguar-2-3-0/">← Previous: Virtual Jaguar v2.3.0</a>
+    <a href="/blog/">All posts →</a>
 </nav>
 
 </div>
