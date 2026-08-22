@@ -2561,7 +2561,7 @@
                 <div class="project-icon" style="background:rgba(0,194,255,0.1);border:1px solid rgba(0,194,255,0.2);"><img src="https://provenance-emu.com/images/icons/icon.512x512.png" alt="Provenance" loading="lazy" width="56" height="56"></div>
                 <span class="project-tag tag-creator">Creator &amp; PM</span>
                 <h3>Provenance <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">6.3k ⭐ · App Store</span></h3>
-                <p>The most popular open-source multi-system emulator for iOS, tvOS, and macOS. Now on the App Store. 388k+ downloads, 50+ supported console systems. Full SwiftUI interface with iCloud Sync, Spotlight, QuickLook, FileProvider, and Siri integration. Upcoming: first open-source Jaguar CD emulation.</p>
+                <p>The most popular open-source multi-system emulator for iOS, tvOS, and macOS. Now on the App Store. 388k+ downloads, 50+ supported console systems. Full SwiftUI interface with iCloud Sync, Spotlight, QuickLook, FileProvider, and Siri integration. Its Jaguar core shipped the first cross-platform open-source Jaguar CD emulation in v3.0.0; pulling that update into Provenance itself is next.</p>
                 <div class="project-links">
                     <a href="https://provenance-emu.com" target="_blank" rel="noopener">🌐 Website
                         <div class="link-preview"><img src="https://provenance-emu.com/images/mobile.png" alt="Provenance on iOS" loading="lazy" width="300" height="200"><div class="link-preview-label">provenance-emu.com</div></div>
@@ -2598,12 +2598,12 @@
         <!-- Virtual Jaguar -->
         <div class="project-card reveal">
             <div class="project-icon" style="background:rgba(0,229,153,0.1);border:1px solid rgba(0,229,153,0.2);"><svg viewBox="0 0 24 24" fill="none" stroke="#00e599" stroke-width="2" stroke-linecap="round"><path d="M4 4c2 5 4 8 7 12M9 3c1.5 5 3 9 5 13M14 2c1 5 2 9 3.5 14"/><circle cx="7" cy="19" r="1" fill="#00e599"/><circle cx="13" cy="19" r="1" fill="#00e599"/><circle cx="18.5" cy="19" r="1" fill="#00e599"/></svg></div>
-            <span class="project-tag tag-maintainer">Maintainer · v2.2.0 just shipped</span>
-            <h3>Virtual Jaguar (libretro) <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">v2.2.0 · 76 commits · solo</span></h3>
-            <p>Admin and maintainer. <strong>v2.2.0 (May 2026)</strong> shipped a high-level emulation BIOS that boots most commercial titles without a real BIOS image — removing the longest-standing barrier to entry — plus 22 previously-broken games now functional (Doom, Syndicate, Atari Karts), save states, rewind, RetroAchievements, ~2× speedup on hot paths, audio-pipeline rewrite fixing a 12-year-old bug. <strong>76 commits, all single-author.</strong> Powers Jaguar emulation in both RetroArch and Provenance.</p>
+            <span class="project-tag tag-maintainer">Maintainer · v3.4.0 just shipped</span>
+            <h3>Virtual Jaguar (libretro) <span style="font-size:0.7rem;color:var(--accent-green);font-family:var(--font-mono);vertical-align:middle;margin-left:0.4rem">v3.4.0 · 788 commits · 5 releases in 24 days</span></h3>
+            <p>Admin and maintainer of the hard-forked Atari Jaguar core. Five tagged releases in 24 days (v2.3.2 &rarr; v3.4.0): the first cross-platform open-source Jaguar CD emulation (10 titles boot to game code in both HLE and real-BIOS mode) and the first shipped Jaguar Voice Modem emulation, its Ultra Vortek protocol reverse-engineered from the retail ROM and netplay verified on two physical iOS devices. Also JagLink/CatBox link play, 2x internal resolution with real supersampling, and JagGD cartridge support. Built on a purpose-built Claude Code harness (105 headless debug probes, worktree-parallel agents, an acid-test regression gate) that also published its own retraction when an earlier Doom timing figure turned out to double-count a CPU cycle.</p>
             <div class="project-links">
-                <a href="https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.2.0" target="_blank" rel="noopener">↗ v2.2.0 release notes</a>
-                <a href="/blog/virtual-jaguar-v2-2-0/">📖 Blog post</a>
+                <a href="https://github.com/libretro/virtualjaguar-libretro/releases" target="_blank" rel="noopener">↗ Releases</a>
+                <a href="/blog/virtual-jaguar-3-0-0/">📖 Blog post</a>
                 <a href="https://github.com/libretro/virtualjaguar-libretro" target="_blank" rel="noopener">↗ GitHub</a>
             </div>
         </div>
@@ -2925,6 +2925,64 @@
                         <span class="cs-chip">Docker</span>
                         <span class="cs-chip">GitHub Actions</span>
                         <span class="cs-chip">Python harness</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Case Study 6: Virtual Jaguar — Two Console-Emulation World-Firsts -->
+        <article class="case-study reveal" id="cs-virtual-jaguar" style="--cs-accent: var(--accent-green);">
+            <div class="cs-header">
+                <div class="cs-meta"><strong>Virtual Jaguar (libretro)</strong> · Maintainer · 2026 (July–August)</div>
+                <div class="cs-tags">
+                    <span class="cs-tag">Bare-Metal</span>
+                    <span class="cs-tag">Reverse Engineering</span>
+                    <span class="cs-tag">AI-Assisted Dev</span>
+                    <span class="cs-tag">Open Source</span>
+                </div>
+            </div>
+            <h3 class="cs-headline">Revived an abandoned Atari Jaguar core and shipped the first cross-platform open-source Jaguar CD emulation and the first shipped Jaguar Voice Modem emulation in five releases over 24 days, then published a retraction on its own headline feature.</h3>
+            <p class="cs-subhead">Hard fork of a libretro core with no meaningful releases in years. Five tagged versions, v2.3.2 → v3.4.0, in 24 days: the first cross-platform open-source Jaguar CD emulation, and the first shipped Jaguar Voice Modem emulation. Both root-caused from the hardware and the retail ROM, not guessed at.</p>
+            <div class="cs-body">
+                <aside class="cs-metric">
+                    <div class="cs-metric-value">5</div>
+                    <div class="cs-metric-label">Tagged releases in 24 days</div>
+                    <div class="cs-metric-sub">v2.3.2 → v3.4.0. 788 own commits, excluding 18 from dependabot, Copilot, and Cursor agents.</div>
+                </aside>
+                <div class="cs-content">
+                    <h5>The challenge</h5>
+                    <p>No cross-platform open-source emulator had Jaguar CD support (MiSTer's FPGA core does, but it's hardware-bound and buggier). The Jaguar Voice Modem, an unreleased 1995 peripheral that only one retail game ever spoke to (Ultra Vortek), had never had a shipped emulator implementation before this one. Both had to be root-caused from first principles: no test hardware for most of the CD corpus, and nothing to reverse-engineer the modem against except the retail ROM's own driver code.</p>
+
+                    <h5>What I built</h5>
+                    <ul>
+                        <li><strong>Jaguar CD, root-caused not guessed.</strong> All 10 locally-available CD titles boot to <code>GAME_CODE</code> in both HLE and real-BIOS mode. Memory Track NVM is HLE'd, so save-dependent titles like Vid Grid work again. A CUE/BIN→CDI converter (<code>cue2cdi</code>) and a build-stamped CD boot-matrix regression tool catch phantom regressions from stale builds, not just real ones; it caught one before this cycle shipped.</li>
+                        <li><strong>Jaguar Voice Modem, reverse-engineered from the retail ROM.</strong> Disassembled Ultra Vortek's own modem driver to derive the protocol, documented in full: a custom Phylon command set (not AT), 16-bit command words console-to-modem, a mutual DTMF probe as the line-quality check. Derived from the ROM, not from documentation that doesn't exist. Netplay verified on two physical iOS devices, not just headlessly.</li>
+                        <li><strong>JagLink networking at the silicon level.</strong> JERRY's asynchronous serial UART emulated at the register level (<code>ASIDATA</code>/<code>ASICTRL</code>/<code>ASISTAT</code>), three transports: direct TCP, RetroArch's netpacket interface, and a CatNet-style multi-peer hub. Doom deathmatch is playable over TCP.</li>
+                        <li><strong>A debugging harness built for how I actually work now.</strong> Per-issue agent guides, a custom Claude Code skill that routes to the right one of 105 purpose-built headless probes instead of writing a new one from scratch, worktree-parallel agents, and an acid-test regression gate across 23 CI workflows. One of those workflows runs Copilot and Kimi as adversarial reviewers on every PR.</li>
+                    </ul>
+
+                    <h5>Outcome</h5>
+                    <p>The tooling didn't just ship features faster. It caught its own mistake. The experimental DRAM/bus-timing model, the thing meant to fix Doom's pacing, closes approximately 0% of the measured gap. An earlier +2.0% figure, published two releases prior, turned out to be measured against a bus model that double-counted the 68000's own bus cycle. That bug is fixed and the correction is in the release notes. The retraction, not the feature list, is the real evidence the process works: it publishes what's wrong with its own results, not only what shipped.</p>
+
+                    <h5>Proof — read the code</h5>
+                    <ul>
+                        <li><a href="https://github.com/libretro/virtualjaguar-libretro/blob/master/docs/RELEASE_NOTES_v3.4.0.md" target="_blank" rel="noopener" style="color:var(--accent-green);text-decoration:none;border-bottom:1px dotted var(--accent-green)">RELEASE_NOTES_v3.4.0.md</a> — Voice Modem, JagLink, peripherals</li>
+                        <li><a href="https://github.com/libretro/virtualjaguar-libretro/blob/master/docs/voice-modem.md" target="_blank" rel="noopener" style="color:var(--accent-green);text-decoration:none;border-bottom:1px dotted var(--accent-green)">voice-modem.md</a> — full JVM protocol decode from the retail ROM</li>
+                        <li><a href="https://github.com/libretro/virtualjaguar-libretro/blob/master/docs/doom-pace-calibration.md" target="_blank" rel="noopener" style="color:var(--accent-green);text-decoration:none;border-bottom:1px dotted var(--accent-green)">doom-pace-calibration.md</a> — the retraction, with the double-counted bus cycle</li>
+                        <li><a href="https://github.com/libretro/virtualjaguar-libretro/blob/master/.claude/skills/vj-debug/SKILL.md" target="_blank" rel="noopener" style="color:var(--accent-green);text-decoration:none;border-bottom:1px dotted var(--accent-green)">vj-debug/SKILL.md</a> — the debug-tool router, 105 probes deep</li>
+                        <li><a href="https://github.com/libretro/virtualjaguar-libretro/releases" target="_blank" rel="noopener" style="color:var(--accent-green);text-decoration:none;border-bottom:1px dotted var(--accent-green)">Releases</a> — v2.3.2 through v3.4.0</li>
+                    </ul>
+
+                    <div class="cs-stack">
+                        <span class="cs-stack-label">Stack</span>
+                        <span class="cs-chip">Claude Code</span>
+                        <span class="cs-chip">C</span>
+                        <span class="cs-chip">68000</span>
+                        <span class="cs-chip">Atari Jaguar</span>
+                        <span class="cs-chip">libretro</span>
+                        <span class="cs-chip">Reverse Engineering</span>
+                        <span class="cs-chip">GitHub Actions</span>
+                        <span class="cs-chip">Git worktrees</span>
                     </div>
                 </div>
             </div>
@@ -3294,6 +3352,11 @@
                     <div class="press-item-meta">5,300+ stars · 21 PRs merged</div>
                     <h4>SideStore</h4>
                     <p>Org member. Rust build integration, error handling, settings, pairing file loading</p>
+                </a>
+                <a href="https://github.com/libretro/RetroArch" target="_blank" rel="noopener" class="press-item">
+                    <div class="press-item-meta">13,500+ stars · 4 PRs merged</div>
+                    <h4>RetroArch (libretro)</h4>
+                    <p>Authored and merged the CoreMIDI, CoreLocation, and CoreAudio microphone drivers for iOS/tvOS/macOS. Also wrote the AVFoundation camera driver, credited by name in the commit that upstreamed it</p>
                 </a>
             </div>
         </div>
@@ -3899,8 +3962,10 @@ const searchIndex = [
     { title: 'AT&T Tech Channel', desc: 'Emanuel Goldstein, Whit Diffie, Jack Dorsey, H.D. Moore, Bell Labs', section: 'experience', icon: '💼', category: 'Experience' },
     // Projects
     { title: 'Provenance', desc: '6.3k stars, most popular open-source iOS emulator, 50+ systems, SwiftUI, iCloud sync, App Store, 388k+ downloads', section: 'projects', icon: '🎮', category: 'Projects', url: 'https://provenance-emu.com' },
-    { title: 'Virtual Jaguar v2.2.0 (just shipped!)', desc: '76 single-author commits · HLE BIOS · 22 games unlocked (Doom, Syndicate, Atari Karts) · save states, rewind, RetroAchievements · 2x speedup', section: 'projects', icon: '🐆', category: 'Projects', url: 'https://github.com/libretro/virtualjaguar-libretro/releases/tag/v2.2.0' },
-    { title: 'Virtual Jaguar v2.2.0 (blog)', desc: 'Long-form: HLE BIOS, audio rewrite, save states/rewind/RA, 22 games unlocked', section: 'blog', icon: '✍️', category: 'Writing', url: '/blog/virtual-jaguar-v2-2-0/' },
+    { title: 'Virtual Jaguar v3.4.0 (just shipped!)', desc: '5 releases in 24 days · first open-source Jaguar CD emulation · first shipped Jaguar Voice Modem · JagLink netplay · 788 commits', section: 'projects', icon: '🐆', category: 'Projects', url: 'https://github.com/libretro/virtualjaguar-libretro/releases' },
+    { title: 'Virtual Jaguar v3.0.0 (blog)', desc: 'Long-form: Jaguar CD, link-cable multiplayer, CI gates that can fail', section: 'blog', icon: '✍️', category: 'Writing', url: '/blog/virtual-jaguar-3-0-0/' },
+    { title: 'Virtual Jaguar — AI methodology case study', desc: 'Doom retraction, 105 headless probes, worktree-parallel agents, acid-test CI gate', section: 'cs-virtual-jaguar', icon: '🐆', category: 'AI-assisted dev' },
+    { title: 'RetroArch Apple drivers', desc: 'CoreMIDI, CoreLocation, CoreAudio microphone drivers merged. AVFoundation camera driver credited by name upstream', section: 'projects', icon: '🔌', category: 'Open Source', url: 'https://github.com/libretro/RetroArch' },
     { title: 'Jaguar 240p Test Suite', desc: '36 PRs in 10 days · 84% AI co-authored · Claude Code + Copilot + Qodo on bare-metal m68k Atari Jaguar', section: 'projects', icon: '📺', category: 'Projects', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite' },
     { title: '240p Test Suite — PAL pass PR', desc: 'Cross-cutting region switch on bare-metal Jaguar — PAL/NTSC, 50Hz timing, VDP register diagnostics', section: 'projects', icon: '🤖', category: 'AI-assisted dev', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite/pull/27' },
     { title: 'Jaguar smoke-test CI', desc: 'libretro virtualjaguar boots every PR ROM, uploads framebuffer as artifact, signature verifier', section: 'projects', icon: '🤖', category: 'AI-assisted dev', url: 'https://github.com/JoeMatt/atari_jaguar_240p_test_suite/blob/main/.github/workflows/build.yml' },

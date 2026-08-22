@@ -304,8 +304,20 @@ jobs:
           # Contributors on Provenance
           CONTRIBS=$(gh api repos/Provenance-Emu/Provenance/contributors --paginate --jq 'length' 2>/dev/null | awk '{s+=$1} END{print s+0}')
 
-          # Lifetime merged PRs
-          MERGED_PRS=$(gh api 'search/issues?q=is:pr+author:JoeMatt+is:merged' --jq '.total_count' 2>/dev/null || echo 0)
+          # Lifetime merged PRs. Unauthenticated on purpose: the default GITHUB_TOKEN
+          # is a GitHub App installation token scoped to only this repo, and the
+          # Search API silently filters cross-repo results to what the token can see
+          # (returns 0, not an error). Plain REST reads above aren't affected -- only
+          # Search is. Public search has no such restriction and this endpoint is
+          # called once per run, well under the 10 req/min unauthenticated limit.
+          MERGED_PRS=$(curl -s "https://api.github.com/search/issues?q=is:pr+author:JoeMatt+is:merged" | python3 -c "
+          import json, sys
+          d = json.load(sys.stdin)
+          if \"total_count\" not in d:
+              print(\"search/issues error:\", d.get(\"message\", d), file=sys.stderr)
+              sys.exit(1)
+          print(d[\"total_count\"])
+          " 2>&1) || { echo \"::warning::MERGED_PRS fetch failed: $MERGED_PRS\"; MERGED_PRS=0; }
 
           # AI workflow count (count workflow files in Provenance)
           WF_COUNT=$(gh api repos/Provenance-Emu/Provenance/contents/.github/workflows --jq '[.[].name | select(test("ai-|claude|cursor|kimi|copilot|auto-translate|repo-health"))] | length' 2>/dev/null || echo 0)
